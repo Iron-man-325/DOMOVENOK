@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+{% block content %}
+        <div class="container">
+            <div>
+                <div>
+                    <h2 class="head-text">Сдать  жилье в аренду</h2>
+                </div>
+                <div class="flex">
+                    <div class="city">
+                        <p class="text">Город</p>
+                        <input class="group-input" placeholder="Город">
+                    </div>
+                    <div>
+                        <p class="text">Улица</p>
+                        <input class="group-input" placeholder="Улица">
+                    </div>
+                </div>
+                <div>
+                    <!-- Для добавленных картинок -->
+                </div>
+                <div>
+                    <p class="text">Описание</p>
+                    <input class="description">
+                </div>
+                <div>
+                    <h4 class="head-2-text">Что находится по близости?</h4>
+                </div>
+                <div class="height-margin">
+                    <div>
+                        <div>
+                            <!-- Для добавленных вариантов -->
+                        </div>
+                        <div class="button-add">
+                            <p class="text">Добавить вариант +</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="height-margin">
+                    <h4 class="head-2-text">Удобства</h4>
+                </div>
+                <div class="height-margin">
+                    <div>
+                        <div>
+                            <!-- Для добавленных вариантов -->
+                        </div>
+                        <div class="button-add">
+                            <p class="text">Добавить вариант +</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="height-margin">
+                    <h4 class="head-2-text">Правила</h4>
+                </div>
+                <div class="height-margin">
+                    <div>
+                        <div>
+                            <!-- Для добавленных вариантов -->
+                        </div>
+                        <div class="button-add">
+                            <p class="text">Добавить вариант +</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="height-margin">
+                    <p class="text">Сколько может проживать человек</p>
+                </div>
+                <div class="height-margin">
+                    <p class="text">Количество спальных мест</p>
+                    <input class="count-input" placeholder="Укажите количество спальных мест">
+                </div>
+                <div class="height-margin">
+                    <p class="text">Спальни</p>
+                    <input class="count-input" placeholder="Укажите число спален">
+                </div>
+                <div class="height-margin">
+                    <p class="text">Ванны</p>
+                    <input class="count-input" placeholder="Укажите число ванных">
+                </div>
+                <div class="flex">
+                    <div class="city">
+                        <p class="text">Стоимость за одну ночь</p>
+                        <input class="group-input" placeholder="₽0">
+                    </div>
+                    <div>
+                        <p class="text">Аванс</p>
+                        <input class="group-input" placeholder="₽0">
+                    </div>
+                </div>
+                <div class="height-margin">
+                    <p class="text">Минимальный срок аренды</p>
+                    <input class="count-input" placeholder="Количество ночей">
+                </div>
+                <div class="height-margin">
+                    <p class="text">Свободно</p>
+                    <input class="count-input" placeholder="Добавить даты">
+                </div>
+                <button class="button-submit height-margin">
+                    <p class="text-submit">Добавить</p>
+                </button>
+            </div>
+        </div>
+{% endblock %}

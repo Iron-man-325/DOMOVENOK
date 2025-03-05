@@ -6,7 +6,7 @@ def index_page(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
-    return render(request, 'pages/index.html', context)
+    return render(request, 'pages/Flat_add.html', context)
 
 
 def login_page(request: WSGIRequest):
