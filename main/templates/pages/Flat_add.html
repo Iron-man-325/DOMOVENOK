@@ -1,30 +1,37 @@
-{% extends 'base/base.html' %}
+ html {% extends 'base/base.html' %}
 {% block content %}
-        <div class="container">
-            <div>
-                <div>
-                    <h2 class="head-text">Сдать  жилье в аренду</h2>
-                </div>
+    <div class="container">
+        <div>
+            <h2 class="head-text">Сдать жилье в аренду</h2>
+            <form method="post">
+                {% csrf_token %}
                 <div class="flex">
                     <div class="city">
                         <p class="text">Город</p>
-                        <input class="group-input" placeholder="Город">
+                        {{ form.city }}
                     </div>
                     <div>
                         <p class="text">Улица</p>
-                        <input class="group-input" placeholder="Улица">
+                        {{ form.street }}
                     </div>
                 </div>
                 <div>
-                    <!-- Для добавленных картинок -->
+                    <p class="text">Адрес</p>
+                    {{ form.address }}
                 </div>
                 <div>
                     <p class="text">Описание</p>
-                    <input class="description">
+                    {{ form.description }}
                 </div>
                 <div>
-                    <h4 class="head-2-text">Что находится по близости?</h4>
+                    <p class="text">Ссылки на фотографии</p>
+                    {{ form.photo_links }}
                 </div>
+<<<<<<< HEAD
+                <div>
+                    <p class="text">Правила проживания</p>
+                    {{ form.living_rules }}
+=======
                 <div class="height-margin">
                     <div>
                         <div>
@@ -64,6 +71,9 @@
                         <div class="button-add">
                             <p class="text">Добавить вариант +</p>
                         </div>
+html
+
+
 
                     </div>
                 </div>
@@ -73,36 +83,42 @@
                 <div class="height-margin">
                     <p class="text">Количество спальных мест</p>
                     <input class="count-input" placeholder="Укажите количество спальных мест">
+>>>>>>> refs/remotes/origin/HTML
                 </div>
                 <div class="height-margin">
                     <p class="text">Спальни</p>
-                    <input class="count-input" placeholder="Укажите число спален">
+                    {{ form.rooms }}
                 </div>
                 <div class="height-margin">
                     <p class="text">Ванны</p>
-                    <input class="count-input" placeholder="Укажите число ванных">
+                    {{ form.bathrooms }}
+                </div>
+                <div class="height-margin">
+                    <p class="text">Количество спальных мест</p>
+                    {{ form.beds }}
                 </div>
                 <div class="flex">
                     <div class="city">
                         <p class="text">Стоимость за одну ночь</p>
-                        <input class="group-input" placeholder="₽0">
+                        {{ form.price_per_night }}
                     </div>
                     <div>
                         <p class="text">Аванс</p>
-                        <input class="group-input" placeholder="₽0">
+                        {{ form.advance_payment }}
                     </div>
                 </div>
                 <div class="height-margin">
                     <p class="text">Минимальный срок аренды</p>
-                    <input class="count-input" placeholder="Количество ночей">
+                    {{ form.min_rental_days }}
                 </div>
                 <div class="height-margin">
-                    <p class="text">Свободно</p>
-                    <input class="count-input" placeholder="Добавить даты">
+                    <p class="text">Свободно с</p>
+                    {{ form.available_from }}
                 </div>
                 <button class="button-submit height-margin">
                     <p class="text-submit">Добавить</p>
                 </button>
-            </div>
+            </form>
         </div>
+    </div>
 {% endblock %}
