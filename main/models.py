@@ -1,27 +1,23 @@
 from django.db import models
-
 from django.contrib.auth.models import User
+import json
 
 class Apartment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='apartments') # имя арендодателя
-    address = models.CharField(max_length=255) # адрес квартиры
-    rooms = models.IntegerField() # кол - во комнат
-    bathrooms = models.IntegerField() # кол - во ванных комнат
-    area = models.FloatField() # удобства
-    price = models.FloatField() # цена
-    description = models.TextField(blank=True) # описание
-    photo_links = models.TextField(blank=True) # ссылки на фото
-    living_rules = models.TextField(blank=True) # правила сдачи
-    available_from = models.DateField(blank=True, null=True) # колво гостей для сдачи
-    beds = models.IntegerField() # кол - во кроватей
-    advance_payment = models.IntegerField() #аванс
-    street = models.CharField(max_length=255) # улица квартиры
-    city = models.CharField(max_length=255) # город
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='apartments')
+    address = models.CharField(max_length=255)
+    rooms = models.IntegerField()
+    bathrooms = models.IntegerField()
+    amenities = models.TextField(default='[]', blank=True)  # Удобства
+    price = models.FloatField()
+    description = models.TextField(blank=True)
+    photo_links = models.TextField(blank=True)
+    living_rules = models.TextField(default='[]', blank=True)  # Правила
+    available_from = models.DateField(blank=True, null=True)
+    beds = models.IntegerField()
+    advance_payment = models.IntegerField()
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+
     def __str__(self):
         return f"{self.address} - {self.rooms} комнат"
 
-class Profile(models.Model):
-    """
-    Доп. таблица к пользователю
-    """
-    pass
