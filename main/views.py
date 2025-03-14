@@ -5,14 +5,7 @@ from .forms import ApartmentForm
 from .models import Apartment
 
 def add_apartment(request):
-    if request.method == 'POST':
-        form = ApartmentForm(request.POST)
-        if form.is_valid():
-            form.request = request
-            form.save()
-            return redirect('apartments_list')
-    else:
-        form = ApartmentForm()
+    form = ApartmentForm()
     return render(request, 'pages/Flat_add.html', {'form': form})
 
 def index_page(request: WSGIRequest):
