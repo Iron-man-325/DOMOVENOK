@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/show_flat.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+        <div class="content">
+            <div>
+                <!-- Для картинок -->
+            </div>
+            <div class="price-block">
+                <h3 class="price-text">₽42,000/месяц</h3>
+                <p class="text">2 кровати 2 ванны ·  22м²</p>
+            </div>
+            <div>
+                <p class="text">КРУТАЯ КВАРТИРА ТИПА ИНЕРЬЕР ТАМ ВООООООООТ</p>
+            </div>
+            <div>
+                <h3>О квартире</h3>
+            </div>
+            <div class="line"></div>
+            <div class="columns">
+                <div class="part">
+                    <p class="head-text">Ремонт</p>
+                    <p class="text">Крутой</p>
+                </div>
+                <div class="part">
+                    <p class="head-text">Правила</p>
+                    <p class="text">С детьми:можно</p>
+                    <p class="text">С животными:можно</p>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="columns">
+                <div class="part">
+                    <p class="head-text">Условия аренды</p>
+                    <p class="text">Залог: 27000</p>
+                    <p class="text">Комиссия: 50%</p>
+                </div>
+                <div class="part">
+                    <p class="head-text">Расположение</p>
+                    <p class="text">Улица Пушкина, Дом колотушкина</p>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="columns">
+                <div class="part">
+                    <p class="head-text">Парковка</p>
+                    <p class="text">Есть(подземная)</p>
+                </div>
+                <div class="part">
+                    <p class="head-text">Общая площадь</p>
+                    <p class="text">22м²</p>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="columns">
+                <div class="part">
+                    <p class="head-text">Вид</p>
+                    <p class="text">На свалку</p>
+                </div>
+                <div class="part">
+                    <p class="head-text">Этаж</p>
+                    <p class="text">7 из 19</p>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div>
+                <div class="part">
+                    <p class="head-text">Количество комнат</p>
+                    <p class="text">2</p>
+                </div>
+            </div>
+            <button class="button-submit height-margin">
+                <p class="text-submit">Связаться с арендодателем</p>
+            </button>
+        </div>
+{% endblock %}
