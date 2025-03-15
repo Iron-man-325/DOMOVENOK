@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -53,6 +54,24 @@ def index_page(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+
+def login_view(request):
+    context = {
+        "error": None
+    }
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('profile')
+        context["error"] = "Неверное имя пользователя или пароль."
+
+    return render(request, "pages/Login.html", context)
 
 
 def login_page(request: WSGIRequest):

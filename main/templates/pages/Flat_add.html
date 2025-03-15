@@ -28,12 +28,13 @@
             <div>
                 <h4 class="head-2-text">Что находится по близости?</h4>
                 <div class="height-margin">
-                    <div class="flex-container" id="nearby-container">
-                        <div id="nearby-options" class="flex-item">
+
+                    <div id="nearby-options" class="dynamo">
                             <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <input type="text" id="new-nearby" class="group-input flex-item" placeholder="Введите вариант">
-                        <button type="button" id="add-nearby-button" class="button-add flex-item">Добавить вариант +</button>
+                    <div class="flex-container" id="nearby-container">
+                        <input type="text" id="new-nearby" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-nearby-button" class="button-add ">Добавить вариант +</button>
                     </div>
                     <!-- Скрытое поле для сохранения данных -->
                     <input type="hidden" name="nearby_objects" id="nearby-hidden">
@@ -44,12 +45,12 @@
             <div>
                 <h4 class="head-2-text">Удобства</h4>
                 <div class="height-margin">
-                    <div class="flex-container" id="amenities-container">
-                        <div id="amenities-options" class="flex-item">
+                                            <div id="amenities-options" class="dynamo">
                             <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <input type="text" id="new-amenity" class="group-input flex-item" placeholder="Введите вариант">
-                        <button type="button" id="add-amenity-button" class="button-add flex-item">Добавить вариант +</button>
+                    <div class="flex-container" id="amenities-container">
+                        <input type="text" id="new-amenity" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-amenity-button" class="button-add ">Добавить вариант +</button>
                     </div>
                     <!-- Скрытое поле для сохранения данных -->
                     <input type="hidden" name="amenities" id="amenities-hidden">
@@ -60,12 +61,12 @@
             <div>
                 <h4 class="head-2-text">Правила</h4>
                 <div class="height-margin">
-                    <div class="flex-container" id="rules-container">
-                        <div id="rules-options" class="flex-item">
+                                            <div id="rules-options" class="dynamo">
                             <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <input type="text" id="new-rule" class="group-input flex-item" placeholder="Введите вариант">
-                        <button type="button" id="add-rule-button" class="button-add flex-item">Добавить вариант +</button>
+                    <div class="flex-container" id="rules-container">
+                        <input type="text" id="new-rule" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-rule-button" class="button-add ">Добавить вариант +</button>
                     </div>
                     <!-- Скрытое поле для сохранения данных -->
                     <input type="hidden" name="rules" id="rules-hidden">
@@ -131,58 +132,64 @@
         }
     </style>
 
-    <script>
-        // Функция для обработки динамических добавлений
-        document.addEventListener('DOMContentLoaded', function () {
-            function setupDynamicFields(containerId, inputId, addButtonId, hiddenFieldId) {
-                const container = document.getElementById(containerId);
-                const input = document.getElementById(inputId);
-                const addButton = document.getElementById(addButtonId);
-                const hiddenField = document.getElementById(hiddenFieldId);
+<script>
+    // Функция для обработки динамических добавлений
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupDynamicFields(containerId, inputId, addButtonId, hiddenFieldId) {
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            const addButton = document.getElementById(addButtonId);
+            const hiddenField = document.getElementById(hiddenFieldId);
 
-                // Добавление нового элемента
-                addButton.addEventListener('click', function () {
-                    const value = input.value.trim();
-                    if (value) {
-                        const item = document.createElement('span');
-                        item.textContent = value;
-                        item.className = 'dynamic-item';
+            // Добавление нового элемента
+            addButton.addEventListener('click', function () {
+                const value = input.value.trim();
+                if (value) {
+                    // Создание контейнера для элемента
+                    const itemContainer = document.createElement('div');
+                    itemContainer.className = 'dynamic-item flex-item';
 
-                        // Кнопка удаления
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Удалить';
-                        deleteButton.type = 'button';
-                        deleteButton.addEventListener('click', function () {
-                            container.removeChild(item);
-                            updateHiddenField();
-                        });
+                    // Создание параграфа с текстом
+                    const itemText = document.createElement('p');
+                    itemText.textContent = value;
+                    itemContainer.appendChild(itemText);
 
-                        item.appendChild(deleteButton);
-                        container.appendChild(item);
-
-                        input.value = '';
+                    // Кнопка удаления
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '-';
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.addEventListener('click', function () {
+                        container.removeChild(itemContainer);
                         updateHiddenField();
-                    }
-                });
-
-                // Обновление скрытого поля
-                function updateHiddenField() {
-                    const values = [];
-                    container.querySelectorAll('.dynamic-item').forEach(function (item) {
-                        values.push(item.textContent.replace('Удалить', '').trim());
                     });
-                    hiddenField.value = JSON.stringify(values); // Сохраняем как JSON-строку
+                    itemContainer.appendChild(deleteButton); // Добавляем кнопку в контейнер
+
+                    container.appendChild(itemContainer); // Добавляем контейнер в общую коллекцию
+
+                    input.value = '';
+                    updateHiddenField();
                 }
+            });
+
+            // Обновление скрытого поля
+            function updateHiddenField() {
+                const values = [];
+                container.querySelectorAll('.dynamic-item').forEach(function (item) {
+                    values.push(item.querySelector('p').textContent.trim());
+                });
+                hiddenField.value = JSON.stringify(values); // Сохраняем как JSON-строку
             }
+        }
 
-            // Настройка для близлежащих объектов
-            setupDynamicFields('nearby-options', 'new-nearby', 'add-nearby-button', 'nearby-hidden');
+        // Настройка для близлежащих объектов
+        setupDynamicFields('nearby-options', 'new-nearby', 'add-nearby-button', 'nearby-hidden');
 
-            // Настройка для удобств
-            setupDynamicFields('amenities-options', 'new-amenity', 'add-amenity-button', 'amenities-hidden');
+        // Настройка для удобств
+        setupDynamicFields('amenities-options', 'new-amenity', 'add-amenity-button', 'amenities-hidden');
 
-            // Настройка для правил проживания
-            setupDynamicFields('rules-options', 'new-rule', 'add-rule-button', 'rules-hidden');
-        });
-        </script>
+        // Настройка для правил проживания
+        setupDynamicFields('rules-options', 'new-rule', 'add-rule-button', 'rules-hidden');
+    });
+</script>
 {% endblock %}
