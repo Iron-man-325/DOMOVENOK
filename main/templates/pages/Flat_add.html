@@ -1,18 +1,20 @@
 {% extends 'base/base.html' %}
 {% block content %}
-        <div class="container">
+    <div class="container">
+        <div>
             <div>
-                <div>
-                    <h2 class="head-text">Сдать  жилье в аренду</h2>
-                </div>
+                <h2 class="head-text">Сдать жилье в аренду</h2>
+            </div>
+            <form method="post">
+                {% csrf_token %}
                 <div class="flex">
                     <div class="city">
                         <p class="text">Город</p>
-                        <input class="group-input" placeholder="Город">
+                        {{ form.city }}
                     </div>
                     <div>
                         <p class="text">Улица</p>
-                        <input class="group-input" placeholder="Улица">
+                        {{ form.street }}
                     </div>
                 </div>
                 <div>
@@ -20,83 +22,174 @@
                 </div>
                 <div>
                     <p class="text">Описание</p>
-                    <input class="description">
+                    {{ form.description }}
                 </div>
-                <div>
-                    <h4 class="head-2-text">Что находится по близости?</h4>
-                </div>
+                <!-- Близлежащие объекты -->
+            <div>
+                <h4 class="head-2-text">Что находится по близости?</h4>
                 <div class="height-margin">
-                    <div>
-                        <div>
-                            <!-- Для добавленных вариантов -->
+
+                    <div id="nearby-options" class="dynamo">
+                            <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <div class="button-add">
-                            <p class="text">Добавить вариант +</p>
-                        </div>
+                    <div class="flex-container" id="nearby-container">
+                        <input type="text" id="new-nearby" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-nearby-button" class="button-add ">Добавить вариант +</button>
                     </div>
+                    <!-- Скрытое поле для сохранения данных -->
+                    <input type="hidden" name="nearby_objects" id="nearby-hidden">
                 </div>
+            </div>
+
+            <!-- Удобства -->
+            <div>
+                <h4 class="head-2-text">Удобства</h4>
                 <div class="height-margin">
-                    <h4 class="head-2-text">Удобства</h4>
-                </div>
-                <div class="height-margin">
-                    <div>
-                        <div>
-                            <!-- Для добавленных вариантов -->
+                                            <div id="amenities-options" class="dynamo">
+                            <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <div class="button-add">
-                            <p class="text">Добавить вариант +</p>
-                        </div>
+                    <div class="flex-container" id="amenities-container">
+                        <input type="text" id="new-amenity" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-amenity-button" class="button-add ">Добавить вариант +</button>
                     </div>
+                    <!-- Скрытое поле для сохранения данных -->
+                    <input type="hidden" name="amenities" id="amenities-hidden">
                 </div>
+            </div>
+
+            <!-- Правила проживания -->
+            <div>
+                <h4 class="head-2-text">Правила</h4>
                 <div class="height-margin">
-                    <h4 class="head-2-text">Правила</h4>
-                </div>
-                <div class="height-margin">
-                    <div>
-                        <div>
-                            <!-- Для добавленных вариантов -->
+                                            <div id="rules-options" class="dynamo">
+                            <!-- Здесь будут динамически добавляться варианты -->
                         </div>
-                        <div class="button-add">
-                            <p class="text">Добавить вариант +</p>
-                        </div>
+                    <div class="flex-container" id="rules-container">
+                        <input type="text" id="new-rule" class="group-input " placeholder="Введите вариант">
+                        <button type="button" id="add-rule-button" class="button-add ">Добавить вариант +</button>
                     </div>
+                    <!-- Скрытое поле для сохранения данных -->
+                    <input type="hidden" name="rules" id="rules-hidden">
                 </div>
+            </div>
+
                 <div class="height-margin">
                     <p class="text">Сколько может проживать человек</p>
+                    {{ form.max_people }}
                 </div>
                 <div class="height-margin">
                     <p class="text">Количество спальных мест</p>
-                    <input class="count-input" placeholder="Укажите количество спальных мест">
+                    {{ form.sleeping_places }}
                 </div>
                 <div class="height-margin">
                     <p class="text">Спальни</p>
-                    <input class="count-input" placeholder="Укажите число спален">
+                    {{ form.sleeping_rooms }}
                 </div>
                 <div class="height-margin">
                     <p class="text">Ванны</p>
-                    <input class="count-input" placeholder="Укажите число ванных">
+                    {{ form.bathrooms }}
                 </div>
                 <div class="flex">
                     <div class="city">
                         <p class="text">Стоимость за одну ночь</p>
-                        <input class="group-input" placeholder="₽0">
+                        {{ form.cost_per_night }}
                     </div>
                     <div>
                         <p class="text">Аванс</p>
-                        <input class="group-input" placeholder="₽0">
+                        {{ form.prepayment }}
                     </div>
                 </div>
                 <div class="height-margin">
                     <p class="text">Минимальный срок аренды</p>
-                    <input class="count-input" placeholder="Количество ночей">
+                    {{ form.min_nights }}
                 </div>
                 <div class="height-margin">
                     <p class="text">Свободно</p>
-                    <input class="count-input" placeholder="Добавить даты">
+                    {{ form.free_at }}
                 </div>
+
                 <button class="button-submit height-margin">
                     <p class="text-submit">Добавить</p>
                 </button>
-            </div>
+            </form>
         </div>
+    </div>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field, errors in form.errors.items %}
+            {{ errors }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <style>
+        .flex-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .flex-item {
+            flex-shrink: 0;
+        }
+    </style>
+
+<script>
+    // Функция для обработки динамических добавлений
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupDynamicFields(containerId, inputId, addButtonId, hiddenFieldId) {
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            const addButton = document.getElementById(addButtonId);
+            const hiddenField = document.getElementById(hiddenFieldId);
+
+            // Добавление нового элемента
+            addButton.addEventListener('click', function () {
+                const value = input.value.trim();
+                if (value) {
+                    // Создание контейнера для элемента
+                    const itemContainer = document.createElement('div');
+                    itemContainer.className = 'dynamic-item flex-item';
+
+                    // Создание параграфа с текстом
+                    const itemText = document.createElement('p');
+                    itemText.textContent = value;
+                    itemContainer.appendChild(itemText);
+
+                    // Кнопка удаления
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '-';
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.addEventListener('click', function () {
+                        container.removeChild(itemContainer);
+                        updateHiddenField();
+                    });
+                    itemContainer.appendChild(deleteButton); // Добавляем кнопку в контейнер
+
+                    container.appendChild(itemContainer); // Добавляем контейнер в общую коллекцию
+
+                    input.value = '';
+                    updateHiddenField();
+                }
+            });
+
+            // Обновление скрытого поля
+            function updateHiddenField() {
+                const values = [];
+                container.querySelectorAll('.dynamic-item').forEach(function (item) {
+                    values.push(item.querySelector('p').textContent.trim());
+                });
+                hiddenField.value = JSON.stringify(values); // Сохраняем как JSON-строку
+            }
+        }
+
+        // Настройка для близлежащих объектов
+        setupDynamicFields('nearby-options', 'new-nearby', 'add-nearby-button', 'nearby-hidden');
+
+        // Настройка для удобств
+        setupDynamicFields('amenities-options', 'new-amenity', 'add-amenity-button', 'amenities-hidden');
+
+        // Настройка для правил проживания
+        setupDynamicFields('rules-options', 'new-rule', 'add-rule-button', 'rules-hidden');
+    });
+</script>
 {% endblock %}
