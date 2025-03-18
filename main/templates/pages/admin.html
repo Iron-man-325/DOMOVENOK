@@ -1,10 +1,11 @@
 {% extends 'base/base.html' %}
 
+
 {% block content %}
 <div class="container">
     <div class="apartments-list">
         <h2 class="head-text">Список квартир</h2>
-        
+
         {% if apartments %}
             {% for apartment in apartments %}
                 <div class="apartment-card">
@@ -39,31 +40,19 @@
                         </div>
 
                         <div class="apartment-features">
-                            <h4>Удобства:</h4>
-                            <ul>
-                                {% for amenity in apartment.amenities %}
-                                    <li>{{ amenity }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                    <h4>Удобства:</h4>
+                    <p>{{ apartment.amenities }}</p>
+                </div>
 
-                        <div class="apartment-rules">
-                            <h4>Правила:</h4>
-                            <ul>
-                                {% for rule in apartment.living_rules %}
-                                    <li>{{ rule }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                <div class="apartment-rules">
+                    <h4>Правила:</h4>
+                    <p>{{ apartment.living_rules }}</p>
+                </div>
 
-                        <div class="apartment-nearby">
-                            <h4>Близлежащие объекты:</h4>
-                            <ul>
-                                {% for obj in apartment.nearby_objects %}
-                                    <li>{{ obj }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                <div class="apartment-nearby">
+                    <h4>Близлежащие объекты:</h4>
+                    <p>{{ apartment.nearby_objects }}</p>
+                </div>
                     </div>
                 </div>
             {% endfor %}
@@ -106,9 +95,9 @@
     border-radius: 8px;
 }
 
-.apartment-description, 
-.apartment-features, 
-.apartment-rules, 
+.apartment-description,
+.apartment-features,
+.apartment-rules,
 .apartment-nearby {
     margin: 20px 0;
 }

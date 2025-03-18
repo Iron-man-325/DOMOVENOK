@@ -3,7 +3,15 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ApartmentForm
+import json
 from .models import Apartment
+
+def parse(s):
+    s1 = ""
+    for c in s:
+        if c != '[' and c != ']' and c != '"':
+            s1 += c
+    return s1
 def add_apartment(request):
     if request.method == 'POST':
         form = ApartmentForm(request.POST)
@@ -23,20 +31,12 @@ def add_apartment(request):
                 free_at=form.cleaned_data['free_at']
             )
 
-            nearby_objects_json = request.POST.get('nearby_objects')
-            if nearby_objects_json:
-                apartment.nearby_objects = nearby_objects_json
-
-
-            amenities_json = request.POST.get('amenities')
-            if amenities_json:
-                apartment.amenities = amenities_json
-
-
-            rules_json = request.POST.get('rules')
-            if rules_json:
-                apartment.living_rules = rules_json
-
+            apartment.nearby_objects = request.POST.get('nearby_objects', '')
+            apartment.amenities = request.POST.get('amenities', '')
+            apartment.living_rules = request.POST.get('rules', '')
+            apartment.nearby_objects = parse(apartment.nearby_objects)
+            apartment.amenities = parse(apartment.amenities)
+            apartment.living_rules = parse(apartment.living_rules)
             apartment.save()
 
             return redirect('apartment_list')
