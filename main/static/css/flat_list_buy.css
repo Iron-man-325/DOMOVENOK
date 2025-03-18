@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+body{
+    background-color: rgba(252, 250, 248, 1);
+}
+.head{
+    display: flex;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.search{
+    width: 256px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: rgba(244, 242, 240, 1);
+    border: none;
+    margin-top: 8px;
+}
+.head-navigation-text{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 14px;
+    font-size: 14px;
+    font-style: normal;
+    color: black;
+}
+.name{
+    margin-right: 30%;
+}
+.navigation-text{
+    margin: 0 20px 0;
+}
+.name-only{
+    width: 100px;
+}
+.publish-adv{
+    background-color: rgba(232, 131, 48, 1);
+    border-radius: 9999px;
+    border: none;
+}
+.button-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+.container{
+    margin-left: 30%;
+}
+.back-img{
+    width: 928px;
+    height: 480px;
+    background-image: url(../img/Фон_поиска.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+}
+.text-noto{
+    color: rgba(252, 250, 248, 1);
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 48px;
+    font-weight: 30px;
+    font-style: normal;
+}
+.but-search{
+    margin-top: 10px;
+    margin-right: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(232, 131, 48, 1);
+    border: none;
+    border-radius: 12px;
+    width: 92px;
+    height: 48px;
+    cursor: pointer;
+}
+.search-text{
+    color: rgba(24, 20, 17, 1);
+    font-size: 15px;
+    font-weight: bold;
+}
+.search-input{
+    padding-right: 40px;
+    border: none;
+    border-radius: 12px;
+    width: 324px;
+    height: 64px;
+    flex-grow:2;
+}
+::placeholder {
+    color: rgba(136, 115, 99, 1);
+    padding-left: 10px;
+}
+.search-cont{
+    padding: 25% 0 0 10%;
+}
+.wrapper{
+    position: relative;
+    display: inline-block;
+}
+.text{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 22px;
+    font-weight: bold;
+}
+.flat-img{
+    width: 455px;
+    height: 256px;
+    background-image: url(../img/пример.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+}
+.var-cont{
+    margin-top: 30px;
+    display: flex;
+}
+.desc-text{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 16px;
+    color: rgba(136, 115, 99, 1);
+    margin: 10px 0 0 0;
+}
+.name-flat{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0 0 0 ;
+}
+.desc{
+    margin: 10px 0 0 15px;
+}
+.reserve-but{
+    vertical-align: middle;
+    line-height: 1px;
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: rgba(232, 131, 48, 1);
+    border: none;
+    border-radius: 12px;
+    width: 133px;
+    height: 32px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+}
+.desc-cont{
+    height: 150px;
+    display: flex;
+}
+.reserve-text{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(24, 20, 17, 1);
+}
+.but-div{
+    width: 150px;
+    height: 150px;
+    position: relative;
+}

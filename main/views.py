@@ -20,7 +20,11 @@ def index_page(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
-
+def flat_list(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/flat_list_buy.html', context)
 
 def login_page(request: WSGIRequest):
     raise NotImplementedError
