@@ -25,6 +25,11 @@ def flat_list(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/flat_list_buy.html', context)
+def sup(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/support_message.html', context)
 
 def login_page(request: WSGIRequest):
     raise NotImplementedError

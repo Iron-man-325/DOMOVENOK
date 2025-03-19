@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/support_message.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+            <div>
+                <h2 class="head-text">Напишите ваш запрос</h2>
+            </div>
+            <div class="tab-container">
+                <button class="underlined-tab">
+                    <p class="tab">Главная</p>
+                </button>
+                <button class="reg-tab">
+                    <p class="tab">Техника</p>
+                </button>
+                <button class="reg-tab">
+                    <p class="tab">Пломбы</p>
+                </button>
+                <button class="reg-tab">
+                    <p class="tab">Электричество</p>
+                </button>
+            </div>
+            <div>
+
+            </div>
+            <div>
+                <input class="desc-inp" placeholder="Опишите вашу проблему">
+            </div>
+            <div class="add-photo">
+                <div class="camera">
+
+                </div>
+                <div>
+                    <p class="text">Добавить фото</p>
+                    <p class="color-text">Можно добавлять до 3 фото</p>
+                </div>
+            </div>
+            <button class="button">
+                <p class="but-text">Отправить запрос</p>
+            </button>
+        </div>
+{% endblock %}
