@@ -4,31 +4,28 @@
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
 {% endblock %}
 {% block content %}
-
-        <div class="enter">
-            <h2 class="style-text">Вход в EasyVote</h2>
-        </div>
-        <div class="fields">
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="mail">
-                    <p class="style-text">Имя</p>
-                    <input class="enter-field" name="username" type="text"  required />
-                </div>
-                <div class="password">
-                    <p class="style-text">Пароль</p>
-                    <input class="enter-field" name="password" type="password" placeholder="" required />
-                </div>
-                <div class="cont">
-                    <a class="style-text text-color" >Забыли пароль?</a>
-                </div>
-                <div class="cont-button">
-                    <button type="submit" class="enter-text button-login">Войти</button>
-                    <button type="button"  class="button-register register-text">Зарегистрироваться</button>
-                </div>
-                <div class="cont-1">
-                    <a class="style-text text-color" >Нет аккаунта?</a>
-                </div>
-            </form>
+        <div class="container">
+            <div class="enter">
+                <h2 class="style-text">Вход в Домовенок ЙОУУУУ</h2>
+            </div>
+            <div class="fields">
+                <form method="post" action="{% url 'login' %}">
+                    <div class="mail">
+                        <p class="text">Имя</p>
+                        <input class="enter-field" name="username" type="text"  required />
+                    </div>
+                    <div class="password">
+                        <p class="text">Пароль</p>
+                        <input class="enter-field" name="password" type="password" placeholder="" required />
+                    </div>
+                    <div class="cont">
+                        <a class="password-forget" >Забыли пароль?</a>
+                    </div>
+                    <div class="cont-button">
+                        <button type="submit" class="enter-text button-login">Войти</button>
+                        <button type="button"  class="button-register register-text">Зарегистрироваться</button>
+                    </div>
+                </form>
+            </div>
         </div>
 {% endblock %}

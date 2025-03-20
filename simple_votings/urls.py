@@ -8,6 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='index'),
     path('registration/', views.registration_page, name='registration'),
-    path('login/', views.login_page, name='login'),
+    path('Login/', views.login_page, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout')
 ]

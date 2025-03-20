@@ -1,13 +1,11 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile
-from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect
-from .models import Profile
+from .forms import UserForm, User
+
+
 
 def index_page(request: WSGIRequest):
     context = {
@@ -16,13 +14,11 @@ def index_page(request: WSGIRequest):
     return render(request, 'pages/index.html', context)
 
 
-class UserForm:
-    pass
 
 
 def registration_page(request):
     if request.method == 'POST':
-        form = UserForm(request.POST)
+        form = UserForm()
         if form.is_valid():
             user = User.objects.create_user(
                 email=form.data["email"],
@@ -42,9 +38,9 @@ def registration_page(request):
     data = {
         'form': form,
     }
-    return render(request, "HTML/creating-ak.html", data)
+    return render(request, "pages/regestration.html", data)
 
-def login_view(request):
+def login_page(request):
     context = {
         "error": None
     }
@@ -60,4 +56,4 @@ def login_view(request):
             return redirect('profile')
         context["error"] = "Неверное имя пользователя или пароль."
 
-    return render(request, "registration/login.html", context)
+    return render(request, "pages/login.html", context)
