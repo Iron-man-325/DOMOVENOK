@@ -73,6 +73,12 @@ def login_view(request):
 
     return render(request, "pages/Login.html", context)
 
+def show_flat(request, flat_id):
+    try:
+        apartment = Apartment.objects.get(id=flat_id)
+        return render(request, "pages/show_flat.html", {'apartment': apartment})
+    except Apartment.DoesNotExist:
+        return render(request, "pages/404.html", status=404)
 
 def login_page(request: WSGIRequest):
     raise NotImplementedError

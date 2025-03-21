@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/show_flat.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="content">
+    <!-- Блок с картинками (добавьте реализацию) -->
+    <div class="image-block">
+        <img src="{% static 'images/placeholder.jpg' %}" alt="Квартира" class="main-image">
+        <div class="gallery">
+            <!-- Добавьте галерею изображений -->
+        </div>
+    </div>
+
+    <!-- Блок с ценой -->
+    <div class="price-block">
+        <h3 class="price-text">{{ apartment.cost_per_night }} ₽/ночь</h3>
+        <p class="text">{{ apartment.sleeping_places }} спальных мест</p>
+    </div>
+
+    <!-- Описание -->
+    <div class="description-block">
+        <p class="text">{{ apartment.description }}</p>
+    </div>
+
+    <!-- Основные характеристики -->
+    <div class="characteristics">
+        <h3>О квартире</h3>
+        <div class="line"></div>
+
+        <!-- Колонки с данными -->
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Спальные места</p>
+                <p class="text">{{ apartment.sleeping_places }} кроватей</p>
+            </div>
+            <div class="part">
+                <p class="head-text">Ванные комнаты</p>
+                <p class="text">{{ apartment.bathrooms }}</p>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Минимальный срок аренды</p>
+                <p class="text">{{ apartment.min_nights }} ночей</p>
+            </div>
+            <div class="part">
+                <p class="head-text">Предоплата</p>
+                <p class="text">{{ apartment.prepayment }}%</p>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Расположение</p>
+                <p class="text">{{ apartment.city }}, {{ apartment.street }}</p>
+            </div>
+            <div class="part">
+                <p class="head-text">Доступность</p>
+                <p class="text">{{ apartment.free_at }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительные удобства -->
+    <div class="amenities-block">
+        <h3>Удобства</h3>
+        <div class="line"></div>
+        <ul class="amenities-list">
+            {{ apartment.amenities }}
+        </ul>
+    </div>
+
+    <!-- Правила проживания -->
+    <div class="rules-block">
+        <h3>Правила</h3>
+        <div class="line"></div>
+        <ul class="rules-list">
+            {{ apartment.living_rules }}
+        </ul>
+    </div>
+
+    <!-- Кнопка связи -->
+    <button class="button-submit height-margin">
+        <p class="text-submit">Связаться с арендодателем</p>
+    </button>
+</div>
+{% endblock %}
