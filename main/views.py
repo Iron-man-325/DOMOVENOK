@@ -43,7 +43,7 @@ def registration_page(request: WSGIRequest):
     raise NotImplementedError
 
 
-    @csrf_exempt
+@csrf_exempt
 def send_support_message(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -53,8 +53,8 @@ def send_support_message(request):
             send_mail(
                 'Сообщение поддержки',  # Тема письма
                 user_message,  # Тело письма
-                'from@example.com',  # Письмо отправителя (например, no-reply@yourdomain.com)
-                ['to@example.com'],  # Ваш электронный адрес
+                'no-reply@yourdomain.com',  # Письмо отправителя (например, no-reply@yourdomain.com)
+                ['lebedev.egor585.lol@gmail.com'],  # Ваш электронный адрес
                 fail_silently=False,
             )
             return JsonResponse({'success': True})
