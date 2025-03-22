@@ -1,4 +1,8 @@
 {% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
 {% block content %}
     <div class="container">
         <div>
@@ -16,9 +20,18 @@
                         <p class="text">Улица</p>
                         {{ form.street }}
                     </div>
-                </div>
-                <div>
-                    <!-- Для добавленных картинок -->
+                    <div>
+                        <p class="text">Дом</p>
+                        {{ form.housenum }}
+                    </div>
+                    <div>
+                        <p class="text">Этаж</p>
+                        {{ form.stage }}
+                    </div>
+                    <div>
+                        <p class="text">Квартира</p>
+                        {{ form.number }}
+                    </div>
                 </div>
                 <div>
                     <p class="text">Описание</p>
@@ -107,7 +120,6 @@
                     <p class="text">Свободно</p>
                     {{ form.free_at }}
                 </div>
-
                 <button class="button-submit height-margin">
                     <p class="text-submit">Добавить</p>
                 </button>
@@ -115,11 +127,16 @@
         </div>
     </div>
     {% if form.errors %}
-    <div class="alert alert-danger">
-        {% for field, errors in form.errors.items %}
-            {{ errors }}
-        {% endfor %}
-    </div>
+        <div class="alert alert-danger">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ field.label }}: {{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
     {% endif %}
     <style>
         .flex-container {

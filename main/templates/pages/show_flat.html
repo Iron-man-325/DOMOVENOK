@@ -7,10 +7,7 @@
 <div class="content">
     <!-- Блок с картинками (добавьте реализацию) -->
     <div class="image-block">
-        <img src="{% static 'images/placeholder.jpg' %}" alt="Квартира" class="main-image">
-        <div class="gallery">
-            <!-- Добавьте галерею изображений -->
-        </div>
+        {{ aparment.photo }}
     </div>
 
     <!-- Блок с ценой -->
@@ -59,15 +56,24 @@
         <div class="columns">
             <div class="part">
                 <p class="head-text">Расположение</p>
-                <p class="text">{{ apartment.city }}, {{ apartment.street }}</p>
+                <p class="text"> Город {{ apartment.city }}, Улица {{ apartment.street }}, Дом {{apartment.housenum }}, Этаж{{apartment.stage}} Квартира{{ apartment.number }}</p>
             </div>
             <div class="part">
                 <p class="head-text">Доступность</p>
                 <p class="text">{{ apartment.free_at }}</p>
             </div>
         </div>
+
     </div>
 
+    <!-- Что находится рядом-->
+    <div class="amenities-block">
+        <h3>Рядом со зданием</h3>
+        <div class="line"></div>
+        <ul class="amenities-list">
+            {{ apartment.nearby_objects }}
+        </ul>
+    </div>
     <!-- Дополнительные удобства -->
     <div class="amenities-block">
         <h3>Удобства</h3>

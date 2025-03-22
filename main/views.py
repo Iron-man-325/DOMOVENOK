@@ -18,6 +18,9 @@ def add_apartment(request):
         if form.is_valid():
             # Создание объекта квартиры
             apartment = Apartment.objects.create(
+                number=form.cleaned_data['number'],
+                housenum=form.cleaned_data['housenum'],
+                stage=form.cleaned_data['stage'],
                 city=form.cleaned_data['city'],
                 street=form.cleaned_data['street'],
                 description=form.cleaned_data['description'],
@@ -30,7 +33,7 @@ def add_apartment(request):
                 min_nights=form.cleaned_data['min_nights'],
                 free_at=form.cleaned_data['free_at']
             )
-
+            apartment.photo = request.FILES
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
             apartment.amenities = request.POST.get('amenities', '')
             apartment.living_rules = request.POST.get('rules', '')

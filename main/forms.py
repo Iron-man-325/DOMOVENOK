@@ -1,7 +1,26 @@
 from django import forms
-
-
+from django.forms import ModelForm
+from .models import Apartment
 class ApartmentForm(forms.Form):
+
+    housenum = forms.CharField(min_length=1,
+                                max_length=69,
+                                widget=forms.TextInput({"class": "group-input",
+                                                        "placeholder": "Номер дома"}
+                                                       )
+                                )
+    stage = forms.CharField(min_length=1,
+                            max_length=69,
+                            widget=forms.TextInput({"class": "group-input",
+                                                    "placeholder": "Этаж"}
+                                                   )
+                            )
+    number = forms.CharField(min_length=1,
+                               max_length=69,
+                               widget=forms.TextInput({"class": "group-input",
+                                                       "placeholder": "Номер квартиры"}
+                                                      )
+                               )
     city = forms.CharField(min_length=1,
                            max_length=69,
                            widget=forms.TextInput({"class": "group-input",
