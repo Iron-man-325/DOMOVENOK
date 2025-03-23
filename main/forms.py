@@ -1,14 +1,15 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Apartment
-class ApartmentForm(forms.Form):
+from .models import Apartment, Photo
 
+
+class ApartmentForm(forms.Form):
     housenum = forms.CharField(min_length=1,
-                                max_length=69,
-                                widget=forms.TextInput({"class": "group-input",
-                                                        "placeholder": "Номер дома"}
-                                                       )
-                                )
+                               max_length=69,
+                               widget=forms.TextInput({"class": "group-input",
+                                                       "placeholder": "Номер дома"}
+                                                      )
+                               )
     stage = forms.CharField(min_length=1,
                             max_length=69,
                             widget=forms.TextInput({"class": "group-input",
@@ -16,11 +17,11 @@ class ApartmentForm(forms.Form):
                                                    )
                             )
     number = forms.CharField(min_length=1,
-                               max_length=69,
-                               widget=forms.TextInput({"class": "group-input",
-                                                       "placeholder": "Номер квартиры"}
-                                                      )
-                               )
+                             max_length=69,
+                             widget=forms.TextInput({"class": "group-input",
+                                                     "placeholder": "Номер квартиры"}
+                                                    )
+                             )
     city = forms.CharField(min_length=1,
                            max_length=69,
                            widget=forms.TextInput({"class": "group-input",
@@ -74,3 +75,12 @@ class ApartmentForm(forms.Form):
                                                               "placeholder": "Добавить даты"}
                                                              )
                                   )
+
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = "__all__"
+        widgets = {
+            "image": forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"})
+        }

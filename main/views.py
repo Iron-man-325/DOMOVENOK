@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate, login
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ApartmentForm
+from .forms import ApartmentForm, PhotoForm
 import json
 from .models import Apartment
+
 
 def parse(s):
     s1 = ""
@@ -12,6 +13,8 @@ def parse(s):
         if c != '[' and c != ']' and c != '"':
             s1 += c
     return s1
+
+
 def add_apartment(request):
     if request.method == 'POST':
         form = ApartmentForm(request.POST)
@@ -49,14 +52,18 @@ def add_apartment(request):
 
     return render(request, 'pages/Flat_add.html', {'form': form})
 
+
 def apartment_list(request):
     apartments = Apartment.objects.all()
     return render(request, 'pages/admin.html', {'apartments': apartments})
+
+
 def index_page(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+
 
 def login_view(request):
     context = {
@@ -76,6 +83,7 @@ def login_view(request):
 
     return render(request, "pages/Login.html", context)
 
+
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
@@ -83,9 +91,27 @@ def show_flat(request, flat_id):
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
 
+
 def login_page(request: WSGIRequest):
     raise NotImplementedError
 
 
 def registration_page(request: WSGIRequest):
     raise NotImplementedError
+
+def add_image_page(request: WSGIRequest):
+    context = {
+        "form": PhotoForm()
+    }
+    if request.method == "GET":
+        return render(request, "pages/save_photo.html", context)
+
+    form = PhotoForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+    else:
+        raise NotImplementedError
+
+    return render(request, "pages/save_photo.html", context)
+
+

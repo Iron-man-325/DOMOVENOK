@@ -12,6 +12,7 @@ urlpatterns = [
      path('',views.add_apartment, name='main'),
      path('login/', views.login_view, name='login'),
      path('flat/<int:flat_id>/', views.show_flat, name='flat_detail'),
+     path('photo', views.add_image_page),
          # path('registration/', views.registration_page, name='registration'),
     # path('login/', views.login_page, name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout')
