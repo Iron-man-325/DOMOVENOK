@@ -1,7 +1,7 @@
 from django import forms
 
 
-class FlatAddForm(forms.Form):
+class ApartmentAddForm(forms.Form):
     city = forms.CharField(min_length=1,
                            max_length=69,
                            widget=forms.TextInput({"class": "group-input",
