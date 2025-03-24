@@ -30,6 +30,11 @@ def sup(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/support_message.html', context)
+def stat(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/static.html', context)
 
 def login_page(request: WSGIRequest):
     raise NotImplementedError

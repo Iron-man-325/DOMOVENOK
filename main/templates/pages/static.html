@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/static.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+        <div class="container">
+            <div>
+                <h2 class="flat-name">Квартира №1</h2>
+            </div>
+            <div class="flex">
+                <div class="flat-photo">
+
+                </div>
+                <div class="stat-cont">
+                    <p class="stat-text">Адрес:</p>
+                    <p class="stat-text">Контактные данные:</p>
+                    <p class="stat-text">Статус:</p>
+                    <p class="stat-text">Стоимость:</p>
+                    <a class="stat-text">Договор</a>
+                </div>
+                <div class="earn-cont">
+                    <h3 class="earn-money">32 000₽</h3>
+                    <p class="small-text">Всего заработано</p>
+                </div>
+            </div>
+            <div class="choose-cont">
+                <div class="option-chosed">
+                    <p class="choose-text">Вода</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Свет</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Газ</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Жкх</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Аренда</p>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="second-choose">
+                    <div class="option-chosed">
+                        <p class="choose-text">История оплаты</p>
+                    </div>
+                    <div class="option">
+                        <p class="choose-text">Квитанции об оплате</p>
+                    </div>
+                    <div class="option">
+                        <p class="choose-text">История оплаты</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">23.05.2000</p>
+                        </div>
+                        <div>
+                            <p class="add-text">Сумма</p>
+                            <p class="add-text">7500₽</p>
+                        </div>
+                        <div>
+                            <p class="last-add-text">Номер квитанции</p>
+                            <p class="last-add-text">778742319047397429052</p>
+                        </div>
+                    </div>
+                    <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">23.05.2000</p>
+                        </div>
+                        <div>
+                            <p class="add-text">Сумма</p>
+                            <p class="add-text">7500₽</p>
+                        </div>
+                        <div>
+                            <p class="last-add-text">Номер квитанции</p>
+                            <p class="last-add-text">778742319047397429052</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
