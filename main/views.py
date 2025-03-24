@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ApartmentForm
 from .models import Apartment
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def add_apartment(request):
     if request.method == 'POST':
@@ -42,3 +46,22 @@ def login_page(request: WSGIRequest):
 
 def registration_page(request: WSGIRequest):
     raise NotImplementedError
+
+
+@csrf_exempt
+def send_support_message(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_message = data.get('message', '')
+
+        if user_message:
+            send_mail(
+                'Сообщение поддержки',  # Тема письма
+                user_message,  # Тело письма
+                'no-reply@yourdomain.com',  # Письмо отправителя (например, no-reply@yourdomain.com)
+                ['lebedev.egor585.lol@gmail.com'],  # Ваш электронный адрес
+                fail_silently=False,
+            )
+            return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
