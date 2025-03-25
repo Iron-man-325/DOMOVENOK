@@ -11,6 +11,7 @@ urlpatterns = [
      path('sup/', views.sup, name='index'),
      path('stat/', views.stat, name='index'),
      path('send-support-message/', views.send_support_message, name='send_support_message'),
+     path('my-flats/', views.my_flats, name='send_support_message'),
     # path('registration/', views.registration_page, name='registration'),
     # path('login/', views.login_page, name='login'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout')

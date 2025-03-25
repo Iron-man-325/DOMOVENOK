@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+body{
+    background-color: rgba(252, 250, 248, 1);
+}
+header{
+    height: 60px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid rgba(243, 237, 231, 1);
+}
+.head{
+    display: flex;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.search{
+    width: 256px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: rgba(244, 242, 240, 1);
+    border: none;
+    margin-top: 8px;
+}
+.head-navigation-text{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.name{
+    margin-right: 30%;
+}
+.navigation-text{
+    margin: 0 20px 0;
+}
+.name-only{
+    width: 100px;
+}
+.publish-adv{
+    vertical-align: middle;
+    line-height: 1px;
+    width: 205px;
+    height: 40px;
+    background-color: rgba(232, 131, 48, 1);
+    border-radius: 9999px;
+    border: none;
+}
+.button-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+}
+.container{
+    margin: 0 30% ;
+}
+.stat-head{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bolder;
+    font-size: 36px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.earn-cont{
+    vertical-align: middle;
+    line-height: 5px;
+    margin: 0 20px 0 0;
+    width: 194px;
+    height: 85px;
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgba(240, 234, 228, 1);
+    border-style: solid;
+}
+.earn-money{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+    text-align: center;
+}
+.small-text{
+    color: rgba(133, 115, 96, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    font-style: normal;
+    margin: 10px 0 0 40px;
+}
+.choose-cont{
+    display: flex;
+    margin-top: 20px;
+    width: 960px;
+    height: 70px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 2px solid rgba(240, 234, 228, 1);
+}
+.flex{
+    display: flex;
+}
+.choose-text{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.option-chosed{
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    width: 220px;
+    height: 53px;
+    border-radius: 12px;
+    background-color: rgba(240, 234, 228, 1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.option{
+    width: 220px;
+    height: 53px;
+    background-color: rgba(252, 250, 248, 1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.flat-img-1{
+    width: 60px;
+    height: 60px;
+    background-image: url(../img/flat.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    margin: 10px 0 0 10px;
+}
+.flat-img-2{
+    width: 60px;
+    height: 60px;
+    background-image: url(../img/flat.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    margin: 10px 0 0 10px;
+}
+.flat-name{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+    text-align: center;
+}
+.add-cont{
+    display: flex;
+    width: 960px;
+    height: 83px;
+    border-top: 1px solid rgba(240, 234, 228, 1);
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+    padding: 0;
+    margin-top: 10px;
+}
+.flat-name-cont{
+    margin-left: 30px;
+    margin-top: 25px;
+}

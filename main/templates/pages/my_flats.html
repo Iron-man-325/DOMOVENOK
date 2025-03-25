@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/my_flats.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+            <div>
+                <h2 class="stat-head">Ваша статистика</h2>
+            </div>
+            <div class="flex">
+                <div class="earn-cont">
+                    <p class="earn-money">3</p>
+                    <p class="small-text">Квартир на продаже</p>
+                </div>
+                <div class="earn-cont">
+                    <p class="earn-money">420 00₽</p>
+                    <p class="small-text">Всего заработано</p>
+                </div>
+            </div>
+            <div class="choose-cont">
+                <div class="option-chosed">
+                    <p class="choose-text">Все квартиры</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Убранные</p>
+                </div>
+                <div class="option">
+                    <p class="choose-text">Активные</p>
+                </div>
+            </div>
+            <div>
+                <div class="add-cont">
+                    <div class="flat-img-1">
+
+                    </div>
+                    <div class="flat-name-cont">
+                        <a class="flat-name">Хата</a>
+                    </div>
+                </div>
+                <div class="add-cont">
+                    <div class="flat-img-2">
+
+                    </div>
+                    <div class="flat-name-cont">
+                        <a class="flat-name">Хата</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

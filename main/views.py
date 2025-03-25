@@ -39,7 +39,11 @@ def stat(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/static.html', context)
-
+def my_flats(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/my_flats.html', context)
 def login_page(request: WSGIRequest):
     raise NotImplementedError
 
