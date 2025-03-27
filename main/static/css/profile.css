@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+body{
+    background-color: rgba(252, 250, 248, 1);
+}
+header{
+    height: 60px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid rgba(243, 237, 231, 1);
+}
+main{
+    display:flex;
+    justify-content:center;
+}
+.head{
+    display: flex;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.search{
+    width: 256px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: rgba(244, 242, 240, 1);
+    border: none;
+    margin-top: 8px;
+}
+.head-navigation-text{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.name{
+    margin-right: 30%;
+}
+.navigation-text{
+    margin: 0 20px 0;
+}
+.name-only{
+    width: 100px;
+}
+.publish-adv{
+    vertical-align: middle;
+    line-height: 1px;
+    width: 205px;
+    height: 40px;
+    background-color: rgba(232, 131, 48, 1);
+    border-radius: 9999px;
+    border: none;
+}
+.button-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+}
+.container{
+    margin: 20px 0 ;
+}
+.flex{
+    display: flex;
+}
+.username{
+    height:40px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.button-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+}
+.name-history-flat{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+}
+.price{
+    color: rgba(151, 111, 78, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+}
+.his-img{
+    background-image: url(../img/flat.png);
+    height: 223px;
+    width: 223px;
+    border-radius: 12px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.your-img{
+    background-image: url(../img/flat.png);
+    height: 171px;
+    width: 320px;
+    border-radius: 12px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-left: 30%;
+    margin-bottom: 40px;
+}
+.view-but{
+    vertical-align: middle;
+    line-height: 32px;
+    width: 115px;
+    height: 32px;
+    border-radius: 12px;
+    background-color: rgba(245, 240, 229, 1);
+    text-align: center;
+}
+.view-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+}
+.flat-name{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 16px;
+}
+.redac-but{
+    margin: 60px 10px 0 100px;
+    background-color: rgba(245, 240, 229, 1);
+    border-radius: 12px;
+    width: 234px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10px;
+}
+.head-prof-block{
+    height: 160px;
+    display: flex;
+    vertical-align: middle;
+    line-height: 80px;
+}
+.log-out-but{
+    margin: 60px 10px 0 0;
+    background-color: rgba(232, 131, 48, 1);
+    border-radius: 12px;
+    width: 234px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10px;
+}
+.logo-prof{
+    background-image: url(../img/dog.jpg);
+    height: 128px;
+    width: 128px;
+    border-radius: 64px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.name-block{
+    margin-top: 40px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10px;
+    margin-left: 10px;
+}
+.his-block{
+    margin-right: 20px;
+}
+.description-your-flat{
+    width: 300px;
+    margin-bottom: 40px;
+}

@@ -1,0 +1,73 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+        <div class="container">
+            <div class="head-prof-block">
+                <div class="logo-prof">
+
+                </div>
+                <div class="name-block">
+                    <h2 class="username">Морская пехота</h2>
+                </div>
+                <div class="redac-but">
+                    <p class="button-text">Редактировать профиль</p>
+                </div>
+                <div class="log-out-but">
+                    <p class="button-text">Выйти из аккаунта</p>
+                </div>
+            </div>
+            <div>
+                <h2 class="username">История просмотра</h2>
+            </div>
+            <div class="flex">
+                <div class="his-block">
+                    <div class="his-img">
+
+                    </div>
+                    <p class="name-history-flat">квартира крутой</p>
+                    <p class="price">8000/ночь</p>
+                </div>
+                <div class="his-block">
+                    <div class="his-img">
+
+                    </div>
+                    <p class="name-history-flat">дом крутой</p>
+                    <p class="price">8000/ночь</p>
+                </div>
+            </div>
+            <div>
+                <h3 class="username">Ваши квартиры</h3>
+            </div>
+            <div>
+                <div class="flex">
+                    <div class="description-your-flat">
+                        <p class="price">Дом</p>
+                        <h4 class="flat-name">Дом. Там убивали</h4>
+                        <p class="price">Химки</p>
+                        <div class="view-but">
+                            <p class="view-text">Посмотреть</p>
+                        </div>
+                    </div>
+                    <div class="your-img">
+
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="description-your-flat">
+                        <p class="price">Дом</p>
+                        <h4 class="flat-name">Другой дом. Там выживали.</h4>
+                        <p class="price">Химки</p>
+                        <div class="view-but">
+                            <p class="view-text">Посмотреть</p>
+                        </div>
+                    </div>
+                    <div class="your-img">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

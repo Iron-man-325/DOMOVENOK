@@ -9,6 +9,7 @@ urlpatterns = [
      path('', views.index_page, name='index'),
      path('flat-list/', views.flat_list, name='index'),
      path('sup/', views.sup, name='index'),
+     path('profile/', views.profile, name='index'),
      path('stat/', views.stat, name='index'),
      path('send-support-message/', views.send_support_message, name='send_support_message'),
      path('my-flats/', views.my_flats, name='send_support_message'),
