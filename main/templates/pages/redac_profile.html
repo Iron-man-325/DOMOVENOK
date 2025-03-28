@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/redac_profile.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div>
+            <div>
+                <h2 class="head-settings-text">Настройки</h2>
+            </div>
+            <div class="logo-container">
+                <div class="logo">
+
+                </div>
+                <div class="change-logo-button">
+                    <p class="change-logo-text">Сменить аватр</p>
+                </div>
+            </div>
+            <div class="personal-info-container">
+                <h4 class="personal-info-head-text">Персональная информация</h4>
+            </div>
+            <div>
+                <p class="personal-info-text">Имя</p>
+                <input class="info-input" placeholder="Ваше имя">
+            </div>
+            <div>
+                <p class="personal-info-text">Фамилия</p>
+                <input class="info-input" placeholder="Ваша фамилия">
+            </div>
+            <div>
+                <p class="personal-info-text">Статус</p>
+                <input class="info-input" placeholder="Ваш статус">
+            </div>
+            <div>
+                <p class="personal-info-text">Почта</p>
+                <input class="info-input" placeholder="user@gmail.com">
+            </div>
+            <div>
+                <p class="personal-info-text">Номер телефона</p>
+                <input class="info-input" placeholder="+7 977 123 45 67">
+            </div>
+            <div>
+                <h4 class="personal-info-head-text">Пароль</h4>
+            </div>
+            <div>
+                <p class="personal-info-text">Ваш пароль</p>
+                <input class="info-input" placeholder="Ваш пароль">
+            </div>
+            <div>
+                <p class="personal-info-text">Новый пароль</p>
+                <input class="info-input" placeholder="Новый пароль">
+            </div>
+            <div>
+                <p class="personal-info-text">Подтвердите новый пароль</p>
+                <input class="info-input" placeholder="Подтвердите новый пароль">
+            </div>
+        </div>
+{% endblock %}

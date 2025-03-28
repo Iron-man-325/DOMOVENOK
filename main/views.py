@@ -44,6 +44,11 @@ def my_flats(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/my_flats.html', context)
+def redac_profile(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/redac_profile.html', context)
 
 def profile(request: WSGIRequest):
     context = {
