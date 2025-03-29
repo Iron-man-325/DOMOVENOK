@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+body{
+    background-color: rgba(252, 250, 248, 1);
+}
+header{
+    height: 60px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid rgba(243, 237, 231, 1);
+}
+main{
+    display:flex;
+    justify-content:center;
+}
+.head{
+    display: flex;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.search{
+    width: 256px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: rgba(244, 242, 240, 1);
+    border: none;
+    margin-top: 8px;
+}
+
+.logo-small{
+    margin-left:10px;
+    background-image: url(../img/dog.jpg);
+    height: 40px;
+    width: 40px;
+    border-radius: 64px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.head-navigation-text{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+}
+.name{
+    margin-right: 30%;
+}
+.navigation-text{
+    margin: 0 20px 0;
+}
+.name-only{
+    width: 100px;
+}
+.publish-adv{
+    vertical-align: middle;
+    line-height: 1px;
+    width: 205px;
+    height: 40px;
+    background-color: rgba(232, 131, 48, 1);
+    border-radius: 9999px;
+    border: none;
+}
+.button-text{
+    color: rgba(27, 20, 14, 1);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 14px;
+}
+.container {
+    margin-top:20px;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 56px;
+}
+
+.faq-head {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 400;
+    font-size: 44px;
+    font-style: normal;
+    color: rgba(27, 20, 14, 1);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.faq-item {
+    vertical-align: middle;
+    width: 720px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: rgba(240, 234, 228, 1);
+    border-style: solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 32px;
+}
+
+.faq-question {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16.5px;
+    font-style: normal;
+    color: rgba(133, 115, 96, 1);
+    text-align: left;
+}
+
+.faq-item::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(133, 115, 96, 1);
+}
+
+.questions {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}

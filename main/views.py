@@ -29,6 +29,11 @@ def flat_list(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/flat_list_buy.html', context)
+def faq_questions(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/faq_questions.html', context)
 def sup(request: WSGIRequest):
     context = {
         'pagename': "Главная"
