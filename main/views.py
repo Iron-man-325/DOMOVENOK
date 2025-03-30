@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+
 def add_apartment(request):
     if request.method == 'POST':
         form = ApartmentForm(request.POST)
@@ -19,47 +20,84 @@ def add_apartment(request):
         form = ApartmentForm()
     return render(request, 'pages/Flat_add.html', {'form': form})
 
+
 def index_page(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+
+
 def flat_list(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/flat_list_buy.html', context)
+
+
 def faq_questions(request: WSGIRequest):
+    class Question:
+        def __init__(self, q: str, a: str = ""):
+            self.q = q
+            self.a = a
     context = {
-        'pagename': "Главная"
+        'pagename': "Часто задаваемые вопросы",
+        'questions': [Question("Как выставить квартиру на продажу?",
+                               "Никак."),
+                      Question("Как оплатить квартиру?",
+                               "Вы можете оплатить квартиру прямо на сайте с помощью T Pay."),
+                      Question("Как увидеть статистику по заработку?",
+                               "Никак, мы - не приложение вашего банка."),
+                      Question("Как добавить квитанции об оплате?",
+                               "Никак."),
+                      Question("Можно ли связаться с администрацией сайта?",
+                               "Нет, идите к чёрту, проект сдан, мы сваливаем в закат."),
+                      Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
+                               "Нет, модератор просто галочки тыкает с перерывом на сон. Ваша заявка не модерируется?"
+                               + " Ничего не можем поделать, модератору здоровье важнее этой заявки."),
+                      Question("?",
+                               "?"),
+                      ]
     }
+
     return render(request, 'pages/faq_questions.html', context)
+
+
 def sup(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/support_message.html', context)
+
+
 def stat(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/static.html', context)
+
+
 def my_flats(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/my_flats.html', context)
+
+
 def redac_profile(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/redac_profile.html', context)
 
+
 def profile(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/profile.html', context)
+
+
 def login_page(request: WSGIRequest):
     raise NotImplementedError
 
