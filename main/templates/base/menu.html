@@ -1,29 +1,25 @@
-<nav>
-
-    <a href="{% url 'index' %}">Simple votings</a>
-
-
-    <ul>
-        {% block menu %}
-            {% for item in menu %}
-                <li>
-                    <a href="{% url item.url_name %}">{{ item.name }}</a>
-                </li>
-            {% endfor %}
-        {% endblock %}
-    </ul>
-
-
-    <ul>
-        {% block usermenu %}
-            <li>
-                {% if request.user.is_authenticated %}
-                    <a href="{% url 'logout' %}">Выйти</a>
-                {% else %}
-                    <a href="{% url 'login' %}">Войти</a>
-                {% endif %}
-            </li>
-        {% endblock %}
-    </ul>
-
-</nav>
+<div class="head">
+    <div class="name">
+        <div></div>
+        <div class="name-only">
+            <h3>Домовенок ЙОУУУУ</h3>
+        </div>
+    </div>
+    <div class="head">
+        <input class="search" placeholder="Поиск">
+        <div class="navigation-text">
+            <a href="{% url item.url_name %}">
+                <p class="head-navigation-text">{{ item.name }}</p>
+            </a>
+        </div>
+        <div>
+            <a href="{% url 'flat_add' %}">
+                <button class="publish-adv">
+                    <p class="button-text">Разместить объявление</p>
+                </button>
+            </a>
+        </div>
+        <div>
+        </div>
+    </div>
+</div>

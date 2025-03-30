@@ -9,29 +9,44 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 
+def get_base_context(pagename: str = ""):
+    class MenuUrlContext:
+        def __init__(self, url_name: str, name: str):
+            self.url_name = url_name
+            self.name = name
+    return {'pagename': pagename,
+            'menu': [MenuUrlContext('index', 'Главная'),
+                     MenuUrlContext('stat', 'Статистика'),
+                     MenuUrlContext('index', 'Чаты'),
+                     MenuUrlContext('index', 'Квитанции'),
+                     MenuUrlContext('support', 'Поддержка'),
+                     MenuUrlContext('redact_profile', 'Настройки'),
+                     ]
+            }
+
+
 def add_apartment(request):
+    context = get_base_context('Добавление квартиры')
     if request.method == 'POST':
         form = ApartmentForm(request.POST)
-        if form.is_valid():
-            form.request = request
-            form.save()
-            return redirect('apartments_list')
+        if not form.is_valid():
+            context['form'] = form
+            return render(request, 'pages/Flat_add.html', context)
+        form.request = request
+        form.save()
+        return redirect('flat-list')
     else:
-        form = ApartmentForm()
-    return render(request, 'pages/Flat_add.html', {'form': form})
+        context['form'] = ApartmentForm()
+    return render(request, 'pages/Flat_add.html', context)
 
 
 def index_page(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Главная')
     return render(request, 'pages/Flat_add.html', context)
 
 
 def flat_list(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Квартиры')
     return render(request, 'pages/flat_list_buy.html', context)
 
 
@@ -40,61 +55,50 @@ def faq_questions(request: WSGIRequest):
         def __init__(self, q: str, a: str = ""):
             self.q = q
             self.a = a
-    context = {
-        'pagename': "Часто задаваемые вопросы",
-        'questions': [Question("Как выставить квартиру на продажу?",
-                               "Никак."),
-                      Question("Как оплатить квартиру?",
-                               "Вы можете оплатить квартиру прямо на сайте с помощью T Pay."),
-                      Question("Как увидеть статистику по заработку?",
-                               "Никак, мы - не приложение вашего банка."),
-                      Question("Как добавить квитанции об оплате?",
-                               "Никак."),
-                      Question("Можно ли связаться с администрацией сайта?",
-                               "Нет, идите к чёрту, проект сдан, мы сваливаем в закат."),
-                      Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
-                               "Нет, модератор просто галочки тыкает с перерывом на сон. Ваша заявка не модерируется?"
-                               + " Ничего не можем поделать, модератору здоровье важнее этой заявки."),
-                      Question("?",
-                               "?"),
-                      ]
-    }
+    context = get_base_context('Часто задаваемые вопросы')
+    context['questions'] = [Question("Как выставить квартиру на продажу?",
+                                     "Никак."),
+                            Question("Как оплатить квартиру?",
+                                     "Вы можете оплатить квартиру прямо на сайте с помощью T Pay."),
+                            Question("Как увидеть статистику по заработку?",
+                                     "Никак, мы - не приложение вашего банка."),
+                            Question("Как добавить квитанции об оплате?",
+                                     "Никак."),
+                            Question("Можно ли связаться с администрацией сайта?",
+                                     "Нет, идите к чёрту, проект сдан, мы сваливаем в закат."),
+                            Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
+                                     "Нет, модератор просто галочки тыкает с перерывом на сон."
+                                     + " Ваша заявка не модерируется?"
+                                     + " Ничего не можем поделать, модератору здоровье важнее этой заявки."),
+                            Question("?",
+                                     "?"),
+                            ]
 
     return render(request, 'pages/faq_questions.html', context)
 
 
 def sup(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Поддержка')
     return render(request, 'pages/support_message.html', context)
 
 
 def stat(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Статистика')
     return render(request, 'pages/static.html', context)
 
 
 def my_flats(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Ваши квартиры')
     return render(request, 'pages/my_flats.html', context)
 
 
-def redac_profile(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
-    return render(request, 'pages/redac_profile.html', context)
+def redact_profile(request: WSGIRequest):
+    context = get_base_context('Редактирование профиля')
+    return render(request, 'pages/redact_profile.html', context)
 
 
 def profile(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
+    context = get_base_context('Профиль')
     return render(request, 'pages/profile.html', context)
 
 
