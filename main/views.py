@@ -18,11 +18,15 @@ def get_base_context(pagename: str = ""):
             'menu': [MenuUrlContext('index', 'Главная'),
                      MenuUrlContext('stat', 'Статистика'),
                      MenuUrlContext('index', 'Чаты'),
-                     MenuUrlContext('index', 'Квитанции'),
+                     MenuUrlContext('faq', 'Q&A'),
                      MenuUrlContext('support', 'Поддержка'),
                      MenuUrlContext('redact_profile', 'Настройки'),
                      ]
             }
+
+
+def index_page(request: WSGIRequest):
+    return flat_list(request)
 
 
 def add_apartment(request):
@@ -37,11 +41,6 @@ def add_apartment(request):
         return redirect('flat-list')
     else:
         context['form'] = ApartmentForm()
-    return render(request, 'pages/Flat_add.html', context)
-
-
-def index_page(request: WSGIRequest):
-    context = get_base_context('Главная')
     return render(request, 'pages/Flat_add.html', context)
 
 
