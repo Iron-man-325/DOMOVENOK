@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'simple_votings.urls'
+ROOT_URLCONF = 'house_checker.urls'
 
 TEMPLATES = [
     {
@@ -61,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'simple_votings.wsgi.application'
+WSGI_APPLICATION = 'house_checker.wsgi.application'
 
 
 # Database
