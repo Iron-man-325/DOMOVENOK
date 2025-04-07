@@ -1,12 +1,15 @@
-from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .forms import ApartmentForm
-from .models import Apartment
+from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+
 import json
+
+from .forms import ApartmentForm
+from .models import Apartment, Profile
 
 
 def get_base_context(pagename: str = ""):
@@ -93,10 +96,20 @@ def my_flats(request: WSGIRequest):
 
 def redact_profile(request: WSGIRequest):
     context = get_base_context('Редактирование профиля')
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+
+        # Получение информации о профиле пользователя
+    context['profile'] = Profile.objects.get(user=request.user)
+    context['username'] = request.user.username
+    context['email'] = request.user.email
+    context['last_name'] = request.user.last_name
+
     return render(request, 'pages/redact_profile.html', context)
 
 
-def profile(request: WSGIRequest):
+def profile_page(request: WSGIRequest):
     context = get_base_context('Профиль')
     return render(request, 'pages/profile.html', context)
 
