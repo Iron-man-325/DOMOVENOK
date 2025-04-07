@@ -1,8 +1,10 @@
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ApartmentForm
-from .models import Apartment
+from .forms import ApartmentForm, User, UserForm
+from .models import Apartment, Profile
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -60,12 +62,49 @@ def profile(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/profile.html', context)
-def login_page(request: WSGIRequest):
-    raise NotImplementedError
 
+def registration_page(request):
+    if request.method == 'POST':
+        form = UserForm()
+        if form.is_valid():
+            user = User.objects.create_user(
+                email=form.data["email"],
+                username=form.data["username"],
+                password=form.data["password"],
+                last_name=form.data["last_name"]
+            )
 
-def registration_page(request: WSGIRequest):
-    raise NotImplementedError
+            profile = Profile()  # Создание объекта профиля (в ОЗУ)
+            profile.user = user
+            profile.save()  # Фиксирует профиль в БД
+
+            login(request, user)
+            return redirect('profile')
+    form = UserForm()
+
+    data = {
+        'form': form,
+    }
+    return render(request, "pages/regestration.html", data)
+
+def login_page(request):
+    context = {
+        "error": None
+    }
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('profile')
+        context["error"] = "Неверное имя пользователя или пароль."
+
+    return render(request, "pages/login.html", context)
+
 
 
 @csrf_exempt

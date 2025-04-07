@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -21,7 +22,7 @@ class Apartment(models.Model):
         return f"{self.address} - {self.rooms} комнат"
 
 class Profile(models.Model):
-    """
-    Доп. таблица к пользователю
-    """
-    pass
+    user = models.ForeignKey(User, models.CASCADE)
+
+    def __str__(self):
+        return self.user.username

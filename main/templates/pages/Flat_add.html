@@ -1,7 +1,48 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block css %}
-<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link href="{% static 'css/flat_add.css' %}" rel="stylesheet">
+{% endblock %}
+{% block header %}
+<header>
+        <div class="head">
+            <div class="name">
+                <div></div>
+                <div class="name-only">
+                    <h3>Домовенок ЙОУУУУ</h3>
+                </div>
+            </div>
+            <div class="head">
+                <input class="search" placeholder="Поиск">
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Главная</p>
+                </div>
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Статистика</p>
+                </div>
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Чаты</p>
+                </div>
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Квитанции</p>
+                </div>
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Поддержка</p>
+                </div>
+                <div class="navigation-text">
+                    <p class="head-navigation-text">Настройки</p>
+                </div>
+                <div>
+                    <button class="publish-adv">
+                        <p class="button-text">Разместить объявление</p>
+                    </button>
+                </div>
+                <div class="logo-small">
+
+                </div>
+            </div>
+        </div>
+    </header>
 {% endblock %}
 {% block content %}
         <div class="container">
