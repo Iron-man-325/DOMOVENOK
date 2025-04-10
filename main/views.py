@@ -41,6 +41,11 @@ def sup(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/support_message.html', context)
+def support(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/support.html', context)
 def stat(request: WSGIRequest):
     context = {
         'pagename': "Главная"
