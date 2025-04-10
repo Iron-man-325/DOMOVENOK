@@ -9,7 +9,7 @@
             <div>
                 <h2 class="head-text">Сдать жилье в аренду</h2>
             </div>
-            <form method="post">
+             <form class="form-control" action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="flex">
                     <div class="city">
@@ -120,6 +120,8 @@
                     <p class="text">Свободно</p>
                     {{ form.free_at }}
                 </div>
+                <img id="img_preview" class="img-fluid rounded mx-auto d-block mb-3" src="https://i.sstatic.net/y9DpT.jpg">
+                {{ form.image }}
                 <button class="button-submit height-margin">
                     <p class="text-submit">Добавить</p>
                 </button>
@@ -209,4 +211,7 @@
         setupDynamicFields('rules-options', 'new-rule', 'add-rule-button', 'rules-hidden');
     });
 </script>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/preview_img.js' %}"></script>
 {% endblock %}

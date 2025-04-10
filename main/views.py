@@ -17,7 +17,7 @@ def parse(s):
 
 def add_apartment(request):
     if request.method == 'POST':
-        form = ApartmentForm(request.POST)
+        form = ApartmentForm(request.POST, request.FILES)
         if form.is_valid():
             # Создание объекта квартиры
             apartment = Apartment.objects.create(
@@ -34,9 +34,9 @@ def add_apartment(request):
                 cost_per_night=form.cleaned_data['cost_per_night'],
                 prepayment=form.cleaned_data['prepayment'],
                 min_nights=form.cleaned_data['min_nights'],
-                free_at=form.cleaned_data['free_at']
+                free_at=form.cleaned_data['free_at'],
+                image=form.cleaned_data['image']
             )
-            apartment.photo = request.FILES
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
             apartment.amenities = request.POST.get('amenities', '')
             apartment.living_rules = request.POST.get('rules', '')

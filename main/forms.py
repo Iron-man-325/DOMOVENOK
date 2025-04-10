@@ -75,6 +75,7 @@ class ApartmentForm(forms.Form):
                                                               "placeholder": "Добавить даты"}
                                                              )
                                   )
+    image = forms.ImageField(widget=forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"}))
 
 
 class PhotoForm(forms.ModelForm):

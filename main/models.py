@@ -41,6 +41,7 @@ class Apartment(models.Model):
 
     # Дополнительные фото
     # photos = models.ManyToManyField(Photo, related_name='additional_photos')
-
+    image = models.ImageField(upload_to='apartment_photos/',default='default_image.jpg')  # Папка для хранения фото
+    alt_text = models.CharField(max_length=255, blank=True, null=True, help_text="Описание изображения")
     def __str__(self):
         return f"{self.city}, {self.street} - {self.description[:20]}..."
