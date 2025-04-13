@@ -110,6 +110,11 @@ def login_page(request):
 
     return render(request, "pages/login.html", context)
 
+def my_complaints(request: WSGIRequest):
+    context = {
+        'pagename': "Мои жалобы"
+    }
+    return render(request, 'pages/my_coplaints.html', context)
 
 
 @csrf_exempt
