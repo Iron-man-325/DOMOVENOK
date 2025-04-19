@@ -26,6 +26,16 @@ def index_page(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+def my_problems(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/my_problems.html', context)
+def error(request: WSGIRequest):
+    context = {
+        'pagename': "Главная"
+    }
+    return render(request, 'pages/error.html', context)
 def flat_list(request: WSGIRequest):
     context = {
         'pagename': "Главная"
