@@ -2,8 +2,9 @@
 body{
     background-color: rgba(252, 250, 248, 1);
 }
-.container{
-    margin-left:35%;
+main{
+    display:flex;
+    justify-content:center;
 }
 .create{
     margin: 12px 30px 12px 0;
