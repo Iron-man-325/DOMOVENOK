@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #F5F0E5;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .profile-header h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .profile-info {
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #E88330;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #0D141C;
+        }
+
+        .history-container, .apartments-container {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .card-title {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .card-price {
+            color: #E88330;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="profile-photo.jpg" alt="Фото профиля">
+            <h1>Имя Фамилия</h1>
+        </div>
+
+        <div class="profile-info">
+            <p>Email: user@example.com</p>
+            <p>Телефон: +7 (999) 123-45-67</p>
+        </div>
+
+        <div>
+            <a href="#" class="button">Редактировать профиль</a>
+            <a href="#" class="button">Выйти из аккаунта</a>
+        </div>
+
+        <div class="section-title">История просмотра</div>
+        <div class="history-container">
+            <div class="card">
+                <img src="example-image1.jpg" alt="Картинка квартиры">
+                <div class="card-title">Квартира в центре города</div>
+                <div class="card-price">8000/ночь</div>
+            </div>
+
+            <div class="card">
+                <img src="example-image2.jpg" alt="Картинка квартиры">
+                <div class="card-title">Квартира у моря</div>
+                <div class="card-price">10000/ночь</div>
+            </div>
+
+            <!-- Добавьте дополнительные карточки по мере необходимости -->
+        </div>
+
+        <div class="section-title">Ваши квартиры</div>
+        <div class="apartments-container">
+            <div class="card">
+                <img src="example-image3.jpg" alt="Картинка квартиры">
+                <div class="card-title">Собственная квартира в парке</div>
+                <div class="card-price">9000/ночь</div>
+            </div>
+
+            <div class="card">
+                <img src="example-image4.jpg" alt="Картинка квартиры">
+                <div class="card-title">Квартира с видом на озеро</div>
+                <div class="card-price">12000/ночь</div>
+            </div>
+            <!-- Добавьте дополнительные карточки по мере необходимости -->
+        </div>
+    </div>
+</body>
+</html>
