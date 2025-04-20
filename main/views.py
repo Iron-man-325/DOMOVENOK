@@ -1,6 +1,5 @@
 import json
 
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -69,6 +68,7 @@ def index_page(request: WSGIRequest):
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+
 
 def my_problems(request: WSGIRequest):
     context = {
@@ -202,6 +202,7 @@ def send_support_message(request):
 
     return JsonResponse({'success': False})
 
+
 def login_view(request):
     context = {
         "error": None
@@ -227,4 +228,3 @@ def show_flat(request, flat_id):
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
-
