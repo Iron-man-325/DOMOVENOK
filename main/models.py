@@ -141,35 +141,29 @@ class PaymentMethod(models.Model):
 
 
 class Apartment(models.Model):
-    # Адрес квартиры
-    city = models.CharField(max_length=69, null=True)  # Город
-    street = models.CharField(max_length=69, null=True)  # Улица
-    stage = models.CharField(max_length=69, null=True)  # Этаж
-    number = models.CharField(max_length=69, null=True)  # номер квартиры
-    housenum = models.CharField(max_length=69, null=True)  # номер дома
-    # Описание квартиры
-    description = models.CharField(max_length=69, blank=True)
+    city = models.CharField(max_length=200, null=True)
+    street = models.CharField(max_length=200, null=True)
+    stage = models.CharField(max_length=200, null=True)
+    number = models.CharField(max_length=200, null=True)
+    housenum = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=200, blank=True)
 
     # Характеристики квартиры
-    max_people = models.DecimalField(max_digits=10, decimal_places=2)  # Максимальное количество постояльцев
-    sleeping_places = models.DecimalField(max_digits=10, decimal_places=2)  # Количество спальных мест
-    sleeping_rooms = models.DecimalField(max_digits=10, decimal_places=2)  # Количество спален
-    bathrooms = models.DecimalField(max_digits=10, decimal_places=2)  # Количество ванных комнат
+    max_people = models.DecimalField(max_digits=10, decimal_places=2)
+    sleeping_places = models.DecimalField(max_digits=10, decimal_places=2)
+    sleeping_rooms = models.DecimalField(max_digits=10, decimal_places=2)
+    bathrooms = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # Стоимость и предоплата
-    cost_per_night = models.DecimalField(max_digits=10, decimal_places=2)  # Цена за ночь
-    prepayment = models.DecimalField(max_digits=10, decimal_places=2)  # Предоплата
+    cost_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    prepayment = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # Минимальное количество ночей для бронирования
     min_nights = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # Дата доступности квартиры
     free_at = models.DateTimeField(blank=True, null=True)
-    nearby_objects = models.TextField(default='[]')  # JSON-строка
-    amenities = models.TextField(default='[]')  # JSON-строка
-    living_rules = models.TextField(default='[]', blank=True)  # JSON-строка
+    nearby_objects = models.TextField(default='[]')
+    amenities = models.TextField(default='[]')
+    living_rules = models.TextField(default='[]', blank=True)
 
-    # Дополнительные фото
     # photos = models.ManyToManyField(Photo, related_name='additional_photos')
     image = models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')  # Папка для хранения фото
 
