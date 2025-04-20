@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ApartmentForm, PhotoForm
+from .forms import ApartmentForm
 import json
 from .models import Apartment
 

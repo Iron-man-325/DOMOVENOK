@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Apartment, Photo
+from .models import Apartment
 
 
 class ApartmentForm(forms.Form):
@@ -78,10 +78,10 @@ class ApartmentForm(forms.Form):
     image = forms.ImageField(widget=forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"}))
 
 
-class PhotoForm(forms.ModelForm):
-    class Meta:
-        model = Photo
-        fields = "__all__"
-        widgets = {
-            "image": forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"})
-        }
+# class PhotoForm(forms.ModelForm):
+#     class Meta:
+#         model = Photo
+#         fields = "__all__"
+#         widgets = {
+#             "image": forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"})
+#         }
