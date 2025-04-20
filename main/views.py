@@ -114,7 +114,7 @@ def my_complaints(request: WSGIRequest):
     context = {
         'pagename': "Мои жалобы"
     }
-    return render(request, 'pages/my_coplaints.html', context)
+    return render(request, 'pages/my_complaints.html', context)
 
 
 @csrf_exempt
