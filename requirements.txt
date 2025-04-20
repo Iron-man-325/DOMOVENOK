@@ -1,3 +1,4 @@
 Django
 django-bootstrap5
 djangorestframework==3.15.2
+pillow==11.2.1
