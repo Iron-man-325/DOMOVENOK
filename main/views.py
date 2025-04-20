@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+
 
 def add_apartment(request):
     if request.method == 'POST':
@@ -21,62 +22,83 @@ def add_apartment(request):
         form = ApartmentForm()
     return render(request, 'pages/Flat_add.html', {'form': form})
 
+
 def index_page(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
+
+
 def my_problems(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/my_problems.html', context)
+
+
 def error(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/error.html', context)
+
+
 def flat_list(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/flat_list_buy.html', context)
+
+
 def faq_questions(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/faq_questions.html', context)
+
+
 def sup(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/support_message.html', context)
+
+
 def support(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/support.html', context)
+
+
 def stat(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/static.html', context)
+
+
 def my_flats(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/my_flats.html', context)
+
+
 def redac_profile(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/redac_profile.html', context)
 
+
 def profile(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/profile.html', context)
+
 
 def registration_page(request):
     if request.method == 'POST':
@@ -89,7 +111,7 @@ def registration_page(request):
                 last_name=form.data["last_name"]
             )
 
-            profile = Profile()  # Создание объекта профиля (в ОЗУ)
+            profile = Profile()
             profile.user = user
             profile.save()  # Фиксирует профиль в БД
 
@@ -101,6 +123,7 @@ def registration_page(request):
         'form': form,
     }
     return render(request, "pages/regestration.html", data)
+
 
 def login_page(request):
     context = {
@@ -121,7 +144,6 @@ def login_page(request):
     return render(request, "pages/login.html", context)
 
 
-
 @csrf_exempt
 def send_support_message(request):
     if request.method == 'POST':
@@ -130,8 +152,8 @@ def send_support_message(request):
 
         if user_message:
             send_mail(
-                'Сообщение поддержки',  # Тема письма
-                user_message,  # Тело письма
+                'Сообщение поддержки',
+                user_message,
                 'no-reply@yourdomain.com',  # Письмо отправителя (например, no-reply@yourdomain.com)
                 ['lebedev.egor585.lol@gmail.com'],  # Ваш электронный адрес
                 fail_silently=False,
