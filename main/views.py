@@ -98,20 +98,3 @@ def login_page(request: WSGIRequest):
 
 def registration_page(request: WSGIRequest):
     raise NotImplementedError
-
-def add_image_page(request: WSGIRequest):
-    context = {
-        "form": PhotoForm()
-    }
-    if request.method == "GET":
-        return render(request, "pages/save_photo.html", context)
-
-    form = PhotoForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-    else:
-        raise NotImplementedError
-
-    return render(request, "pages/save_photo.html", context)
-
-
