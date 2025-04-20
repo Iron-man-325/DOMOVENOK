@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from .forms import ApartmentForm
-from .models import Apartment, Profile
+from .models import Apartment, Profile, User, UserHistory
 
 
 def get_base_context(pagename: str = ""):
@@ -45,6 +45,11 @@ def add_apartment(request):
     else:
         context['form'] = ApartmentForm()
     return render(request, 'pages/Flat_add.html', context)
+
+
+def apartment_page(request: WSGIRequest):
+    context = get_base_context("Квартира")
+    return render(request, 'pages/show_flat.html')
 
 
 def flat_list(request: WSGIRequest):
@@ -94,17 +99,19 @@ def my_flats(request: WSGIRequest):
     return render(request, 'pages/my_flats.html', context)
 
 
+@login_required
 def redact_profile(request: WSGIRequest):
     context = get_base_context('Редактирование профиля')
     if request.method == 'POST':
         logout(request)
         return redirect('login')
 
-        # Получение информации о профиле пользователя
-    context['profile'] = Profile.objects.get(user=request.user)
-    context['username'] = request.user.username
-    context['email'] = request.user.email
-    context['last_name'] = request.user.last_name
+    # Получение информации о профиле пользователя
+    usr = User.objects.get_by_natural_key(request.user)
+    context['profile'] = Profile.objects.get(user=usr)
+    context['username'] = usr.username
+    context['email'] = usr.email
+    context['last_name'] = usr.last_name
 
     return render(request, 'pages/redact_profile.html', context)
 
