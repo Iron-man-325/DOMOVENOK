@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+body{
+    background-color: rgba(252, 250, 248, 1);
+}
+main{
+    display:flex;
+    justify-content:center;
+}
+.create{
+    margin: 12px 30px 12px 0;
+}
+.style-text-head{
+    font-family: "Inter", serif;
+    font-size:32px;
+    font-weight: bold;
+    font-style: normal;
+    color:rgba(13, 20, 28, 1);
+
+}
+.style-text-small{
+    font-family: "Inter", serif;
+    font-optical-sizing: auto;
+    font-weight: 200px;
+    font-style: normal;
+    font-size: 14px;
+}
+.text-color-small{
+    color: rgba(180, 180, 180, 1);
+}
+.cont-button{
+    width:480px;
+}
+.enter-text{
+    color:rgba(27, 20, 14, 1);
+    font-family: "Inter", serif;
+    font-size:16px;
+    font-weight: bold;
+
+}
+.button-create-ak{
+    background-color: rgba(232, 131, 48, 1);
+    text-align: center;
+    width: 480px;
+    height: 40px;
+    margin: 4px 16px 12px 0px;
+    vertical-align: middle;
+    line-height: 40px;
+    border-radius: 12px;
+    padding: 0;
+    border: none;
+}
+.enter-field-create{
+    width: 480px;
+    height: 40px;
+    background-color: rgba(243, 242, 240, 1);
+    border-radius: 12px;
+    padding: 0;
+    border: none;
+}
+::placeholder{
+    color:rgba(160, 160, 160, 1);
+    padding-left: 15px;
+}
+

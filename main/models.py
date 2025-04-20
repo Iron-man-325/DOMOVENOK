@@ -1,8 +1,12 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.models import User
 
 
 class Apartment(models.Model):
+    """
+    Квартира
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='apartments')  # имя арендодателя
     address = models.CharField(max_length=255)  # адрес квартиры
     rooms = models.IntegerField()  # кол - во комнат
@@ -29,6 +33,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return User.objects.get(self.user).username
 
 
 class UserHistory(models.Model):

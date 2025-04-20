@@ -59,29 +59,28 @@ main{
     font-size: 16px;
 }
 .tab-container{
-    width: 40%;
+    width: 960px;
     height: 50px;
     border-top: none;
     border-right: none;
     border-left: none;
     border-bottom: 1px solid rgba(231, 218, 208, 1);
     display: flex;
+    padding: 0;
 }
 .underlined-tab{
     border-top: none;
     border-right: none;
     border-left: none;
     border-bottom: 3px solid rgba(232, 131, 48, 1);
-    width: 61px;
-    height: 43px;
+    width: 96px;
+    height: 50px;
     margin-right: 15px;
     background-color: rgba(252, 250, 248, 1);
-    padding: 0;
 }
 .reg-tab{
-    margin-right: 15px;
-    width: 61px;
-    height: 43px;
+    width: 96px;
+    height: 47px;
     background-color: rgba(252, 250, 248, 1);
     border: none;
     padding: 0;
@@ -103,7 +102,7 @@ main{
     margin-right: 10px;
     width: 48px;
     height: 48px;
-    background-image: url(../img/photo.png);
+    background-image: url(photo.png);
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 12px;

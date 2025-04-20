@@ -1,7 +1,34 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect
 
 from .models import Apartment, Profile
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'last_name', 'email', 'password']
+
+        widgets = {
+            "username": TextInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'Ваше имя'
+            }),
+            "email": EmailInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'Почта'
+            }),
+            "password": PasswordInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'Пароль'
+            }),
+            "last_name": TextInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'Фамилия'
+            }),
+        }
 
 
 class ApartmentForm(forms.ModelForm):
