@@ -132,15 +132,13 @@ def redac_profile(request: WSGIRequest):
 
 
 def profile(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
-    return render(request, 'pages/profile.html', context)
+    user = request.user
+    return render(request, 'pages/profile.html', {'form': user})
 
 
 def registration_page(request):
     if request.method == 'POST':
-        form = UserForm()
+        form = UserForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
                 email=form.data["email"],

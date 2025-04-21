@@ -10,6 +10,7 @@
             </div>
             <div class="fields">
                 <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
                     <div class="mail">
                         <p class="text">Имя</p>
                         <input class="enter-field" name="username" type="text"  required />

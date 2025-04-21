@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 body{
     background-color: rgba(252, 250, 248, 1);
@@ -9,14 +9,7 @@ main{
 }
 
 .button-login{
-    background-color: rgba(232, 131, 48, 1);
-=======
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Manrope:wght@600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Manrope:wght@600&display=swap');
-.button-login{
     background-color: rgba(33, 148, 242, 1);
->>>>>>> develop
     text-align: center;
     width: 480px;
     height: 40px;
@@ -28,34 +21,26 @@ main{
     border: none;
 }
 .enter{
-
-<<<<<<< HEAD
     margin: 20px 0 8px 100px;
-=======
     margin: 20px 17% 8px 17%;
 }
 .fields{
     margin: 0 10%;
->>>>>>> develop
 }
 .mail{
     margin: 12px 16px;
 }
 .style-text{
     font-family: "Manrope", serif;
-<<<<<<< HEAD
     font-size: 24px;
     font-weight: bold;
-=======
     font-optical-sizing: auto;
     font-weight: 600px;
->>>>>>> develop
     font-style: normal;
 }
 .enter-field{
     width: 480px;
     height: 40px;
-<<<<<<< HEAD
     background-color: rgba(243, 242, 240, 1);
     border-radius: 12px;
     padding: 0;
@@ -65,7 +50,6 @@ main{
 
 .button-register{
     background-color: rgba(226, 222, 219, 1);
-=======
     background-color: rgba(247, 250, 252, 1);
     border-radius: 12px;
     padding: 0;
@@ -77,7 +61,6 @@ main{
 }
 .button-register{
     background-color: rgba(232, 237, 245, 1);
->>>>>>> develop
     text-align: center;
     width: 480px;
     height: 40px;
@@ -98,7 +81,6 @@ main{
 .cont{
     margin: 4px 16px 12px 16px;
 }
-<<<<<<< HEAD
 .enter-text{
     color:rgba(27, 20, 14, 1);
     font-family: "Manrope", serif;
@@ -127,7 +109,6 @@ main{
     font-weight: normal;
     font-style: normal;
 }
-=======
 .cont-1{
     width: 497px;
     height: 37px;
@@ -137,4 +118,3 @@ main{
     line-height: 37px;
 }
 
->>>>>>> develop
