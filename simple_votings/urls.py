@@ -8,11 +8,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', views.index_page, name='index'),
+    path('', views.add_apartment, name='index'),
     path('support/', views.support, name='index'),
     path('questions/', views.faq_questions, name='index'),
 
-    path('flat-list/', views.flat_list, name='index'),
+    path('flat-list/', views.flat_list, name='apartment_list'),
     path('flat/<int:flat_id>/', views.show_flat, name='flat_detail'),
     path('my-flats/', views.my_flats, name='send_support_message'),
 

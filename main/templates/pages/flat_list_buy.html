@@ -65,16 +65,16 @@
                 <div>
                     <h3 class="text">Последние предложения</h3>
                 </div>
+                {% for apartment in apartments %}
                 <div class="var-cont">
-                    <div class="flat-img">
-
-                    </div>
+                <img class="flat-img" src="{{ apartment.image.url }}">
                     <div class="desc-cont">
                         <div class="desc">
                             <p class="desc-text">Дом целиком</p>
-                            <h4 class="name-flat">Вилла Санта-Барбара с видом на океан</h4>
-                            <p class="desc-text">Санта-Барбара, Калифорния</p>
-                            <p class="desc-text">4 спальни • 3 ванные • 2,000 кв.футов</p>
+                            <h4 class="name-flat">{{ apartment.id }}</h4>
+                            <p class="desc-text">{{ apartment.city }}</p>
+
+                            <p class="desc-text">{{ apartment.description }}</p>
 
                         </div>
                         <div class="but-div">
@@ -84,44 +84,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="var-cont">
-                    <div class="flat-img">
-
-                    </div>
-                    <div class="desc-cont">
-                        <div class="desc">
-                            <p class="desc-text">Дом целиком</p>
-                            <h4 class="name-flat">Вилла Санта-Барбара с видом на океан</h4>
-                            <p class="desc-text">Санта-Барбара, Калифорния</p>
-                            <p class="desc-text">4 спальни • 3 ванные • 2,000 кв.футов</p>
-
-                        </div>
-                        <div class="but-div">
-                            <button class="reserve-but">
-                                <p class="reserve-text">Забронировать</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="var-cont">
-                    <div class="flat-img">
-
-                    </div>
-                    <div class="desc-cont">
-                        <div class="desc">
-                            <p class="desc-text">Дом целиком</p>
-                            <h4 class="name-flat">Вилла Санта-Барбара с видом на океан</h4>
-                            <p class="desc-text">Санта-Барбара, Калифорния</p>
-                            <p class="desc-text">4 спальни • 3 ванные • 2,000 кв.футов</p>
-
-                        </div>
-                        <div class="but-div">
-                            <button class="reserve-but">
-                                <p class="reserve-text">Забронировать</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+                
             </div>
         </div>
 {% endblock %}

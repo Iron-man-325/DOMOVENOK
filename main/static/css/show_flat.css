@@ -3,11 +3,11 @@
 body{
     background-color: rgba(252, 250, 248, 1);
 }
-<<<<<<< HEAD
+
 main{
     display:flex;
     justify-content:center;
-=======
+}
 header{
     height: 60px;
     border-top: none;
@@ -59,7 +59,7 @@ header{
     font-weight: bold;
     font-style: normal;
     font-size: 14px;
->>>>>>> develop
+
 }
 .button-submit{
     width: 480px;
@@ -80,14 +80,11 @@ header{
 .height-margin{
     margin-top: 30px;
 }
-.content{
-    margin-left: 30%;
-}
 .text{
     font-family: "Plus Jakarta Sans", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 15px;
-    font-size: small;
+    font-weight: normal;
+    font-size: 15px;
     font-style: normal;
     color: rgba(28, 23, 13, 1);
 }
@@ -101,8 +98,8 @@ header{
 .head-text{
     font-family: "Plus Jakarta Sans", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 15px;
-    font-size: small;
+    font-weight: normal;
+    font-size: 15px;
     font-style: normal;
     color: rgba(151, 111, 78, 1);
 }
@@ -120,8 +117,6 @@ header{
 }
 .price-block{
     margin-top: 20px;
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> develop
+

@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block css %}
-<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link href="{% static 'css/flat_add.css' %}" rel="stylesheet">
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -20,7 +20,9 @@
                         <p class="text">Улица</p>
                         {{ form.street }}
                     </div>
-                    <div>
+                </div>
+                <div class="flex">
+                    <div class="city">
                         <p class="text">Дом</p>
                         {{ form.housenum }}
                     </div>

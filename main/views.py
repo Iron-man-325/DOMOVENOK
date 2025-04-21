@@ -58,7 +58,7 @@ def add_apartment(request):
     return render(request, 'pages/Flat_add.html', {'form': form})
 
 
-def apartment_list(request):
+def adminn(request):
     apartments = Apartment.objects.all()
     return render(request, 'pages/admin.html', {'apartments': apartments})
 
@@ -85,10 +85,8 @@ def error(request: WSGIRequest):
 
 
 def flat_list(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
-    return render(request, 'pages/flat_list_buy.html', context)
+    apartments = Apartment.objects.all()
+    return render(request, 'pages/flat_list_buy.html', {'apartments': apartments})
 
 
 def faq_questions(request: WSGIRequest):
