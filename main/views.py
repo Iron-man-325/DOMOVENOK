@@ -9,8 +9,27 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 
 from .forms import ApartmentForm, User, UserForm
-from .models import Apartment, Profile
+from .models import Apartment, Profile,ViewHistory
 
+def get_base_context(pagename: str = "", **kwargs):
+    class MenuUrlContext:
+        def __init__(self, url_name: str, name: str):
+            self.url_name = url_name
+            self.name = name
+
+    context = {'pagename': pagename,
+               'menu': [MenuUrlContext('index', 'Главная'),
+                        MenuUrlContext('stat', 'Статистика'),
+                        MenuUrlContext('index', 'Чаты'),
+                        MenuUrlContext('faq', 'Q&A'),
+                        MenuUrlContext('support', 'Поддержка'),
+                        MenuUrlContext('redact_profile', 'Настройки'),
+                        ]
+               }
+    for key, value in kwargs:
+        context[key] = value
+
+    return context
 
 def parse(s):
     s1 = ""
@@ -89,11 +108,6 @@ def flat_list(request: WSGIRequest):
     return render(request, 'pages/flat_list_buy.html', {'apartments': apartments})
 
 
-def faq_questions(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
-    }
-    return render(request, 'pages/faq_questions.html', context)
 
 
 def sup(request: WSGIRequest):
@@ -133,7 +147,8 @@ def redac_profile(request: WSGIRequest):
 
 def profile(request: WSGIRequest):
     user = request.user
-    return render(request, 'pages/profile.html', {'form': user})
+    history = ViewHistory.objects.filter(user=request.user).order_by('-viewed_at')[:20]
+    return render(request, 'pages/profile.html', {'form': user, 'history': history})
 
 
 def registration_page(request):
@@ -224,3 +239,30 @@ def show_flat(request, flat_id):
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
+    
+def faq_questions(request: WSGIRequest):
+    class Question:
+        def __init__(self, q: str, a: str = ""):
+            self.q = q
+            self.a = a
+
+    context = get_base_context('Часто задаваемые вопросы')
+    context['questions'] = [Question("Как выставить квартиру на продажу?",
+                                     "Никак."),
+                            Question("Как оплатить квартиру?",
+                                     "Вы можете оплатить квартиру прямо на сайте с помощью T Pay."),
+                            Question("Как увидеть статистику по заработку?",
+                                     "Никак, мы - не приложение вашего банка."),
+                            Question("Как добавить квитанции об оплате?",
+                                     "Никак."),
+                            Question("Можно ли связаться с администрацией сайта?",
+                                     "Нет, идите к чёрту, проект сдан, мы сваливаем в закат."),
+                            Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
+                                     "Нет, модератор просто галочки тыкает с перерывом на сон."
+                                     + " Ваша заявка не модерируется?"
+                                     + " Ничего не можем поделать, модератору здоровье важнее этой заявки."),
+                            Question("?",
+                                     "?"),
+                            ]
+
+    return render(request, 'pages/faq_questions.html', context)

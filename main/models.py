@@ -174,3 +174,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class ViewHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='view_history')
+    property = models.ForeignKey(Apartment, on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(auto_now_add=True)
