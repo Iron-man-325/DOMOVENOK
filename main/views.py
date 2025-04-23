@@ -59,7 +59,8 @@ def add_apartment(request):
                 prepayment=form.cleaned_data['prepayment'],
                 min_nights=form.cleaned_data['min_nights'],
                 free_at=form.cleaned_data['free_at'],
-                image=form.cleaned_data['image']
+                image=form.cleaned_data['image'],
+                user = request.user
             )
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
             apartment.amenities = request.POST.get('amenities', '')
@@ -67,6 +68,7 @@ def add_apartment(request):
             apartment.nearby_objects = parse(apartment.nearby_objects)
             apartment.amenities = parse(apartment.amenities)
             apartment.living_rules = parse(apartment.living_rules)
+            
             apartment.save()
 
             return redirect('apartment_list')
@@ -132,8 +134,10 @@ def stat(request: WSGIRequest):
 
 
 def my_flats(request: WSGIRequest):
+    apartments = Apartment.objects.filter(user=request.user)
     context = {
-        'pagename': "Главная"
+        'pagename': "Главная",
+        'apartments': apartments
     }
     return render(request, 'pages/my_flats.html', context)
 
@@ -148,7 +152,8 @@ def redac_profile(request: WSGIRequest):
 def profile(request: WSGIRequest):
     user = request.user
     history = ViewHistory.objects.filter(user=request.user).order_by('-viewed_at')[:20]
-    return render(request, 'pages/profile.html', {'form': user, 'history': history})
+    my_flats = Apartment.objects.filter(user=request.user)
+    return render(request, 'pages/profile.html', {'form': user, 'history': history, 'myflats':my_flats})
 
 
 def registration_page(request):

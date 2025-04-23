@@ -137,6 +137,7 @@ class PaymentMethod(models.Model):
 
 
 class Apartment(models.Model):
+    user = models.ForeignKey('auth.User', models.CASCADE)
     city = models.CharField(max_length=200, null=True)
     street = models.CharField(max_length=200, null=True)
     stage = models.CharField(max_length=200, null=True)
