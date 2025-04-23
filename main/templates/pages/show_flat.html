@@ -16,26 +16,26 @@
             <div class="head">
                 <input class="search" placeholder="Поиск">
                 <div class="navigation-text">
-                    <p class="head-navigation-text">Главная</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text">Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text">Поддержка</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text">Настройки</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'redac' %}'">Настройки</p>
                 </div>
                 <div>
-                    <button class="publish-adv">
-                        <p class="button-text">Разместить объявление</p>
+                    <button class="publish-adv" onclick="location.href='{% url 'add' %}'">
+                        <p class="button-text" >Разместить объявление</p>
                     </button>
                 </div>
                 <div class="logo-small">

@@ -38,7 +38,7 @@ def parse(s):
             s1 += c
     return s1
 
-
+@login_required
 def add_apartment(request):
     if request.method == 'POST':
         form = ApartmentForm(request.POST, request.FILES)
@@ -76,79 +76,85 @@ def add_apartment(request):
 
     return render(request, 'pages/Flat_add.html', {'form': form})
 
-
+@login_required
 def adminn(request):
     apartments = Apartment.objects.all()
     return render(request, 'pages/admin.html', {'apartments': apartments})
 
-
+@login_required
 def index_page(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/Flat_add.html', context)
 
-
+@login_required
 def my_problems(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/my_problems.html', context)
 
-
+@login_required
 def error(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/error.html', context)
 
-
+@login_required
 def flat_list(request: WSGIRequest):
     apartments = Apartment.objects.all()
     return render(request, 'pages/flat_list_buy.html', {'apartments': apartments})
 
 
 
-
+@login_required
 def sup(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/support_message.html', context)
 
-
+@login_required
 def support(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/support.html', context)
 
-
+@login_required
 def stat(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/static.html', context)
 
-
+@login_required
 def my_flats(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/my_flats.html', context)
 
-
+@login_required
 def redac_profile(request: WSGIRequest):
     context = {
         'pagename': "Главная"
     }
     return render(request, 'pages/redac_profile.html', context)
 
-
+@login_required
 def profile(request: WSGIRequest):
     user = request.user
-    history = ViewHistory.objects.filter(user=request.user).order_by('-viewed_at')[:20]
-    return render(request, 'pages/profile.html', {'form': user, 'history': history})
+    history = ViewHistory.objects.filter(user=request.user).select_related('apartment')
+    apartments = Apartment.objects.all()
+    context={
+        'form': user,
+        'history':history,
+        'apartments':apartments
+    }
+    return render(request, 'pages/profile.html', context)
 
 
 def registration_page(request):
@@ -176,26 +182,8 @@ def registration_page(request):
     return render(request, "pages/regestration.html", data)
 
 
-def login_page(request):
-    context = {
-        "error": None
-    }
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('profile')
-        context["error"] = "Неверное имя пользователя или пароль."
-
-    return render(request, "pages/login.html", context)
-
-
 @csrf_exempt
+@login_required
 def send_support_message(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -230,16 +218,18 @@ def login_view(request):
             return redirect('profile')
         context["error"] = "Неверное имя пользователя или пароль."
 
-    return render(request, "pages/Login.html", context)
+    return render(request, "pages/login.html", context)
 
-
+@login_required
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
+        ViewHistory.objects.create(user=request.user, apartment=apartment)
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
     
+@login_required   
 def faq_questions(request: WSGIRequest):
     class Question:
         def __init__(self, q: str, a: str = ""):
