@@ -137,7 +137,7 @@ class PaymentMethod(models.Model):
 
 
 class Apartment(models.Model):
-    user = models.ForeignKey('auth.User', models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     city = models.CharField(max_length=200, null=True)
     street = models.CharField(max_length=200, null=True)
     stage = models.CharField(max_length=200, null=True)
@@ -178,5 +178,5 @@ class Profile(models.Model):
     
 class ViewHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='view_history')
-    property = models.ForeignKey(Apartment, on_delete=models.CASCADE)
+    apartment  = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     viewed_at = models.DateTimeField(auto_now_add=True)

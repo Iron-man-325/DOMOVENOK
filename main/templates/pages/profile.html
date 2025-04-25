@@ -86,15 +86,14 @@
                 {% for apartment in myflats %}
                 <div class="flex">
                     <div class="description-your-flat">
-                        <img src="{{ apartment.image.url }}" 
-                        alt="{{ apartment.city }}" 
-                        style="width: 100px; height: 100px; object-fit: cover;">
-                        <a class="flat-name" href="{% url 'flat_detail' apartment.id %}">
-                            {{ apartment.city }}, {{ apartment.street }} {{ apartment.housenum }}
-                        </a>
+                        <p class="price">Дом</p>
+                        <h4 class="flat-name">Дом. Там убивали</h4>
+                        <p class="price">{{ apartment.street }}</p>
+                        <div class="view-but">
+                            <p class="view-text">Посмотреть</p>
+                        </div>
                     </div>
-
-                    </div>
+                    <img class="your-img" src="{{ apartment.image.url }}" >
                 </div>
                 {% endfor %}
         </div>
