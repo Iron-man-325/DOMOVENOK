@@ -80,32 +80,18 @@
                 <h3 class="username">Ваши квартиры</h3>
             </div>
             <div>
+                {% for apartment in myflats %}
                 <div class="flex">
                     <div class="description-your-flat">
                         <p class="price">Дом</p>
                         <h4 class="flat-name">Дом. Там убивали</h4>
-                        <p class="price">Химки</p>
+                        <p class="price">{{ apartment.street }}</p>
                         <div class="view-but">
                             <p class="view-text">Посмотреть</p>
                         </div>
                     </div>
-                    <div class="your-img">
-
-                    </div>
+                    <img class="your-img" src="{{ apartment.image.url }}" >
                 </div>
-                <div class="flex">
-                    <div class="description-your-flat">
-                        <p class="price">Дом</p>
-                        <h4 class="flat-name">Другой дом. Там выживали.</h4>
-                        <p class="price">Химки</p>
-                        <div class="view-but">
-                            <p class="view-text">Посмотреть</p>
-                        </div>
-                    </div>
-                    <div class="your-img">
-
-                    </div>
-                </div>
-            </div>
+                {% endfor %}
         </div>
 {% endblock %}

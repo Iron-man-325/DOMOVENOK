@@ -70,23 +70,20 @@
                     <p class="choose-text">Активные</p>
                 </div>
             </div>
-            <div>
+            {% for apartment in apartments %}
                 <div class="add-cont">
-                    <div class="flat-img-1">
 
                     </div>
                     <div class="flat-name-cont">
-                        <a class="flat-name">Хата</a>
+                        <img src="{{ apartment.image.url }}" 
+     alt="{{ apartment.city }}" 
+     style="width: 100px; height: 100px; object-fit: cover;">
+     <a class="flat-name" href="{% url 'flat_detail' apartment.id %}">
+        {{ apartment.city }}, {{ apartment.street }} {{ apartment.housenum }}
+    </a>
                     </div>
+                    
                 </div>
-                <div class="add-cont">
-                    <div class="flat-img-2">
-
-                    </div>
-                    <div class="flat-name-cont">
-                        <a class="flat-name">Хата</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 {% endblock %}
