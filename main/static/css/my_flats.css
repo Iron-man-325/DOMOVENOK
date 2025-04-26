@@ -87,13 +87,15 @@ main{
     margin-bottom: 10px;
     margin-top: 10px;
 }
-.flat-img{
-    width: 455px;
-    height: 256px;
+.flat-img-1{
+    width: 60px;
+    height: 60px;
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 12px;
+    margin: 10px 0 0 10px;
 }
+
 .flat-name{
     font-family: "Plus Jakarta Sans", sans-serif;
     font-weight: normal;

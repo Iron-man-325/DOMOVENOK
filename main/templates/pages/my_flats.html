@@ -72,17 +72,12 @@
             </div>
             {% for apartment in apartments %}
                 <div class="add-cont">
-
+                    <div>
+                        <img class="flat-img-1" src="{{ apartment.image.url }}">
                     </div>
-                    <div class="flat-name-cont">
-                        <img src="{{ apartment.image.url }}" 
-     alt="{{ apartment.city }}" 
-     style="width: 100px; height: 100px; object-fit: cover;">
-     <a class="flat-name" href="{% url 'flat_detail' apartment.id %}">
-        {{ apartment.city }}, {{ apartment.street }} {{ apartment.housenum }}
-    </a>
+                    <div>
+                        <a class="flat-name">{{ apartment.description}}</a>
                     </div>
-                    
                 </div>
             {% endfor %}
         </div>
