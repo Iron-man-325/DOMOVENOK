@@ -5,44 +5,8 @@
 {% endblock %}
 {% block header %}
 <header>
-        <div class="head">
-            <div class="name">
-                <div></div>
-                <div class="name-only">
-                    <h3>Домовенок ЙОУУУУ</h3>
-                </div>
-            </div>
-            <div class="head">
-                <input class="search" placeholder="Поиск">
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Главная</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Статистика</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Чаты</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Квитанции</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Поддержка</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text">Настройки</p>
-                </div>
-                <div>
-                    <button class="publish-adv">
-                        <p class="button-text">Разместить объявление</p>
-                    </button>
-                </div>
-                <div class="logo-small">
-
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- ... твой header ... -->
+</header>
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -72,6 +36,7 @@
             <p class="text">Добавить фото</p>
             <p class="color-text">Можно добавлять до 3 фото</p>
         </div>
+        <input type="file" id="photoInput" name="photos" accept="image/*" multiple style="margin-top:10px;">
     </div>
     <button class="button" id="sendRequest">
         <p class="but-text">Отправить запрос</p>
@@ -79,26 +44,42 @@
 </div>
 
 <script>
-    document.getElementById('sendRequest').addEventListener('click', function() {
-        const userMessage = document.getElementById('userMessage').value;
+document.getElementById('sendRequest').addEventListener('click', function(e) {
+    e.preventDefault();
 
-        fetch('/send-support-message/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'  // Не забудьте передать CSRF токен
-            },
-            body: JSON.stringify({ message: userMessage })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Сообщение отправлено успешно!');
-            } else {
-                alert('Ошибка при отправке сообщения.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    });
+    const userMessage = document.getElementById('userMessage').value;
+    const photoInput = document.getElementById('photoInput');
+    const files = photoInput.files;
+
+    if (files.length > 3) {
+        alert('Можно добавить не более 3 фото!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('message', userMessage);
+    for (let i = 0; i < files.length; i++) {
+        formData.append('photos', files[i]);
+    }
+
+    fetch('/send-support-message/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Сообщение отправлено успешно!');
+            document.getElementById('userMessage').value = '';
+            photoInput.value = '';
+        } else {
+            alert('Ошибка при отправке сообщения.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
 </script>
 {% endblock %}
