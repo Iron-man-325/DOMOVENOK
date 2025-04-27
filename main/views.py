@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import json
 
-from .forms import ApartmentForm
+from .forms import ApartmentForm, UserForm
 from .models import Apartment, Profile, User, ViewHistory
 
 
@@ -42,11 +42,11 @@ def get_base_context(pagename: str = "", **kwargs):
                         MenuUrlContext('index', 'Чаты'),
                         MenuUrlContext('faq', 'Q&A'),
                         MenuUrlContext('support', 'Поддержка'),
-                        MenuUrlContext('redact_profile', 'Настройки'),
+                        MenuUrlContext('redact', 'Настройки'),
                         ]
                }
-    for key, value in kwargs:
-        context[key] = value
+    for key in kwargs.keys():
+        context[key] = kwargs[key]
 
     return context
 
@@ -123,18 +123,17 @@ def show_flat(request, flat_id):
         return render(request, "pages/404.html", status=404)
 
 
+@login_required
 def my_problems(request: WSGIRequest):
     context = get_base_context('Мои проблемы')
     return render(request, 'pages/my_problems.html', context)
 
 
-@login_required
 def error(request: WSGIRequest):
     context = get_base_context('Error')
     return render(request, 'pages/error.html', context)
 
 
-@login_required
 def flat_list(request: WSGIRequest):
     context = get_base_context('Квартиры', apartments=Apartment.objects.all())
     return render(request, 'pages/flat_list_buy.html', context)
@@ -147,7 +146,7 @@ def faq_questions(request: WSGIRequest):
             self.a = a
 
     questions = [Question("Как выставить объявление об аренде квартиры?",
-                          "Кнопка справа сверху, в меню, \"Разместить объявление\"."),
+                          "Кнопка справа сверху, в меню, \"Разместить объявление\". Авторизация обязательна."),
                  Question("Как оплатить квартиру?",
                           "Вы можете оплатить квартиру прямо на сайте с помощью своего виртуального кошелька."),
                  Question("Как увидеть статистику по заработку?",
@@ -167,6 +166,7 @@ def faq_questions(request: WSGIRequest):
     return render(request, 'pages/faq_questions.html', context)
 
 
+@login_required
 def sup(request: WSGIRequest):
     context = get_base_context('Поддержка')
     return render(request, 'pages/support_message.html', context)
@@ -209,12 +209,8 @@ def redact_profile(request: WSGIRequest):
     return render(request, 'pages/redact_profile.html', context)
 
 
-def profile_page(request: WSGIRequest):
-    context = get_base_context('Профиль')
-
-
 @login_required
-def profile(request: WSGIRequest):
+def profile_page(request: WSGIRequest):
     user = request.user
     history = ViewHistory.objects.filter(user=request.user).select_related('apartment')
     apartments = Apartment.objects.all()

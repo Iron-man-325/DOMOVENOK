@@ -7,9 +7,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index_page, name='index'),
 
-    path('add/', views.add_apartment, name='add'),
-    path('support/', views.support, name='data'),
+    path('add/', views.add_apartment, name='add_flat'),
+    path('support/', views.support, name='support'),
     path('questions/', views.faq_questions, name='faq'),
 
     path('flat-list/', views.flat_list, name='apartment_list'),
@@ -17,15 +18,15 @@ urlpatterns = [
     path('my-flats/', views.my_flats, name='my_flats'),
 
     path('sup/', views.sup, name='sup'),
-    path('profile/', views.profile, name='profile'),
+    path('profile/', views.profile_page, name='profile'),
     path('stat/', views.stat, name='stat'),
-    path('redac/', views.redac_profile, name='redac'),
+    path('redact/', views.redact_profile, name='redact'),
     path('send-support-message/', views.send_support_message, name='send_support_message'),
 
     path('prob/', views.my_problems, name='prob'),
     path('error/', views.error, name='error'),
-    path('', views.login_view, name='login'),
 
+    path('login/', views.login_page, name='login'),
     path('registration/', views.registration_page, name='registration'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
