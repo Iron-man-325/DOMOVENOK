@@ -42,7 +42,6 @@ main{
     font-size: 14px;
 }
 .his-img{
-    background-image: url(../img/flat.png);
     height: 223px;
     width: 223px;
     border-radius: 12px;
@@ -50,7 +49,6 @@ main{
     background-repeat: no-repeat;
 }
 .your-img{
-    background-image: url(../img/flat.png);
     height: 171px;
     width: 320px;
     border-radius: 12px;

@@ -11,13 +11,17 @@
         <h2 class="faq-head">Часто задаваемые</h2>
         <h2 class="faq-head">вопросы</h2>
     </div>
+    {% for question in questions %}
     <div class="questions">
-        {% for question in questions %}
-        <div class="faq-item">
-            <div class="faq-question">{{ question.q }}</div>
-            <div class="faq-answer">{{ question.a }}</div>
-        </div>
-        {% endfor %}
+        <button id="{{ loop.index }}" class="faq-item">
+            <div class="faq-item">
+                <div class="faq-question">
+                    {{ question.q }}
+                    <div class="faq-answer">{{ question.a }}</div>
+                </div>
+            </div>
+        </button>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -30,23 +30,15 @@
                     <p class="choose-text">Активные</p>
                 </div>
             </div>
-            <div>
+            {% for apartment in apartments %}
                 <div class="add-cont">
-                    <div class="flat-img-1">
-
+                    <div>
+                        <img class="flat-img-1" src="{{ apartment.image.url }}">
                     </div>
-                    <div class="flat-name-cont">
-                        <a class="flat-name">Хата</a>
+                    <div>
+                        <a class="flat-name">{{ apartment.description}}</a>
                     </div>
                 </div>
-                <div class="add-cont">
-                    <div class="flat-img-2">
-
-                    </div>
-                    <div class="flat-name-cont">
-                        <a class="flat-name">Хата</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 {% endblock %}

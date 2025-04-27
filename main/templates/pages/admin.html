@@ -1,0 +1,120 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+<div class="container">
+    <div class="apartments-list">
+        <h2 class="head-text">Список квартир</h2>
+
+        {% if apartments %}
+            {% for apartment in apartments %}
+                <div class="apartment-card">
+                    <div class="card-header">
+                        <h3>{{ apartment.city }}, {{ apartment.street }}</h3>
+                        <p>Цена: {{ apartment.cost_per_night }}₽/ночь</p>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="apartment-characteristics">
+                            <div class="characteristic">
+                                <p>Макс. человек:</p>
+                                <span>{{ apartment.max_people }}</span>
+                            </div>
+                            <div class="characteristic">
+                                <p>Спальных мест:</p>
+                                <span>{{ apartment.sleeping_places }}</span>
+                            </div>
+                            <div class="characteristic">
+                                <p>Спален:</p>
+                                <span>{{ apartment.sleeping_rooms }}</span>
+                            </div>
+                            <div class="characteristic">
+                                <p>Ванных:</p>
+                                <span>{{ apartment.bathrooms }}</span>
+                            </div>
+                        </div>
+
+                        <div class="apartment-description">
+                            <h4>Описание:</h4>
+                            <p>{{ apartment.description }}</p>
+                        </div>
+
+                        <div class="apartment-features">
+                    <h4>Удобства:</h4>
+                    <p>{{ apartment.amenities }}</p>
+                </div>
+
+                <div class="apartment-rules">
+                    <h4>Правила:</h4>
+                    <p>{{ apartment.living_rules }}</p>
+                </div>
+
+                <div class="apartment-nearby">
+                    <h4>Близлежащие объекты:</h4>
+                    <p>{{ apartment.nearby_objects }}</p>
+                </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Квартир пока нет</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.apartments-list {
+    display: grid;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.apartment-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 15px;
+}
+
+.apartment-characteristics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.characteristic {
+    text-align: center;
+    padding: 15px;
+    background: #e9ecef;
+    border-radius: 8px;
+}
+
+.apartment-description,
+.apartment-features,
+.apartment-rules,
+.apartment-nearby {
+    margin: 20px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

@@ -7,15 +7,16 @@
         <link href="{% static 'css/footer.css' %}" rel="stylesheet">
         <link href="{% static 'css/header.css' %}" rel="stylesheet">
         {% block css %}{% endblock %}
+        {% block extra_css %}{% endblock %}
     </head>
 
-    <header>
-        {% block header %}
-            {% include 'base/menu.html' %}
-        {% endblock %}
-    </header>
 
     <body>
+        <header>
+            {% block header %}
+            {% include 'base/menu.html' %}
+            {% endblock %}
+        </header>
 
         <main>
             {% block content %}
@@ -23,32 +24,7 @@
             {% endblock %}
         </main>
 
-        <footer>
-            <div class="footer">
-                <div class="row">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-                <a href="#"><i class="fa fa-youtube"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                </div>
-
-                <div class="row">
-                <ul>
-                <li><a href="#">Связаться с дьяволом</a></li>
-                <li><a href="#">Наши сервисы</a></li>
-                <li><a href="#">Политика конфиденциальности</a></li>
-                <li><a href="#">Условия использования</a></li>
-                <li><a href="#">Устроиться на работу</a></li>
-                </ul>
-                </div>
-
-                <div class="row">
-                <p>Разработано командой биоценогенных мутантов, выращенных в пробирке, во главе с повелителем ксанекса</p>
-                <p class="small">мы не несем ответственность за ваши данные, ведь на их безопасность мы забили</p>
-                </div>
-                </div>
-        </footer>
-
+        {% include 'base/footer.html' %}
 
         {% block extra_js %} {% endblock %}
     </body>

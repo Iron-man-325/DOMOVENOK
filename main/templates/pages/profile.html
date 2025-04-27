@@ -11,7 +11,7 @@
 
                 </div>
                 <div class="name-block">
-                    <h2 class="username">Морская пехота</h2>
+                    <h2 class="username">{{ form.username }}</h2>
                 </div>
                 <div class="redac-but">
                     <p class="button-text">Редактировать профиль</p>
@@ -24,51 +24,34 @@
                 <h2 class="username">История просмотра</h2>
             </div>
             <div class="flex">
-                <div class="his-block">
-                    <div class="his-img">
-
-                    </div>
-                    <p class="name-history-flat">квартира крутой</p>
-                    <p class="price">8000/ночь</p>
-                </div>
-                <div class="his-block">
-                    <div class="his-img">
-
-                    </div>
-                    <p class="name-history-flat">дом крутой</p>
-                    <p class="price">8000/ночь</p>
-                </div>
+                {% for apartment in apartments %}
+                {% for history_entry in history %}
+                    {% if apartment.id == history_entry.apartment.id and user.username == history_entry.user.username %}
+                            <div class="his-block">
+                                <img src="{{ apartment.image.url }}" class="his-img" id="mainImage" alt="Фото квартиры">
+                                <p class="name-history-flat">{{ apartment.description}}</p>
+                                <p class="price">{{ apartment.cost_per_night }}</p>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        {% endfor %}
             </div>
             <div>
                 <h3 class="username">Ваши квартиры</h3>
             </div>
             <div>
+                {% for apartment in myflats %}
                 <div class="flex">
                     <div class="description-your-flat">
                         <p class="price">Дом</p>
                         <h4 class="flat-name">Дом. Там убивали</h4>
-                        <p class="price">Химки</p>
+                        <p class="price">{{ apartment.street }}</p>
                         <div class="view-but">
                             <p class="view-text">Посмотреть</p>
                         </div>
                     </div>
-                    <div class="your-img">
-
-                    </div>
+                    <img class="your-img" src="{{ apartment.image.url }}" >
                 </div>
-                <div class="flex">
-                    <div class="description-your-flat">
-                        <p class="price">Дом</p>
-                        <h4 class="flat-name">Другой дом. Там выживали.</h4>
-                        <p class="price">Химки</p>
-                        <div class="view-but">
-                            <p class="view-text">Посмотреть</p>
-                        </div>
-                    </div>
-                    <div class="your-img">
-
-                    </div>
-                </div>
-            </div>
+                {% endfor %}
         </div>
 {% endblock %}

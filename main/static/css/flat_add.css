@@ -87,11 +87,39 @@ main {
 }
 .button-add{
     display: flex;
+    vertical-align:middle;
+    line-height:32px;
     justify-content: center;
-    vertical-align: middle;
-    line-height: 1px;
     width: 220px;
     height: 32px;
     border-radius: 16px;
+    border:none;
     background-color: rgba(245, 240, 229, 1);
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.flex-item{
+    margin-right:10px;
+    vertical-align:middle;
+    line-height:1px;
+    justify-content: center;
+    border:none;
+    border-radius:12px;
+    display:flex;
+    width: 220px;
+    height: 32px;
+    background-color: rgba(245, 240, 229, 1);
+}
+.delete-button{
+    border:none;
+    margin-left:5px;
+    background-color: rgba(245, 240, 229, 1);
+}
+.dynamo{
+    display:flex;
+    margin-bottom:8px
 }
