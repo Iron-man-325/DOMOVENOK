@@ -1,48 +1,32 @@
+{% extends 'base/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-    <title>Вход в EasyVote</title>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <div class="img"></div>
-                <p class="style-text">EasyVote</p>
+{% block css %}
+<link href="{% static 'css/login.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div>
+    <div class="enter">
+        <h2 class="style-text-head">Вход в EasyVote</h2>
+    </div>
+    <div class="fields">
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="mail">
+                <p class="style-text">Имя</p>
+                <input class="enter-field" name="username" type="text"  required />
             </div>
-        </div>
-    </header>
-    <main>
-        <div class="enter">
-            <h2 class="style-text">Вход в EasyVote</h2>
-        </div>
-        <div class="fields">
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="mail">
-                    <p class="style-text">Имя</p>
-                    <input class="enter-field" name="username" type="text"  required />
-                </div>
-                <div class="password">
-                    <p class="style-text">Пароль</p>
-                    <input class="enter-field" name="password" type="password" placeholder="" required />
-                </div>
-                <div class="cont">
-                    <a class="style-text text-color" >Забыли пароль?</a>
-                </div>
-                <div class="cont-button">
-                    <button type="submit" class="enter-text button-login">Войти</button>
-                    <button type="button"  class="button-register register-text">Зарегистрироваться</button>
-                </div>
-                <div class="cont-1">
-                    <a class="style-text text-color" >Нет аккаунта?</a>
-                </div>
-            </form>
-        </div>
-    </main>
-</body>
-</html>
+            <div class="password">
+                <p class="style-text">Пароль</p>
+                <input class="enter-field" name="password" type="password" placeholder="" required />
+            </div>
+            <div class="cont">
+                <a class="style-text-small text-color-small" >Забыли пароль?</a>
+            </div>
+            <div class="cont-button">
+                <button type="submit" class="enter-text button-login">Войти</button>
+                <button type="button" onclick="location.href='{% url 'registration' %}'"  class="button-register register-text">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

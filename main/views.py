@@ -246,7 +246,7 @@ def login_view(request):
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
-        ViewHistory.objects.create(user=request.user, apartment=apartment)
+        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment)
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)

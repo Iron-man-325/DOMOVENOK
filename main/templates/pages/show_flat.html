@@ -47,96 +47,74 @@
 {% endblock %}
 {% block content %}
 <div class="content">
-    <!-- Блок с картинками (добавьте реализацию) -->
-    <div class="image-block">
-        <img src="{{ apartment.image.url }}" class="main-image" id="mainImage" alt="Фото квартиры">
+    <div>
+        <!-- Для картинок -->
     </div>
-
-    <!-- Блок с ценой -->
     <div class="price-block">
-        <h3 class="price-text">{{ apartment.cost_per_night }} ₽/ночь</h3>
-        <p class="text">{{ apartment.sleeping_places }} спальных мест</p>
+        <h3 class="price-text">₽42,000/месяц</h3>
+        <p class="text">2 кровати 2 ванны ·  22м²</p>
     </div>
-
-    <!-- Описание -->
-    <div class="description-block">
-        <p class="text">{{ apartment.description }}</p>
+    <div>
+        <p class="text">КРУТАЯ КВАРТИРА ТИПА ИНЕРЬЕР ТАМ ВООООООООТ</p>
     </div>
-
-    <!-- Основные характеристики -->
-    <div class="characteristics">
+    <div>
         <h3>О квартире</h3>
-        <div class="line"></div>
-
-        <!-- Колонки с данными -->
-        <div class="columns">
-            <div class="part">
-                <p class="head-text">Спальные места</p>
-                <p class="text">{{ apartment.sleeping_places }} кроватей</p>
-            </div>
-            <div class="part">
-                <p class="head-text">Ванные комнаты</p>
-                <p class="text">{{ apartment.bathrooms }}</p>
-            </div>
+    </div>
+    <div class="line"></div>
+    <div class="columns">
+        <div class="part">
+            <p class="head-text">Ремонт</p>
+            <p class="text">Крутой</p>
         </div>
-
-        <div class="line"></div>
-
-        <div class="columns">
-            <div class="part">
-                <p class="head-text">Минимальный срок аренды</p>
-                <p class="text">{{ apartment.min_nights }} ночей</p>
-            </div>
-            <div class="part">
-                <p class="head-text">Предоплата</p>
-                <p class="text">{{ apartment.prepayment }}%</p>
-            </div>
+        <div class="part">
+            <p class="head-text">Правила</p>
+            <p class="text">С детьми:можно</p>
         </div>
-
-        <div class="line"></div>
-
-        <div class="columns">
-            <div class="part">
-                <p class="head-text">Расположение</p>
-                <p class="text"> Город {{ apartment.city }}, Улица {{ apartment.street }}, Дом {{apartment.housenum }}, Этаж{{apartment.stage}} Квартира{{ apartment.number }}</p>
-            </div>
-            <div class="part">
-                <p class="head-text">Доступность</p>
-                <p class="text">{{ apartment.free_at }}</p>
-            </div>
+    </div>
+    <div class="line"></div>
+    <div class="columns">
+        <div class="part">
+            <p class="head-text">Условия аренды</p>
+            <p class="text">Залог: 27000</p>
+            <p class="text">Комиссия: 50%</p>
         </div>
-
+        <div class="part">
+            <p class="head-text">Расположение</p>
+            <p class="text">Улица Пушкина, Дом колотушкина</p>
+        </div>
     </div>
-
-    <!-- Что находится рядом-->
-    <div class="amenities-block">
-        <h3>Рядом со зданием</h3>
-        <div class="line"></div>
-        <ul class="amenities-list">
-            {{ apartment.nearby_objects }}
-        </ul>
+    <div class="line"></div>
+    <div class="columns">
+        <div class="part">
+            <p class="head-text">Парковка</p>
+            <p class="text">Есть(подземная)</p>
+        </div>
+        <div class="part">
+            <p class="head-text">Общая площадь</p>
+            <p class="text">22м²</p>
+        </div>
     </div>
-    <!-- Дополнительные удобства -->
-    <div class="amenities-block">
-        <h3>Удобства</h3>
-        <div class="line"></div>
-        <ul class="amenities-list">
-            {{ apartment.amenities }}
-        </ul>
+    <div class="line"></div>
+    <div class="columns">
+        <div class="part">
+            <p class="head-text">Вид</p>
+            <p class="text">На свалку</p>
+        </div>
+        <div class="part">
+            <p class="head-text">Этаж</p>
+            <p class="text">7 из 19</p>
+        </div>
     </div>
-
-    <!-- Правила проживания -->
-    <div class="rules-block">
-        <h3>Правила</h3>
-        <div class="line"></div>
-        <ul class="rules-list">
-            {{ apartment.living_rules }}
-        </ul>
+    <div class="line"></div>
+    <div>
+        <div class="part">
+            <p class="head-text">Количество комнат</p>
+            <p class="text">2</p>
+        </div>
     </div>
-
-    <!-- Кнопка связи -->
     <button class="button-submit height-margin">
         <p class="text-submit">Связаться с арендодателем</p>
     </button>
 </div>
+
 {% endblock %}

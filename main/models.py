@@ -171,7 +171,7 @@ class Profile(models.Model):
     """
     Доп. таблица к пользователю
     """
-    user = models.ForeignKey(User, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE,default='1')
 
     def __str__(self):
         return self.user.username
@@ -183,3 +183,4 @@ class ViewHistory(models.Model):
 
     class Meta:
         ordering = ['-viewed_at']
+        unique_together = ['user', 'apartment']
