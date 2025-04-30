@@ -137,7 +137,11 @@ class PaymentMethod(models.Model):
 
 
 class Apartment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    STATUS_CHOICES = [
+        ('available', 'Свободно'),
+        ('rented', 'Сдается'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=200, null=True)
     street = models.CharField(max_length=200, null=True)
     stage = models.CharField(max_length=200, null=True)
@@ -162,6 +166,13 @@ class Apartment(models.Model):
     living_rules = models.TextField(default='[]', blank=True)
 
     image = models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')  # Папка для хранения фото
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='available'
+    )
+
 
     def __str__(self):
         return f"{self.city}, {self.street}, {self.housenum}, кв. {self.number}"

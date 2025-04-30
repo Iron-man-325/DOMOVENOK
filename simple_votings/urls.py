@@ -33,6 +33,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('prob/', views.my_problems, name='logout'),
     path('error/', views.error, name='logout'),
+    path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

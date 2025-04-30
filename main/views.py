@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import ApartmentForm, User, UserForm
 from .models import Apartment, Profile,ViewHistory
@@ -278,3 +278,12 @@ def faq_questions(request: WSGIRequest):
                             ]
 
     return render(request, 'pages/faq_questions.html', context)
+
+def update_apartment_status(request, apartment_id):
+    if request.method == 'POST':
+        apartment = get_object_or_404(Apartment, id=apartment_id)
+        if request.user == apartment.user:
+            new_status = request.POST.get('status')
+            apartment.status = new_status
+            apartment.save()
+    return redirect('flat_detail', flat_id=apartment_id)
