@@ -139,7 +139,7 @@ def support(request: WSGIRequest):
     return render(request, 'pages/support.html', context)
 
 @login_required
-def stat(request: WSGIRequest):
+def stat(request, flat_id):
     context = {
         'pagename': "Главная"
     }

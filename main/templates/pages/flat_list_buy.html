@@ -18,13 +18,13 @@
                     <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'prob' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" >Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'prob' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
@@ -79,14 +79,13 @@
 
                         </div>
                         <div class="but-div">
-                            <button class="reserve-but">
+                            <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
                                 <p class="reserve-text">Забронировать</p>
                             </button>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
-                
             </div>
         </div>
 {% endblock %}

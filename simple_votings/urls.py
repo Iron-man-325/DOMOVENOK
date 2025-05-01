@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('sup/', views.sup, name='sup'),
     path('profile/', views.profile, name='profile'),
-    path('stat/', views.stat, name='stat'),
+    path('stat/<int:flat_id>/', views.stat, name='stat'),
     path('redac/', views.redac_profile, name='redac'),
     path('send-support-message/', views.send_support_message, name='send_support_message'),
 

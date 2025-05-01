@@ -18,13 +18,13 @@
                     <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'my_flats' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" >Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'prob' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
@@ -86,7 +86,7 @@
                         <p class="price">{{ apartment.cost_per_night }}</p>
                         <h4 class="flat-name">{{ apartment.name }}</h4>
                         <p class="price">{{ apartment.street }}</p>
-                        <div class="view-but">
+                        <div class="view-but " onclick="location.href='{% url 'stat' flat_id=apartment.id %}'">
                             <p class="view-text">Посмотреть</p>
                         </div>
                     </div>
