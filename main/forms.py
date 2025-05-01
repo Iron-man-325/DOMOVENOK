@@ -39,6 +39,12 @@ class ApartmentForm(forms.Form):
                                                        "placeholder": "Номер дома"}
                                                       )
                                )
+    name = forms.CharField(min_length=1,
+                            max_length=69,
+                           widget=forms.TextInput({"class": "group-input",
+                                                   "placeholder": "Название"}
+                                                  )
+                               )
     stage = forms.CharField(min_length=1,
                             max_length=69,
                             widget=forms.TextInput({"class": "group-input",
@@ -83,6 +89,10 @@ class ApartmentForm(forms.Form):
                                                                   "placeholder": "Укажите число спален"}
                                                                  )
                                         )
+    square = forms.DecimalField(widget=forms.NumberInput({"class": "count-input",
+                                                                  "placeholder": "Укажите число спален"}
+                                                                 )
+                                        )
     bathrooms = forms.DecimalField(widget=forms.NumberInput({"class": "count-input",
                                                              "placeholder": "Укажите число ванных"}
                                                             )
@@ -104,7 +114,7 @@ class ApartmentForm(forms.Form):
                                                               "placeholder": "Добавить даты"}
                                                              )
                                   )
-    image = forms.ImageField(widget=forms.FileInput(attrs={"class": "...", "onchange": "preview(this)"}))
+    image = forms.ImageField(widget=forms.FileInput(attrs={"class": "", "onchange": "preview(this)"}))
 
 # class PhotoForm(forms.ModelForm):
 #     class Meta:

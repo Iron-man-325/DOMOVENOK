@@ -71,6 +71,8 @@ def add_apartment(request):
                 min_nights=form.cleaned_data['min_nights'],
                 free_at=form.cleaned_data['free_at'],
                 image=form.cleaned_data['image'],
+                square=form.cleaned_data['square'],
+                name=form.cleaned_data['name'],
                 user = request.user
             )
             apartment.nearby_objects = request.POST.get('nearby_objects', '')

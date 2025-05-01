@@ -69,7 +69,7 @@
                     {% if apartment.id == history_entry.apartment.id and user.username == history_entry.user.username %}
                             <div class="his-block">
                                 <img src="{{ apartment.image.url }}" class="his-img" id="mainImage" alt="Фото квартиры">
-                                <p class="name-history-flat">{{ apartment.description}}</p>
+                                <p class="name-history-flat">{{ apartment.name}}</p>
                                 <p class="price">{{ apartment.cost_per_night }}</p>
                             </div>
                             {% endif %}
@@ -83,8 +83,8 @@
                 {% for apartment in myflats %}
                 <div class="flex">
                     <div class="description-your-flat">
-                        <p class="price">Дом</p>
-                        <h4 class="flat-name">Дом. Там убивали</h4>
+                        <p class="price">{{ apartment.cost_per_night }}</p>
+                        <h4 class="flat-name">{{ apartment.name }}</h4>
                         <p class="price">{{ apartment.street }}</p>
                         <div class="view-but">
                             <p class="view-text">Посмотреть</p>

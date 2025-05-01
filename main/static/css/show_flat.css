@@ -65,6 +65,7 @@ body{
 }
 .content{
     margin-left: 30%;
+    margin-top: 20px;
 }
 .text{
     font-family: "Plus Jakarta Sans", sans-serif;
@@ -103,4 +104,8 @@ body{
 }
 .price-block{
     margin-top: 20px;
+}
+.your-img{
+    width: 600px;
+    height: 300px;
 }

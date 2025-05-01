@@ -93,6 +93,7 @@ main{
     margin: 10px 0 0 0 ;
 }
 .desc{
+    width: 100px;
     margin: 10px 0 0 15px;
 }
 .reserve-but{
@@ -100,6 +101,7 @@ main{
     line-height: 1px;
     margin-top: 10px;
     margin-right: 10px;
+    margin-left: 50px;
     background-color: rgba(232, 131, 48, 1);
     border: none;
     border-radius: 12px;

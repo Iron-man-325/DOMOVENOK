@@ -54,12 +54,12 @@
                 {% csrf_token %}
                 <div class="flex">
                     <div class="city">
-                        <p class="text">Город</p>
-                        {{ form.city }}
+                        <p class="text">Название квартиры</p>
+                        {{ form.name }}
                     </div>
                     <div>
-                        <p class="text">Улица</p>
-                        {{ form.street }}
+                        <p class="text">Квартира №</p>
+                        {{ form.number }}
                     </div>
                 </div>
                 <div class="flex">
@@ -71,9 +71,16 @@
                         <p class="text">Этаж</p>
                         {{ form.stage }}
                     </div>
+                </div>
+                <div class="flex">
+                    <div class="city">
+                        <p class="text">Город</p>
+                        {{ form.city }}
+                    </div>
+                
                     <div>
-                        <p class="text">Квартира</p>
-                        {{ form.number }}
+                        <p class="text">Улица</p>
+                        {{ form.street }}
                     </div>
                 </div>
                 <div>
@@ -145,6 +152,10 @@
                     <p class="text">Ванны</p>
                     {{ form.bathrooms }}
                 </div>
+                <div class="height-margin">
+                    <p class="text">Площадь</p>
+                    {{ form.square }}
+                </div>
                 <div class="flex">
                     <div class="city">
                         <p class="text">Стоимость за одну ночь</p>
@@ -163,7 +174,7 @@
                     <p class="text">Свободно</p>
                     {{ form.free_at }}
                 </div>
-                <img id="img_preview" class="img-fluid rounded mx-auto d-block mb-3" src="https://i.sstatic.net/y9DpT.jpg">
+                <img id="img_preview" class="img-add" src="https://i.sstatic.net/y9DpT.jpg">
                 {{ form.image }}
                 <button class="button-submit height-margin">
                     <p class="text-submit">Добавить</p>

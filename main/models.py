@@ -138,6 +138,7 @@ class PaymentMethod(models.Model):
 
 class Apartment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    name=models.CharField(max_length=200,null=True)
     city = models.CharField(max_length=200, null=True)
     street = models.CharField(max_length=200, null=True)
     stage = models.CharField(max_length=200, null=True)
@@ -150,6 +151,7 @@ class Apartment(models.Model):
     sleeping_places = models.DecimalField(max_digits=10, decimal_places=2)
     sleeping_rooms = models.DecimalField(max_digits=10, decimal_places=2)
     bathrooms = models.DecimalField(max_digits=10, decimal_places=2)
+    square = models.DecimalField(max_digits=10, decimal_places=2, default=1)
 
     cost_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     prepayment = models.DecimalField(max_digits=10, decimal_places=2)
