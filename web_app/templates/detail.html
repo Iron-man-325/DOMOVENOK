@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ apartment.наименование | default('Детали квартиры') }}</title>
+     <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .detail-block { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .detail-block h2 { margin-top: 0; }
+        .photo-gallery img { max-width: 300px; margin: 5px; border: 1px solid #ccc; }
+        .characteristics ul { list-style: none; padding: 0; }
+        .characteristics li { margin-bottom: 5px; }
+        .characteristics li strong { display: inline-block; width: 150px; } /* Для выравнивания */
+    </style>
+</head>
+<body>
+    <h1>{{ apartment.наименование | default('Детали квартиры') }}</h1>
+
+    <div class="detail-block">
+        <h2>Основная информация</h2>
+        <p><strong>ID:</strong> {{ apartment.id }}</p>
+        <p><strong>Цена:</strong> {{ apartment.цена | default('N/A') }}</p>
+        <p><strong>Залог:</strong> {{ apartment.залог | default('N/A') }}</p>
+        <p><strong>Комиссия:</strong> {{ apartment.комиссия | default('N/A') }}</p>
+        <p><strong>Адрес:</strong> {{ apartment.адрес | default('N/A') }}</p>
+        <p><strong>Метро:</strong> {{ apartment.метро | default('N/A') }}</p>
+        <p><strong>Площадь:</strong> {{ apartment.общая_площадь_м2 | default('N/A') }} м²</p>
+        <p><strong>Этаж:</strong> {{ apartment.этаж_инфо | default('N/A') }}</p>
+        <p><strong>Дата публикации (детально):</strong> {{ apartment.дата_публикации_детально | default('N/A') }}</p>
+        <p><strong>Ссылка на Avito:</strong> <a href="{{ apartment.ссылка }}" target="_blank">{{ apartment.ссылка | default('N/A') }}</a></p>
+    </div>
+
+    <div class="detail-block">
+        <h2>Описание</h2>
+        <p>{{ apartment.описание_полное | default('Нет описания.') }}</p>
+    </div>
+
+     {% if apartment.характеристики %}
+        <div class="detail-block characteristics">
+            <h2>Характеристики</h2>
+            <ul>
+                {% for key, value in apartment.характеристики.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
+    {% if apartment.фотографии_детально %}
+        <div class="detail-block">
+            <h2>Фотографии</h2>
+            <div class="photo-gallery">
+                {% for photo_url in apartment.фотографии_детально %}
+                    <img src="{{ photo_url }}" alt="Фото {{ loop.index }}">
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <p><a href="{{ url_for('list_apartments') }}">Вернуться к списку</a></p>
+
+</body>
+</html>

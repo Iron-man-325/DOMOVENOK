@@ -10,16 +10,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
+# --- Настройки ---
 # URL страницы списка квартир
 URL = "https://www.avito.ru/moskva/kvartiry/sdam"
 # Имя выходного JSON файла
-OUTPUT_JSON_FILE = 'avito_apartments_sdam_all_optimized.json' # Изменил имя файла
+OUTPUT_JSON_FILE = 'avito_apartments_sdam_all_optimized.json'  # Изменил имя файла
 # Сколько секунд ждать загрузки основных элементов страницы
 WAIT_TIMEOUT_LIST = 15 # Таймаут для страницы списка
 WAIT_TIMEOUT_DETAIL = 20 # Таймаут для страницы объявления
 
 # Сколько страниц списка парсить (None - все доступные)
-MAX_PAGES_TO_PARSE = None
+MAX_PAGES_TO_PARSE = None # Установите None для парсинга всех страниц
+
+# *** ОГРАНИЧЕНИЕ НА КОЛИЧЕСТВО ОБЪЯВЛЕНИЙ СНЯТО ***
+MAX_APARTMENTS_TO_SCRAPE = None # Установлено None
 
 # Настройки для плавной прокрутки и парсинга списка
 SCROLL_PAUSE_TIME = 1.5 # Немного уменьшил паузу после прокрутки списка
@@ -27,8 +31,11 @@ SCROLL_INCREMENT_RATIO = 0.8 # Прокручивать на 80% высоты о
 SCROLL_TOLERANCE = 10 # Допустимое отклонение в пикселях при проверке конца страницы списка
 PAUSE_AFTER_NEW_ITEM_FOUND_LIST = 0.5 # Немного уменьшил паузу после обнаружения НОВОГО элемента в списке
 
+# Настройки для парсинга страниц объявлений
 # PAUSE_BEFORE_DETAIL_SCRAPE = 2.0 # Эту паузу заменяем на WebDriverWait
 PAUSE_BETWEEN_DETAIL_PAGES = 1.5 # Немного уменьшил паузу между посещениями страниц объявлений
+
+# --- Функции ---
 
 def setup_driver():
     """Настраивает и возвращает экземпляр веб-драйвера Chrome."""
@@ -101,6 +108,7 @@ def scrape_listing_page(driver):
         while True: # Цикл прокрутки по текущей странице списка
             scroll_attempts += 1
             try:
+                # Убедимся, что хотя бы один элемент item присутствует после прокрутки
                 WebDriverWait(driver, 5).until(
                      EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-marker="item"]'))
                 )
@@ -118,6 +126,7 @@ def scrape_listing_page(driver):
             for item in listing_elements:
                  try:
                      item_id = item.get_attribute('data-item-id')
+                     # Проверяем, что ID не None/пустой И еще не обработан в этом вызове scrape_listing_page
                      if item_id and item_id not in processed_item_ids:
                           current_scroll_items_to_process.append((item_id, item))
                           processed_item_ids.add(item_id) # Сразу помечаем как обрабатываемый
@@ -142,10 +151,11 @@ def scrape_listing_page(driver):
                         'количество_комнат': 'N/A',
                         'общая_площадь_м2': 'N/A',
                         'этаж_инфо': 'N/A',
-                        'ссылка': 'N/A', 
-                        'фотографии_список': [] 
+                        'ссылка': 'N/A', # Ссылка важна для детального парсинга
+                        'фотографии_список': [] # Фото с страницы списка
                     }
 
+                    # Извлечение данных из элемента списка
                     try:
                         title_element = item.find_element(By.CSS_SELECTOR, 'a[data-marker="item-title"]')
                         raw_title = title_element.text.strip()
@@ -158,6 +168,7 @@ def scrape_listing_page(driver):
                          # print(f"--- Отладка списка --- Не удалось получить основные данные для ID {item_id}: {e}")
                          pass
 
+                    # Фотографии с страницы списка (превью)
                     try:
                         photo_elements = item.find_elements(By.CSS_SELECTOR, 'li[data-marker="slider-image/image-wrapper"] img, img[class*="photo-slider-image"], img[itemprop="image"]')
                         for photo in photo_elements:
@@ -184,6 +195,7 @@ def scrape_listing_page(driver):
                  all_page_data.extend(parsed_in_this_scroll)
 
 
+            # --- Логика прокрутки и проверки условия выхода из цикла прокрутки страницы списка ---
             current_scroll_position = driver.execute_script("return window.pageYOffset;")
             viewport_height = driver.execute_script("return window.innerHeight;")
             document_height = driver.execute_script("return document.body.scrollHeight;")
@@ -240,6 +252,10 @@ def scrape_listing_page(driver):
 
 
 def scrape_apartment_detail(driver, listing_url):
+    """
+    Переходит на страницу конкретного объявления и парсит подробную информацию.
+    Возвращает словарь с детальными данными.
+    """
     detail_data = {
         'цена': 'N/A',
         'залог': 'N/A',
@@ -266,6 +282,8 @@ def scrape_apartment_detail(driver, listing_url):
         # time.sleep(PAUSE_BEFORE_DETAIL_SCRAPE)
 
 
+        # --- Парсинг детальных данных ---
+        # Селекторы обновлены на основе предоставленного HTML
 
         # Цена (попытка извлечь из content атрибута, затем из текста)
         try:
@@ -275,15 +293,19 @@ def scrape_apartment_detail(driver, listing_url):
 
             if price_value:
                  detail_data['цена'] = price_value.strip()
+                 # print(f"--- Отладка детали --- Получена ЦЕНА из content атрибута: {detail_data['цена']} ({listing_url})")
             else:
                  # Если content атрибут пустой или нет, пробуем получить текст с родительского элемента (который включает "в месяц")
                  try:
                       price_element_for_text = driver.find_element(By.CSS_SELECTOR, '#bx_item-price-value')
                       detail_data['цена'] = price_element_for_text.text.strip()
+                      # print(f"--- Отладка детали --- Получена ЦЕНА из текста элемента #bx_item-price-value: {detail_data['цена']} ({listing_url})")
                  except NoSuchElementException:
+                      # Если #bx_item-price-value не найден, пробуем текст с элемента data-marker (только число и ₽)
                       try:
                            price_element_alt_text = driver.find_element(By.CSS_SELECTOR, '[data-marker="item-view/item-price"]')
                            detail_data['цена'] = price_element_alt_text.text.strip() + " (только число+₽)"
+                           # print(f"--- Отладка детали --- Получена ЦЕНА из текста элемента data-marker: {detail_data['цена']} ({listing_url})")
                       except NoSuchElementException:
                            print(f"--- Отладка детали --- Элементы цены не найдены ни по одному селектору ({listing_url}).")
                  except Exception as e_text:
@@ -296,6 +318,7 @@ def scrape_apartment_detail(driver, listing_url):
 
 
         except (NoSuchElementException, StaleElementReferenceException) as e:
+            # Если элемент data-marker="item-view/item-price" не найден вообще
             print(f"--- Отладка детали --- Не удалось найти элемент data-marker=\"item-view/item-price\" для парсинга цены ({listing_url}): {e}")
             pass
         except Exception as e:
@@ -308,6 +331,7 @@ def scrape_apartment_detail(driver, listing_url):
              deposit_fee_element = driver.find_element(By.CSS_SELECTOR, '.styles-item-price-sub-price-A1IZy span')
              deposit_fee_text = deposit_fee_element.text.strip()
 
+             # Парсим текст для извлечения залога и комиссии
              # Ищем число (включая пробелы в качестве разделителя тысяч) перед '₽' после слова 'залог'
              deposit_match = re.search(r'залог\s*([\d\s]+)\s*₽', deposit_fee_text)
              if deposit_match:
@@ -409,11 +433,13 @@ def scrape_apartment_detail(driver, listing_url):
                     else:
                          # Если текст строки не начинается с названия, возможно, структура другая
                          value = full_text # Сохраняем весь текст строки как значение
+                         # print(f"--- Отладка детали --- Необычная структура строки характеристики ({listing_url}, элемент {i+1}): '{full_text}'")
 
 
                     if name and value:
                          detail_data['характеристики'][name] = value
                     # elif name: # Отладочная печать для характеристики без значения
+                         # print(f"--- Отладка детали --- Найдена характеристика '{name}', но значение пустое ({listing_url}, элемент {i+1}).")
 
 
                 except NoSuchElementException:
@@ -442,6 +468,7 @@ def scrape_apartment_detail(driver, listing_url):
             main_image_url = main_image_wrapper.get_attribute('data-url')
             if main_image_url and main_image_url not in detail_data['фотографии_детально']:
                  detail_data['фотографии_детально'].append(main_image_url)
+                 # print(f"--- Отладка детали --- Добавлено главное фото из data-url ({listing_url}).")
             else:
                  # Если data-url пустой или нет, пробуем найти img внутри (как запасной вариант)
                  try:
@@ -501,6 +528,7 @@ def scrape_apartment_detail(driver, listing_url):
     return detail_data
 
 
+# --- Функция для сохранения в JSON ---
 def save_to_json(data, filename):
     """Сохраняет собранные данные в JSON файл."""
     if not data:
@@ -517,6 +545,7 @@ def save_to_json(data, filename):
         print(f"Непредвиденная ошибка при сохранении в JSON: {e}")
 
 
+# --- Основной блок исполнения скрипта ---
 if __name__ == "__main__":
     driver = None
     all_collected_data = [] # Список для хранения всех данных (список + детали)
@@ -558,6 +587,7 @@ if __name__ == "__main__":
                 print(f"Найдено {len(basic_listings_data)} объявлений на странице списка {page_count}.")
                 print(f"Текущее общее количество собранных квартир: {len(all_collected_data)}") # Сообщаем текущее общее количество
 
+                # --- Цикл для перехода на страницы объявлений и парсинга деталей ---
                 processed_on_this_page_count = 0
                 for i, listing in enumerate(basic_listings_data):
                     # Ограничение по общему количеству квартир снято, проверка убрана.
@@ -598,6 +628,7 @@ if __name__ == "__main__":
                         print(f"Пропускаю объявление без ссылки (ID: {listing_id}) с страницы списка {page_count}. Сохраняю базовые данные.")
                         all_collected_data.append(listing)
 
+                # Ограничение по общему количеству квартир снято, проверка убрана.
 
             else:
                 print(f"На странице списка {page_count} не было собрано базовых записей для детального парсинга.")
@@ -605,6 +636,7 @@ if __name__ == "__main__":
 
             # Проверка лимита страниц списка (если задано) уже в начале цикла
 
+            # Поиск кнопки "Следующая страница" и переход
             try:
                 next_button_selector = 'a[data-marker="pagination-button/nextPage"]'
                 driver.execute_script("window.scrollTo(0, 0);")
@@ -635,6 +667,7 @@ if __name__ == "__main__":
             print("Закрытие браузера...")
             driver.quit()
 
+    # --- Финальное сохранение данных ---
     if all_collected_data:
          print(f"\nВсего собрано {len(all_collected_data)} уникальных объявлений (базовые + детальные данные).")
          save_to_json(all_collected_data, OUTPUT_JSON_FILE)
