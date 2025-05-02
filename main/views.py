@@ -194,33 +194,35 @@ def my_flats(request: WSGIRequest):
 
 @login_required
 def redact_profile(request: WSGIRequest):
-    context = get_base_context('Редактирование профиля')
-    if request.method == 'POST':
-        logout(request)
-        return redirect('login')
-
-    # Получение информации о профиле пользователя
     usr = User.objects.get_by_natural_key(request.user)
-    context['profile'] = Profile.objects.get(user=usr)
-    context['username'] = usr.username
-    context['email'] = usr.email
-    context['last_name'] = usr.last_name
+    context = get_base_context(
+        'Редактирование профиля',
+        profile=Profile.objects.get(user=usr),
+        username=usr.username,
+        email=usr.email,
+        last_name=usr.last_name,
+    )
 
     return render(request, 'pages/redact_profile.html', context)
 
 
 @login_required
 def profile_page(request: WSGIRequest):
-    user = request.user
-    history = ViewHistory.objects.filter(user=request.user).select_related('apartment')
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+
+    user = User.objects.get_by_natural_key(request.user)
+    history = ViewHistory.objects.filter(user=user).select_related('apartment')
     apartments = Apartment.objects.all()
-    user_flats = Apartment.objects.filter(user=request.user)
-    context = {
-        'form': user,
-        'history': history,
-        'apartments': apartments,
-        'myflats': user_flats
-    }
+    user_flats = Apartment.objects.filter(user=user)
+    context = get_base_context(
+        'Профиль',
+        form=user,
+        history=history,
+        apartments=apartments,
+        myflats=user_flats
+    )
     return render(request, 'pages/profile.html', context)
 
 

@@ -34,26 +34,28 @@
             </div>
             <div>
                 <p class="personal-info-text">Почта</p>
-                <input class="info-input" placeholder="user@gmail.com">
+                <input class="info-input" type="email" placeholder="user@mail.com">
             </div>
             <div>
                 <p class="personal-info-text">Номер телефона</p>
-                <input class="info-input" placeholder="+7 977 123 45 67">
+                <input class="info-input" type="tel" placeholder="+7 977 123 45 67">
             </div>
             <div>
                 <h4 class="personal-info-head-text">Пароль</h4>
             </div>
-            <div>
-                <p class="personal-info-text">Ваш пароль</p>
-                <input class="info-input" placeholder="Ваш пароль">
-            </div>
-            <div>
-                <p class="personal-info-text">Новый пароль</p>
-                <input class="info-input" placeholder="Новый пароль">
-            </div>
-            <div>
-                <p class="personal-info-text">Подтвердите новый пароль</p>
-                <input class="info-input" placeholder="Подтвердите новый пароль">
-            </div>
+            <form method="post" action="{% url 'redact' %}">
+                <div>
+                    <p class="personal-info-text">Ваш пароль</p>
+                    <input class="info-input" type="password" placeholder="Ваш пароль">
+                </div>
+                <div>
+                    <p class="personal-info-text">Новый пароль</p>
+                    <input class="info-input" type="password" placeholder="Новый пароль">
+                </div>
+                <div>
+                    <p class="personal-info-text">Подтвердите новый пароль</p>
+                    <input class="info-input" type="password" placeholder="Подтвердите новый пароль">
+                </div>
+            </form>
         </div>
 {% endblock %}

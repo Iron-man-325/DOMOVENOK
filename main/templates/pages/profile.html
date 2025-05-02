@@ -13,11 +13,19 @@
                 <div class="name-block">
                     <h2 class="username">{{ form.username }}</h2>
                 </div>
-                <div class="redac-but">
-                    <p class="button-text">Редактировать профиль</p>
+                <div class="div-redact">
+                    <a href="{% url 'redact' %}" style="text-decoration: none;">
+                        <div class="redact-but">
+                            <p class="button-text">Редактировать профиль</p>
+                        </div>
+                    </a>
                 </div>
-                <div class="log-out-but">
-                    <p class="button-text">Выйти из аккаунта</p>
+                <div class="div-logout">
+                    <a href="{% url 'logout' %}" style="text-decoration: none;">
+                        <div class="log-out-but">
+                            <p class="button-text">Выйти из аккаунта</p>
+                        </div>
+                    </a>
                 </div>
             </div>
             <div>
@@ -29,7 +37,7 @@
                     {% if apartment.id == history_entry.apartment.id and user.username == history_entry.user.username %}
                             <div class="his-block">
                                 <img src="{{ apartment.image.url }}" class="his-img" id="mainImage" alt="Фото квартиры">
-                                <p class="name-history-flat">{{ apartment.description}}</p>
+                                <p class="name-history-flat">{{ apartment.description }}</p>
                                 <p class="price">{{ apartment.cost_per_night }}</p>
                             </div>
                             {% endif %}
