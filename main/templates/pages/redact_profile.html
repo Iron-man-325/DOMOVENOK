@@ -9,53 +9,55 @@
             <div>
                 <h2 class="head-settings-text">Настройки</h2>
             </div>
-            <div class="logo-container">
-                <div class="logo">
-
+            <form method="post" action="{% url 'redact' %}">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="">
+                    </div>
+                    <div>
+                        {{ change_profile_form.avatar }}
+                    </div>
+                    <div class="change-logo-button">
+                        <p class="change-logo-text">Сменить аватар</p>
+                    </div>
                 </div>
-                <div class="change-logo-button">
-                    <p class="change-logo-text">Сменить аватр</p>
+            </form>
+            <form method="post" action="{% url 'redact' %}">
+                <div class="personal-info-container">
+                    <h4 class="personal-info-head-text">Персональная информация</h4>
                 </div>
-            </div>
-            <div class="personal-info-container">
-                <h4 class="personal-info-head-text">Персональная информация</h4>
-            </div>
-            <div>
-                <p class="personal-info-text">Имя</p>
-                <input class="info-input" placeholder="Ваше имя">
-            </div>
-            <div>
-                <p class="personal-info-text">Фамилия</p>
-                <input class="info-input" placeholder="Ваша фамилия">
-            </div>
-            <div>
-                <p class="personal-info-text">Статус</p>
-                <input class="info-input" placeholder="Ваш статус">
-            </div>
-            <div>
-                <p class="personal-info-text">Почта</p>
-                <input class="info-input" type="email" placeholder="user@mail.com">
-            </div>
-            <div>
-                <p class="personal-info-text">Номер телефона</p>
-                <input class="info-input" type="tel" placeholder="+7 977 123 45 67">
-            </div>
+                <div>
+                    <p class="personal-info-text">Имя</p>
+                    {{ change_user_form.first_name }}
+                </div>
+                <div>
+                    <p class="personal-info-text">Фамилия</p>
+                    {{ change_user_form.last_name }}
+                </div>
+                <div>
+                    <p class="personal-info-text">Почта</p>
+                    {{ change_user_form.email }}
+                </div>
+                <button type="submit">Сохранить изменения</button>
+            </form>
             <div>
                 <h4 class="personal-info-head-text">Пароль</h4>
             </div>
             <form method="post" action="{% url 'redact' %}">
+                {% csrf_token %}
                 <div>
                     <p class="personal-info-text">Ваш пароль</p>
-                    <input class="info-input" type="password" placeholder="Ваш пароль">
+                    {{ change_password_form.old_password }}
                 </div>
                 <div>
                     <p class="personal-info-text">Новый пароль</p>
-                    <input class="info-input" type="password" placeholder="Новый пароль">
+                    {{ change_password_form.new_password }}
                 </div>
                 <div>
                     <p class="personal-info-text">Подтвердите новый пароль</p>
-                    <input class="info-input" type="password" placeholder="Подтвердите новый пароль">
+                    {{ change_password_form.confirm }}
                 </div>
+                <button type="submit">Сменить пароль</button>
             </form>
         </div>
 {% endblock %}

@@ -9,20 +9,24 @@ from .models import Apartment, Profile
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'last_name', 'email', 'password']
+        fields = ['username', 'password', 'email', 'first_name', 'last_name']
 
         widgets = {
             "username": TextInput(attrs={
                 'class': 'enter-field-create',
-                'placeholder': 'Ваше имя'
-            }),
-            "email": EmailInput(attrs={
-                'class': 'enter-field-create',
-                'placeholder': 'Почта'
+                'placeholder': 'Ник'
             }),
             "password": PasswordInput(attrs={
                 'class': 'enter-field-create',
                 'placeholder': 'Пароль'
+            }),
+            "email": EmailInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'user@mail.com'
+            }),
+            "first_name": TextInput(attrs={
+                'class': 'enter-field-create',
+                'placeholder': 'Ваше имя'
             }),
             "last_name": TextInput(attrs={
                 'class': 'enter-field-create',
@@ -109,12 +113,35 @@ class ApartmentForm(forms.Form):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio']
+        fields = ['avatar']
+        widgets = {
+            "avatar": forms.FileInput(attrs={
+                'class': 'change-logo-text',
+            }),
+        }
 
 
 class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
     class Meta:
         model = User
-        fields = ['username', 'email', 'last_name']
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {
+            "first_name": TextInput(attrs={
+                'class': 'info-input',
+                'placeholder': 'Ваше имя'
+            }),
+            "last_name": TextInput(attrs={
+                'class': 'info-input',
+                'placeholder': 'Ваша фамилия'
+            }),
+            "email": EmailInput(attrs={
+                'class': 'info-input',
+                'placeholder': 'user@mail.com'
+            }),
+        }
+
+
+class PasswordUpdateForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'info-input'}))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'info-input'}))
+    confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'info-input'}))

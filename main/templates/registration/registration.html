@@ -11,14 +11,16 @@
             <form method="post" >
                 {% csrf_token %}
                 <div class="create">
-                    {{ form.email }}
+                    {{ form.username }}
                 </div>
                 <div class="create">
                     {{ form.password }}
                 </div>
                 <div class="create">
-                    {{ form.username }}
-
+                    {{ form.email }}
+                </div>
+                <div class="create">
+                    {{ form.first_name }}
                 </div>
                 <div class="create">
                     {{ form.last_name }}

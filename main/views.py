@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import send_mail
 from django.http import JsonResponse
@@ -8,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import json
 
-from .forms import ApartmentForm, UserForm
+from .forms import ApartmentForm, UserForm, PasswordUpdateForm, ProfileUpdateForm, UserUpdateForm
 from .models import Apartment, Profile, User, ViewHistory
 
 
@@ -195,12 +196,47 @@ def my_flats(request: WSGIRequest):
 @login_required
 def redact_profile(request: WSGIRequest):
     usr = User.objects.get_by_natural_key(request.user)
+    prof = Profile.objects.get(user=usr)
+    change_profile_form = ProfileUpdateForm()
+    change_user_form = UserUpdateForm()
+    change_password_form = PasswordUpdateForm()
+    if request.method == "POST":
+        change_profile_form = ProfileUpdateForm(request.POST)
+        if change_profile_form.is_valid():
+            data = change_profile_form.cleaned_data
+            print(data)
+
+        change_user_form = UserUpdateForm(request.POST)
+        if change_user_form.is_valid():
+            data = change_user_form.cleaned_data
+            print(data)
+
+        change_password_form = PasswordUpdateForm(request.POST)
+        if change_password_form.is_valid():
+            data = change_password_form.cleaned_data
+            check_user = authenticate(request, username=request.user, password=data['old_password'])
+            if check_user != User.objects.get_by_natural_key(request.user):
+                messages.add_message(request, messages.ERROR,
+                                     "Неверный старый пароль (или пользователь недействителен)")
+            elif data['new_password'] != data['confirm']:
+                messages.add_message(request, messages.ERROR,
+                                     "Поля \"Новый пароль\" и \"Подтвердите новый пароль\" не совпадают")
+            else:
+                usr.set_password(data['new_password'])
+                usr.save()
+                login(request, usr)
+                messages.add_message(request, messages.SUCCESS,
+                                     "Ваш пароль изменён")
+
     context = get_base_context(
         'Редактирование профиля',
-        profile=Profile.objects.get(user=usr),
+        profile=prof,
         username=usr.username,
         email=usr.email,
         last_name=usr.last_name,
+        change_profile_form=change_profile_form,
+        change_user_form=change_user_form,
+        change_password_form=change_password_form
     )
 
     return render(request, 'pages/redact_profile.html', context)
@@ -232,9 +268,10 @@ def registration_page(request):
         form = UserForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
-                email=form.data["email"],
                 username=form.data["username"],
                 password=form.data["password"],
+                email=form.data["email"],
+                first_name=form.data["first_name"],
                 last_name=form.data["last_name"]
             )
 
@@ -244,6 +281,8 @@ def registration_page(request):
 
             login(request, user)
             return redirect('profile')
+        if User.objects.filter(username=form.data["username"]):
+            messages.add_message(request, messages.ERROR, "Пользователь с таким ником уже существует")
 
     context = get_base_context('Регистрация', form=form)
     return render(request, "registration/registration.html", context)
@@ -260,6 +299,8 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
+            if 'next' in request.GET.keys():
+                return redirect(request.GET.get('next'))
             return redirect('profile')
         context["error"] = "Неверное имя пользователя или пароль."
 

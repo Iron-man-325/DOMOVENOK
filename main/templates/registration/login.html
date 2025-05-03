@@ -6,24 +6,24 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'login' %}" method="POST">
+<form method="POST">
     {% csrf_token %}
     <div class="container">
         <div class="enter">
             <h2 class="style-text">Вход в Домовенок ЙОУУУУ</h2>
         </div>
         <div class="fields">
-            <form method="post" action="{% url 'login' %}">
+            <form method="post">
                 <div class="mail">
-                    <p class="text">Имя</p>
-                    <input class="enter-field" name="username" type="text"  required />
+                    <p class="text">Ник</p>
+                    <input class="enter-field" name="username" type="text" required />
                 </div>
                 <div class="password">
                     <p class="text">Пароль</p>
                     <input class="enter-field" name="password" type="password" placeholder="" required />
                 </div>
                 <div class="cont">
-                    <a class="password-forget" >Забыли пароль?</a>
+                    <a class="password-forget">Забыли пароль?</a>
                 </div>
                 <div class="cont-button">
                     <button type="submit" class="enter-text button-login">Войти</button>
