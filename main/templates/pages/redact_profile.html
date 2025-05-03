@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block css %}
-<link href="{% static 'css/redac_profile.css' %}" rel="stylesheet">
+<link href="{% static 'css/redact_profile.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -10,19 +10,18 @@
                 <h2 class="head-settings-text">Настройки</h2>
             </div>
             <form method="post" action="{% url 'redact' %}">
+                {% csrf_token %}
                 <div class="logo-container">
                     <div class="logo">
                         <img src="">
-                    </div>
-                    <div>
-                        {{ change_profile_form.avatar }}
                     </div>
                     <div class="change-logo-button">
                         <p class="change-logo-text">Сменить аватар</p>
                     </div>
                 </div>
-            </form>
-            <form method="post" action="{% url 'redact' %}">
+                <div>
+                    {{ change_profile_form.avatar }}
+                </div>
                 <div class="personal-info-container">
                     <h4 class="personal-info-head-text">Персональная информация</h4>
                 </div>

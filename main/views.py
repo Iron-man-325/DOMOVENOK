@@ -204,12 +204,14 @@ def redact_profile(request: WSGIRequest):
         change_profile_form = ProfileUpdateForm(request.POST)
         if change_profile_form.is_valid():
             data = change_profile_form.cleaned_data
-            print(data)
 
         change_user_form = UserUpdateForm(request.POST)
         if change_user_form.is_valid():
             data = change_user_form.cleaned_data
-            print(data)
+            usr.first_name = data['first_name']
+            usr.last_name = data['last_name']
+            usr.email = data['email']
+            usr.save()
 
         change_password_form = PasswordUpdateForm(request.POST)
         if change_password_form.is_valid():
