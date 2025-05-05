@@ -253,12 +253,14 @@ def profile_page(request: WSGIRequest):
         return redirect('login')
 
     user = User.objects.get_by_natural_key(request.user)
+    profile = Profile.objects.get(user=user)
     history = ViewHistory.objects.filter(user=user).select_related('apartment')
     apartments = Apartment.objects.all()
     user_flats = Apartment.objects.filter(user=user)
     context = get_base_context(
         'Профиль',
-        form=user,
+        user=user,
+        profile=profile,
         history=history,
         apartments=apartments,
         myflats=user_flats

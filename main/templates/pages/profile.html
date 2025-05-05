@@ -8,10 +8,12 @@
         <div class="container">
             <div class="head-prof-block">
                 <div class="logo-prof">
-
+                    {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" class="logo-prof">
+                    {% endif %}
                 </div>
                 <div class="name-block">
-                    <h2 class="username">{{ form.username }}</h2>
+                    <h2 class="username">{{ user.username }}</h2>
                 </div>
                 <div class="div-redact">
                     <a href="{% url 'redact' %}" style="text-decoration: none;">
