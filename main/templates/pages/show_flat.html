@@ -101,7 +101,16 @@
                 <p class="text">{{ apartment.bathrooms }}</p>
             </div>
         </div>
-
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Владелец</p>
+                <p class="text">{{ apartment.user }} </p>
+            </div>
+            <div class="part">
+                <p class="head-text">Статус</p>
+                <p class="text">{{ apartment.status }}</p>
+            </div>
+        </div>
         <div class="line"></div>
 
         <div class="columns">
@@ -155,10 +164,34 @@
             {{ apartment.living_rules }}
         </ul>
     </div>
+    {% if apartment.status != 'rented' %}
+        <div class="rent-form">
+            <input 
+                type="number" 
+                id="days-input" 
+                class="days-input" 
+                placeholder="Количество дней" 
+                min="1"
+                value="1"
+            >
+            <button 
+                onclick="redirectToRent()" 
+                class="button-submit height-margin"
+            >
+                <p class="text-submit">Связаться с арендодателем</p>
+            </button>
+        </div>
 
-    <!-- Кнопка связи -->
-    <button class="button-submit height-margin">
-        <p class="text-submit">Связаться с арендодателем</p>
-    </button>
+        <script>
+            function redirectToRent() {
+                const days = document.getElementById('days-input').value;
+                if (days && days > 0) {
+                    window.location.href = `/rent/${ {{ apartment.id }} }/${days}/`;
+                } else {
+                    alert('Пожалуйста, введите корректное количество дней');
+                }
+            }
+        </script>
+    {% endif %}
 </div>
 {% endblock %}

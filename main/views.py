@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from .forms import ApartmentForm, User, UserForm
-from .models import Apartment, Profile
+from .models import Apartment, Profile, Rent_Apartment
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -246,7 +246,7 @@ def login_view(request):
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
-        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment)
+        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment, price=1)    
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
@@ -287,3 +287,19 @@ def update_apartment_status(request, apartment_id):
             apartment.status = new_status
             apartment.save()
     return redirect('flat_detail', flat_id=apartment_id)
+
+def rent_apartment(request, flat_id, dates):
+    try:
+        apartment = get_object_or_404(Apartment, id=flat_id)
+        rent = Rent_Apartment.objects.create(
+            tenant=request.user,
+            landlord=apartment.user,
+            price=apartment.cost_per_night,
+            dates=dates,
+            apartment=apartment
+        )
+        apartment.status = 'rented'
+        apartment.save()
+    except Exception as e:
+        print(f"Error: {e}")
+    return redirect('flat_detail', flat_id = flat_id)
