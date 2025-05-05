@@ -18,7 +18,7 @@ main{
 .tab{
     font-family: "Plus Jakarta Sans", sans-serif;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 20px;
     font-style: normal;
     color: rgba(151, 111, 78, 1);
 }
@@ -26,14 +26,14 @@ main{
     color: rgba(161, 130, 74, 1);
     padding-left: 10px;
     line-height: 20px;
-    transform: translateY(-42.5px);
 }
 .text{
     font-family: "Plus Jakarta Sans", sans-serif;
     font-weight: normal;
     font-size: 16px;
     font-style: normal;
-    height: 12px;
+    height: 10px;
+    width: 180px;
 }
 .color-text{
     font-family: "Plus Jakarta Sans", sans-serif;
@@ -88,15 +88,17 @@ main{
 }
 .desc-inp{
     width: 448px;
-    height: 144px;
+    height: 50px;
     margin-top: 20px;
     border-radius: 12px;
     border-style: solid;
     border-color: rgba(231, 218, 208, 1);
+    margin-bottom: 20px;
 }
 .add-photo{
     display: flex;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 .camera{
     margin-top: 15px;
@@ -107,4 +109,14 @@ main{
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 12px;
+}
+.flex{
+    display: flex;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 2px solid rgba(243, 237, 231, 1);
+}
+.width{
+    width: 500px;
 }

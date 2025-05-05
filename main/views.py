@@ -9,12 +9,12 @@ from django.shortcuts import render, redirect
 from .forms import ApartmentForm, User, UserForm
 from .models import Apartment, Profile
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 
-from .forms import ApartmentForm, User, UserForm
+from .forms import ApartmentForm, User, UserForm,StaticInputForm
 from .models import Apartment, Profile,ViewHistory,Rent_Apartment,StaticInput
 
 def get_base_context(pagename: str = "", **kwargs):
@@ -126,8 +126,34 @@ def flat_list(request: WSGIRequest):
 
 @login_required
 def sup(request: WSGIRequest):
-    context = {
-        'pagename': "Главная"
+    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active')
+    if not rent:
+        return HttpResponse("У вас нет активной аренды", status=400)
+    
+    if request.method == 'POST':
+        form=StaticInputForm(request.POST, request.FILES)
+        if form.is_valid():
+            stat=StaticInput.objects.create(
+                apartment=rent.apartment,
+                water_input=form.cleaned_data['water_input'],
+                water_payment=form.cleaned_data['water_payment'],
+                water_receipt=form.cleaned_data['water_receipt'],
+                electro_input=form.cleaned_data['electro_input'],
+                electro_payment=form.cleaned_data['electro_payment'],
+                electro_receipt=form.cleaned_data['electro_receipt'],
+                gas_input=form.cleaned_data['gas_input'],
+                gas_payment=form.cleaned_data['gas_payment'],
+                gas_receipt=form.cleaned_data['gas_receipt'],
+                GKX_payment=form.cleaned_data['GKX_payment'],
+                GKX_receipt=form.cleaned_data['GKX_receipt'],
+                rent_payment=form.cleaned_data['rent_payment'],
+                rent_receipt=form.cleaned_data['rent_receipt'], 
+                )
+            stat.save()
+    else:
+        form = StaticInputForm()
+    context={
+        'form':form
     }
     return render(request, 'pages/support_message.html', context)
 
@@ -280,11 +306,3 @@ def faq_questions(request: WSGIRequest):
                             ]
 
     return render(request, 'pages/faq_questions.html', context)
-
-def stat_input(request):
-    
-    rent=Rent_Apartment.get.objectsx(user=request.user)
-    rent=rent.filter(status='active')
-    #form=...
-    #if form.is_valid():
-        

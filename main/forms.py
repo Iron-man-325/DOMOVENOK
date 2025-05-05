@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect
-from .models import Profile, Apartment
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect,FileInput 
+from .models import Profile, Apartment,StaticInput
 
 User = get_user_model()
 
@@ -115,6 +115,73 @@ class ApartmentForm(forms.Form):
                                                              )
                                   )
     image = forms.ImageField(widget=forms.FileInput(attrs={"class": "", "onchange": "preview(this)"}))
+
+class StaticInputForm(ModelForm):
+    class Meta:
+        model = StaticInput
+        fields = ['water_input', 'water_receipt','water_payment','electro_payment', 'electro_receipt', 'electro_input','gas_input','gas_payment','gas_receipt','GKX_payment','GKX_receipt','rent_payment','rent_receipt']
+
+        widgets = {
+            "water_input": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите расход'
+            }),
+            "water_payment": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите плату'
+            }),
+            "electro_payment": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите плату'
+            }),
+            "electro_input": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите расход'
+            }),
+            "gas_input": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите расход'
+            }),
+            "gas_payment": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите плату'
+            }),
+            "GKX_payment": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите плату'
+            }),
+            "rent_payment": TextInput(attrs={
+                'class': 'desc-inp',
+                'placeholder': 'Внесите плату'
+            }),
+            "water_receipt": FileInput(attrs={
+                'id':"photoInput",
+                'name':"photos",
+                'style':"margin-top:10px;"
+            }),
+            "electro_receipt": FileInput(attrs={
+                'id':"photoInput",
+                'name':"photos",
+                'style':"margin-top:10px;"
+            }),
+            "gas_receipt": FileInput(attrs={
+                'id':"photoInput",
+                'name':"photos",
+                'style':"margin-top:10px;"
+            }),
+            "GKX_receipt": FileInput(attrs={
+                'id':"photoInput",
+                'name':"photos",
+                'style':"margin-top:10px;"
+            }),
+            "rent_receipt": FileInput(attrs={
+                'id':"photoInput",
+                'name':"photos",
+                'style':"margin-top:10px;"
+            }),
+        }
+
+
 
 # class PhotoForm(forms.ModelForm):
 #     class Meta:
