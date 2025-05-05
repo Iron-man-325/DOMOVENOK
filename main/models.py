@@ -186,3 +186,28 @@ class ViewHistory(models.Model):
     class Meta:
         ordering = ['-viewed_at']
         unique_together = ['user', 'apartment']
+        
+class StaticInput(models.Model):
+    apartment=models.ForeignKey(Apartment,on_delete=models.CASCADE)
+    water_input= models.DecimalField()
+    water_payment=models.DecimalField()
+    water_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    electro_input= models.DecimalField()
+    electro_payment=models.DecimalField()
+    electro_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    gas_input= models.DecimalField()
+    gas_payment=models.DecimalField()
+    gas_receipt= models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    rent_payment= models.DecimalField()
+    rent_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    GKX_payment= models.DecimalField()
+    GKX_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    
+ 
+class Rent_Apartment(models.Model):
+    landlord = models.ForeignKey(User, on_delete=models.CASCADE, related_name='landlord_rentals')
+    tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tenant_rentals')
+    price = models.IntegerField(default=0)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
+    dates = models.IntegerField(default=0)
+    status=models.CharField()

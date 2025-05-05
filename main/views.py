@@ -15,7 +15,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 
 from .forms import ApartmentForm, User, UserForm
-from .models import Apartment, Profile,ViewHistory
+from .models import Apartment, Profile,ViewHistory,Rent_Apartment,StaticInput
 
 def get_base_context(pagename: str = "", **kwargs):
     class MenuUrlContext:
@@ -280,3 +280,11 @@ def faq_questions(request: WSGIRequest):
                             ]
 
     return render(request, 'pages/faq_questions.html', context)
+
+def stat_input(request):
+    
+    rent=Rent_Apartment.get.objectsx(user=request.user)
+    rent=rent.filter(status='active')
+    #form=...
+    #if form.is_valid():
+        
