@@ -9,16 +9,14 @@
         <input class="search" placeholder="Поиск">
         {% for item in menu %}
         <div class="navigation-text">
-            <a href="{% url item.url_name %}" style="text-decoration: none;">
+            <a href="{% url item.url_name %}" class="no-underline">
                 <p class="head-navigation-text">{{ item.name }}</p>
             </a>
         </div>
         {% endfor %}
         <div>
             <a href="{% url 'add_flat' %}">
-                <button class="publish-adv">
-                    <p class="button-text">Разместить объявление</p>
-                </button>
+                <button class="publish-adv button-text">Разместить объявление</button>
             </a>
         </div>
         <div>
