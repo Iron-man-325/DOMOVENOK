@@ -201,9 +201,11 @@ def redact_profile(request: WSGIRequest):
     change_user_form = UserUpdateForm()
     change_password_form = PasswordUpdateForm()
     if request.method == "POST":
-        change_profile_form = ProfileUpdateForm(request.POST)
+        change_profile_form = ProfileUpdateForm(request.POST, request.FILES)
         if change_profile_form.is_valid():
-            data = change_profile_form.cleaned_data
+            if change_profile_form.cleaned_data['avatar']:
+                prof.avatar = change_profile_form.cleaned_data['avatar']
+                prof.save()
 
         change_user_form = UserUpdateForm(request.POST)
         if change_user_form.is_valid():

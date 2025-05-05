@@ -9,19 +9,24 @@
             <div>
                 <h2 class="head-settings-text">Настройки</h2>
             </div>
-            <form method="post" action="{% url 'redact' %}">
+            <form method="post" action="{% url 'redact' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="logo-container">
-                    <div class="logo">
-                        <img src="">
+                    <div class="col-md-auto logo">
+                        {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" class="logo">
+                        {% endif %}
                     </div>
-                    <div class="change-logo-button">
-                        <p class="change-logo-text">Сменить аватар</p>
+                    <div class="col"></div>
+                    <div class="col-md-auto">
+                        <input type="submit" class="change-logo-button change-logo-text" value="Сменить аватар">
                     </div>
                 </div>
                 <div>
                     {{ change_profile_form.avatar }}
                 </div>
+            </form>
+            <form method="post" action="{% url 'redact' %}">
                 <div class="personal-info-container">
                     <h4 class="personal-info-head-text">Персональная информация</h4>
                 </div>
