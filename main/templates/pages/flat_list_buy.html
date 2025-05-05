@@ -30,22 +30,22 @@
                 <img class="flat-img" src="{{ apartment.image.url }}">
                     <div class="desc-cont">
                         <div class="desc">
-                            <p class="desc-text">Дом целиком</p>
-                            <h4 class="name-flat">{{ apartment.id }}</h4>
-                            <p class="desc-text">{{ apartment.city }}</p>
 
-                            <p class="desc-text">{{ apartment.description }}</p>
+                            <h4 class="name-flat">{{ apartment.name }}</h4>
+                            <p class="desc-text">{{ apartment.city }}</p>
+                            <p class="desc-text">{{ apartment.cost_per_night }}</p>
+
+
 
                         </div>
                         <div class="but-div">
-                            <button class="reserve-but">
+                            <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
                                 <p class="reserve-text">Забронировать</p>
                             </button>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
         </div>
 {% endblock %}

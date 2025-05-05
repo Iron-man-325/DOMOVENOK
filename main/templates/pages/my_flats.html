@@ -35,8 +35,8 @@
                     <div>
                         <img class="flat-img-1" src="{{ apartment.image.url }}">
                     </div>
-                    <div>
-                        <a class="flat-name">{{ apartment.description}}</a>
+                    <div class="flat-name-cont">
+                        <a href="{% url 'stat' flat_id=apartment.id %}" class="flat-name">{{ apartment.name }}</a>
                     </div>
                 </div>
             {% endfor %}

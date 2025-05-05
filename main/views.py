@@ -2,12 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.handlers.wsgi import WSGIRequest
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
-import json
 
 from .forms import ApartmentForm, UserForm, PasswordUpdateForm, ProfileUpdateForm, UserUpdateForm
 from .models import Apartment, Profile, User, ViewHistory
@@ -88,6 +86,8 @@ def add_apartment(request):
                 min_nights=form.cleaned_data['min_nights'],
                 free_at=form.cleaned_data['free_at'],
                 image=form.cleaned_data['image'],
+                square=form.cleaned_data['square'],
+                name=form.cleaned_data['name'],
                 user=request.user
             )
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
@@ -316,17 +316,19 @@ def login_page(request):
 @csrf_exempt
 def send_support_message(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        user_message = data.get('message', '')
+        user_message = request.POST.get('message', '')
+        files = request.FILES.getlist('photos')
 
         if user_message:
-            send_mail(
+            email = EmailMessage(
                 'Сообщение поддержки',
                 user_message,
-                'no-reply@yourdomain.com',  # Письмо отправителя (например, no-reply@yourdomain.com)
-                ['lebedev.egor585.lol@gmail.com'],  # Ваш электронный адрес
-                fail_silently=False,
+                'no-reply@yourdomain.com',
+                ['pavel1234111@gmail.com'],
             )
+            for f in files[:3]:
+                email.attach(f.name, f.read(), f.content_type)
+            email.send(fail_silently=False)
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})

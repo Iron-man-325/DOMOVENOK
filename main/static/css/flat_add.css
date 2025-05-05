@@ -123,3 +123,10 @@ main {
     display:flex;
     margin-bottom:8px
 }
+.img-add{
+    margin-top: 20px;
+    width: 450px;
+    height: 300px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
