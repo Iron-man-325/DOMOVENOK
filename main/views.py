@@ -153,12 +153,8 @@ def sup(request: WSGIRequest):
                 submitted_at=timezone.now()
                 )
             stat.save()
-        else:
-            print('ERrror Valid')
     else:
         form = StaticInputForm()
-        print(form.errors)
-        print(form.is_valid())
     context={
         'form':form
     }
