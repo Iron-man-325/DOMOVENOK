@@ -198,7 +198,11 @@ def redact_profile(request: WSGIRequest):
     usr = User.objects.get_by_natural_key(request.user)
     prof = Profile.objects.get(user=usr)
     change_profile_form = ProfileUpdateForm()
-    change_user_form = UserUpdateForm()
+    change_user_form = UserUpdateForm({
+        'first_name': usr.first_name,
+        'last_name': usr.last_name,
+        'email': usr.email
+    })
     change_password_form = PasswordUpdateForm()
     if request.method == "POST":
         change_profile_form = ProfileUpdateForm(request.POST, request.FILES)

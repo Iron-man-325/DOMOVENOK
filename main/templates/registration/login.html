@@ -27,7 +27,9 @@
                 </div>
                 <div class="cont-button">
                     <button type="submit" class="enter-text button-login">Войти</button>
-                    <button type="button"  class="button-register register-text">Зарегистрироваться</button>
+                    <a href="{% url 'registration' %}" class="no-underline">
+                        <button type="button"  class="button-register register-text">Зарегистрироваться</button>
+                    </a>
                 </div>
             </form>
         </div>

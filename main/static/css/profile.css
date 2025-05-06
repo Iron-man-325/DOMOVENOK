@@ -74,6 +74,7 @@ main{
     border-radius: 12px;
     background-color: rgba(245, 240, 229, 1);
     text-align: center;
+    cursor: pointer;
 }
 
 .view-text{

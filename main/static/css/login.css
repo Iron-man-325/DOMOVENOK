@@ -19,6 +19,7 @@ main{
     border-radius: 12px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 .enter{
     margin-left: 150px;
@@ -74,6 +75,7 @@ main{
     border-radius: 12px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 .cont-button{
     width:480px;

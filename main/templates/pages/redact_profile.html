@@ -30,6 +30,7 @@
                 </div>
             </form>
             <form method="post" action="{% url 'redact' %}">
+                {% csrf_token %}
                 <div class="personal-info-container">
                     <h4 class="personal-info-head-text">Персональная информация</h4>
                 </div>
