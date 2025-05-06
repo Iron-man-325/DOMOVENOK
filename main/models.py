@@ -147,16 +147,16 @@ class Apartment(models.Model):
     description = models.CharField(max_length=200, blank=True)
 
     # Характеристики квартиры
-    max_people = models.DecimalField(max_digits=10, decimal_places=2)
-    sleeping_places = models.DecimalField(max_digits=10, decimal_places=2)
-    sleeping_rooms = models.DecimalField(max_digits=10, decimal_places=2)
-    bathrooms = models.DecimalField(max_digits=10, decimal_places=2)
-    square = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    max_people = models.DecimalField(max_digits=10, decimal_places=0)
+    sleeping_places = models.DecimalField(max_digits=10, decimal_places=0)
+    sleeping_rooms = models.DecimalField(max_digits=10, decimal_places=0)
+    bathrooms = models.DecimalField(max_digits=10, decimal_places=0)
+    square = models.DecimalField(max_digits=10, decimal_places=0, default=1)
 
-    cost_per_night = models.DecimalField(max_digits=10, decimal_places=2)
-    prepayment = models.DecimalField(max_digits=10, decimal_places=2)
+    cost_per_night = models.DecimalField(max_digits=10, decimal_places=0)
+    prepayment = models.DecimalField(max_digits=10, decimal_places=0)
 
-    min_nights = models.DecimalField(max_digits=10, decimal_places=2)
+    min_nights = models.DecimalField(max_digits=10, decimal_places=0)
 
     free_at = models.DateTimeField(blank=True, null=True)
     nearby_objects = models.TextField(default='[]')
@@ -191,6 +191,31 @@ class ViewHistory(models.Model):
     class Meta:
         ordering = ['-viewed_at']
         unique_together = ['user', 'apartment']
+        
+class StaticInput(models.Model):
+    apartment=models.ForeignKey(Apartment,on_delete=models.CASCADE)
+    water_input= models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    water_payment=models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    water_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    electro_input= models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    electro_payment=models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    electro_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    gas_input= models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    gas_payment=models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    gas_receipt= models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    rent_payment= models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    rent_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    GKX_payment= models.DecimalField(max_digits=10,decimal_places=0,blank=True, null=True)
+    GKX_receipt=models.ImageField(upload_to='apartment_photos/', default='default_image.jpg')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+class Rent_Apartment(models.Model):
+    landlord = models.ForeignKey(User, on_delete=models.CASCADE, related_name='landlord_rentals')
+    tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tenant_rentals')
+    price = models.IntegerField(default=0)
+    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
+    dates = models.IntegerField(default=0)
+    status=models.CharField()
 
 
 class SupportRequest(models.Model):

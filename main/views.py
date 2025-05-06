@@ -9,11 +9,19 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
+
+from .forms import ApartmentForm, User, UserForm
+from .models import Apartment, Profile
+from django.core.mail import send_mail
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import ApartmentForm, UserForm, PasswordUpdateForm, ProfileUpdateForm, UserUpdateForm
 from .models import Apartment, Profile, User, ViewHistory
 
+from .forms import ApartmentForm, User, UserForm,StaticInputForm
+from .models import Apartment, Profile,ViewHistory,Rent_Apartment,StaticInput
 
 def get_base_context(pagename: str = "", **kwargs):
     """
@@ -173,7 +181,36 @@ def faq_questions(request: WSGIRequest):
 
 @login_required
 def sup(request: WSGIRequest):
-    context = get_base_context('Поддержка')
+    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
+    if not rent:
+        return HttpResponse("У вас нет активной аренды", status=400)
+    
+    if request.method == 'POST':
+        form=StaticInputForm(request.POST, request.FILES)
+        if form.is_valid():
+            stat=StaticInput.objects.create(
+                apartment=rent.apartment,
+                water_input=form.cleaned_data['water_input'],
+                water_payment=form.cleaned_data['water_payment'],
+                water_receipt=form.cleaned_data['water_receipt'],
+                electro_input=form.cleaned_data['electro_input'],
+                electro_payment=form.cleaned_data['electro_payment'],
+                electro_receipt=form.cleaned_data['electro_receipt'],
+                gas_input=form.cleaned_data['gas_input'],
+                gas_payment=form.cleaned_data['gas_payment'],
+                gas_receipt=form.cleaned_data['gas_receipt'],
+                GKX_payment=form.cleaned_data['GKX_payment'],
+                GKX_receipt=form.cleaned_data['GKX_receipt'],
+                rent_payment=form.cleaned_data['rent_payment'],
+                rent_receipt=form.cleaned_data['rent_receipt'],
+                submitted_at=timezone.now()
+                )
+            stat.save()
+    else:
+        form = StaticInputForm()
+    context={
+        'form':form
+    }
     return render(request, 'pages/support_message.html', context)
 
 

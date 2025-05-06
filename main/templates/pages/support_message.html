@@ -50,73 +50,96 @@
     <div>
         <h2 class="head-text">Напишите ваш запрос</h2>
     </div>
-    <div class="tab-container">
-        <button class="underlined-tab">
-            <p class="tab">Главная</p>
-        </button>
+    <form method='POST' enctype="multipart/form-data">
+        {% csrf_token %}
+    <div class="flex">
+        <div>
+            <button class="reg-tab">
+                <h3 class="tab">Вода</h3>
+            </button>
+            <div class="width">
+                {{ form.water_input}}
+                {{ form.water_payment}}
+            </div>
+            <div class="add-photo">
+                <div class="camera"></div>
+                <div>
+                    <p class="text">Добавить квитанцию</p>
+                    {{ form.water_receipt}}
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="reg-tab">
+                <p class="tab">Свет</p>
+            </button>
+            <div class="width">
+                {{ form.electro_input}}
+                {{ form.electro_payment}}
+            </div>
+            <div class="add-photo">
+                <div class="camera"></div>
+                <div>
+                    <p class="text">Добавить квитанцию</p>
+                    {{ form.electro_receipt}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex">
+        <div>
         <button class="reg-tab">
-            <p class="tab">Техника</p>
+            <p class="tab">Газ</p>
         </button>
-        <button class="reg-tab">
-            <p class="tab">Пломбы</p>
-        </button>
-        <button class="reg-tab">
-            <p class="tab">Электричество</p>
-        </button>
+        <div class="width">
+            {{ form.gas_input}}
+            {{ form.gas_payment}}
+        </div>
+        <div class="add-photo">
+            <div class="camera"></div>
+            <div>
+                <p class="text">Добавить квитанцию</p>
+                {{ form.gas_receipt}}
+            </div>
+        </div>
     </div>
     <div>
-        <input class="desc-inp" placeholder="Опишите вашу проблему" id="userMessage">
-    </div>
-    <div class="add-photo">
-        <div class="camera"></div>
-        <div>
-            <p class="text">Добавить фото</p>
-            <p class="color-text">Можно добавлять до 3 фото</p>
+        <button class="reg-tab">
+            <p class="tab">ЖКХ</p>
+        </button>
+        <div class="width">
+            {{ form.GKX_payment}}
         </div>
-        <input type="file" id="photoInput" name="photos" accept="image/*" multiple style="margin-top:10px;">
+        <div class="add-photo">
+            <div class="camera"></div>
+            <div>
+                <p class="text">Добавить квитанцию</p>
+                {{ form.GKX_receipt}}
+            </div>
+        </div>
     </div>
-    <button class="button" id="sendRequest">
+    </div>
+        <button class="reg-tab">
+            <p class="tab">Аренда</p>
+        </button>
+        <div class="width">
+            {{ form.rent_payment}}
+        </div>
+        <div class="add-photo">
+            <div class="camera"></div>
+            <div>
+                <p class="text">Добавить квитанцию</p>
+                {{ form.rent_receipt}}
+            </div>
+        </div>
+    
+    <button class="button" id="sendRequest" type="submit">
         <p class="but-text">Отправить запрос</p>
     </button>
+</form>
 </div>
 
 <script>
-document.getElementById('sendRequest').addEventListener('click', function(e) {
-    e.preventDefault();
 
-    const userMessage = document.getElementById('userMessage').value;
-    const photoInput = document.getElementById('photoInput');
-    const files = photoInput.files;
-
-    if (files.length > 3) {
-        alert('Можно добавить не более 3 фото!');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('message', userMessage);
-    for (let i = 0; i < files.length; i++) {
-        formData.append('photos', files[i]);
-    }
-
-    fetch('/send-support-message/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Сообщение отправлено успешно!');
-            document.getElementById('userMessage').value = '';
-            photoInput.value = '';
-        } else {
-            alert('Ошибка при отправке сообщения.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
 </script>
 {% endblock %}
