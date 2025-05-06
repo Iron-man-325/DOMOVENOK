@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/support.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+<!-- Можно вставить ваш header, если нужно -->
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="head-text">Мои запросы в поддержку</h2>
+
+    {% if requests %}
+        {% for req in requests %}
+            <div class="support-request" style="border:1px solid #ddd; border-radius:8px; padding:16px; margin-bottom:20px;">
+                <div style="font-size:14px; color:#888;">{{ req.created_at|date:"d.m.Y H:i" }}</div>
+                <div style="margin:10px 0;">
+                    <b>Сообщение:</b>
+                    <p style="margin:0;">{{ req.message }}</p>
+                </div>
+                {% if req.photos %}
+                    <div style="margin-top:10px;">
+                        <b>Фото:</b><br>
+                        {% for photo in req.photos %}
+                            <img src="{{ photo.url }}" alt="Фото обращения" style="max-width:120px; max-height:120px; margin-right:10px; border-radius:6px; border:1px solid #eee;">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:#888;">У вас пока нет запросов в поддержку.</p>
+    {% endif %}
+</div>
+{% endblock %}

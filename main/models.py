@@ -191,3 +191,16 @@ class ViewHistory(models.Model):
     class Meta:
         ordering = ['-viewed_at']
         unique_together = ['user', 'apartment']
+
+
+class SupportRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='support_requests')
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    # Для хранения до 3 файлов
+    photo1 = models.ImageField(upload_to='support_photos/', null=True, blank=True)
+    photo2 = models.ImageField(upload_to='support_photos/', null=True, blank=True)
+    photo3 = models.ImageField(upload_to='support_photos/', null=True, blank=True)
+
+    def photos(self):
+        return [p for p in [self.photo1, self.photo2, self.photo3] if p]
