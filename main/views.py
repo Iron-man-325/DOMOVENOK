@@ -117,11 +117,11 @@ def adminn(request):
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
-        context = get_base_context(str(apartment), apartment=apartment)
-        ViewHistory.objects.create(user=request.user, apartment=apartment)
+        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment)
         return render(request, "pages/show_flat.html", {'apartment': apartment})
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
+
 
 
 @login_required
@@ -255,20 +255,20 @@ def profile_page(request: WSGIRequest):
     if request.method == 'POST':
         logout(request)
         return redirect('login')
-
-    user = User.objects.get_by_natural_key(request.user)
-    profile = Profile.objects.get(user=user)
-    history = ViewHistory.objects.filter(user=user).select_related('apartment')
+    
+    usr = User.objects.get_by_natural_key(request.user)
+    prof = Profile.objects.get(user=usr)
+    user=request.user
+    history = ViewHistory.objects.filter(user=request.user).select_related('apartment')
     apartments = Apartment.objects.all()
-    user_flats = Apartment.objects.filter(user=user)
-    context = get_base_context(
-        'Профиль',
-        user=user,
-        profile=profile,
-        history=history,
-        apartments=apartments,
-        myflats=user_flats
-    )
+    my_flats = Apartment.objects.filter(user=request.user)
+    context={
+        'profile':prof,
+        'form': user,
+        'history':history,
+        'apartments':apartments,
+        'myflats':my_flats
+    }
     return render(request, 'pages/profile.html', context)
 
 
