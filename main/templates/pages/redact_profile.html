@@ -3,47 +3,6 @@
 {% block css %}
 <link href="{% static 'css/redact_profile.css' %}" rel="stylesheet">
 {% endblock %}
-{% block header %}
-<header>
-        <div class="head">
-            <div class="name">
-                <div></div>
-                <div class="name-only">
-                    <h3>Домовенок ЙОУУУУ</h3>
-                </div>
-            </div>
-            <div class="head">
-                <input class="search" placeholder="Поиск">
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" >Чаты</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'redac' %}'">Настройки</p>
-                </div>
-                <div>
-                    <button class="publish-adv" onclick="location.href='{% url 'add' %}'">
-                        <p class="button-text" >Разместить объявление</p>
-                    </button>
-                </div>
-                <div class="logo-small">
-
-                </div>
-            </div>
-        </div>
-    </header>
-{% endblock %}
 
 {% block content %}
 <div>
@@ -53,7 +12,7 @@
             <div>
                 <h2 class="head-settings-text">Настройки</h2>
             </div>
-            <form method="post" action="{% url 'redac' %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'redact' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="logo-container">
                     <div class="col-md-auto logo">
@@ -70,7 +29,7 @@
                     {{ change_profile_form.avatar }}
                 </div>
             </form>
-            <form method="post" action="{% url 'redac' %}">
+            <form method="post" action="{% url 'redact' %}">
                 {% csrf_token %}
                 <div class="personal-info-container">
                     <h4 class="personal-info-head-text">Персональная информация</h4>
@@ -92,7 +51,7 @@
             <div>
                 <h4 class="personal-info-head-text">Пароль</h4>
             </div>
-            <form method="post" action="{% url 'redac' %}">
+            <form method="post" action="{% url 'redact' %}">
                 {% csrf_token %}
                 <div>
                     <p class="personal-info-text">Ваш пароль</p>

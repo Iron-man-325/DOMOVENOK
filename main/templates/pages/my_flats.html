@@ -3,47 +3,6 @@
 {% block css %}
 <link href="{% static 'css/my_flats.css' %}" rel="stylesheet">
 {% endblock %}
-{% block header %}
-<header>
-        <div class="head">
-            <div class="name">
-                <div></div>
-                <div class="name-only">
-                    <h3>Домовенок ЙОУУУУ</h3>
-                </div>
-            </div>
-            <div class="head">
-                <input class="search" placeholder="Поиск">
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" >Чаты</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
-                </div>
-                <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'redac' %}'">Настройки</p>
-                </div>
-                <div>
-                    <button class="publish-adv" onclick="location.href='{% url 'add' %}'">
-                        <p class="button-text" >Разместить объявление</p>
-                    </button>
-                </div>
-                <div class="logo-small">
-
-                </div>
-            </div>
-        </div>
-    </header>
-{% endblock %}
 
 {% block content %}
 <div class="container">

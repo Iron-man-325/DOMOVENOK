@@ -12,8 +12,11 @@
 
 
     <body>
+        <header>
             {% block header %}
+            {% include 'base/menu.html' %}
             {% endblock %}
+        </header>
         <main>
             {% block content %}
 

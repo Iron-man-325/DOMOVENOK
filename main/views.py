@@ -1,27 +1,18 @@
 import json
-from .models import SupportRequest
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import EmailMessage
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
-
-from .forms import ApartmentForm, User, UserForm
-from .models import Apartment, Profile
-from django.core.mail import send_mail
-from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import ApartmentForm, UserForm, PasswordUpdateForm, ProfileUpdateForm, UserUpdateForm
-from .models import Apartment, Profile, User, ViewHistory
+from .forms import ApartmentForm, PasswordUpdateForm, ProfileUpdateForm, StaticInputForm, User, UserForm, UserUpdateForm
+from .models import Apartment, Profile, Rent_Apartment, StaticInput, SupportRequest, ViewHistory
 
-from .forms import ApartmentForm, User, UserForm,StaticInputForm
-from .models import Apartment, Profile,ViewHistory,Rent_Apartment,StaticInput
 
 def get_base_context(pagename: str = "", **kwargs):
     """
@@ -129,11 +120,11 @@ def adminn(request):
 def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
+        context = get_base_context(str(apartment), apartment=apartment)
         ViewHistory.objects.update_or_create(user=request.user, apartment=apartment)
-        return render(request, "pages/show_flat.html", {'apartment': apartment})
+        return render(request, "pages/show_flat.html", context)
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
-
 
 
 @login_required
@@ -181,14 +172,14 @@ def faq_questions(request: WSGIRequest):
 
 @login_required
 def sup(request: WSGIRequest):
-    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
+    rent = Rent_Apartment.objects.filter(tenant=request.user, status='active').first()
     if not rent:
         return HttpResponse("У вас нет активной аренды", status=400)
-    
+
     if request.method == 'POST':
-        form=StaticInputForm(request.POST, request.FILES)
+        form = StaticInputForm(request.POST, request.FILES)
         if form.is_valid():
-            stat=StaticInput.objects.create(
+            static = StaticInput.objects.create(
                 apartment=rent.apartment,
                 water_input=form.cleaned_data['water_input'],
                 water_payment=form.cleaned_data['water_payment'],
@@ -204,13 +195,11 @@ def sup(request: WSGIRequest):
                 rent_payment=form.cleaned_data['rent_payment'],
                 rent_receipt=form.cleaned_data['rent_receipt'],
                 submitted_at=timezone.now()
-                )
-            stat.save()
+            )
+            static.save()
     else:
         form = StaticInputForm()
-    context={
-        'form':form
-    }
+    context = get_base_context('Поддержка', form=form)
     return render(request, 'pages/support_message.html', context)
 
 
@@ -236,13 +225,13 @@ def my_flats(request: WSGIRequest):
 
 @login_required
 def redact_profile(request: WSGIRequest):
-    usr = User.objects.get_by_natural_key(request.user)
-    prof = Profile.objects.get(user=usr)
+    user = User.objects.get_by_natural_key(request.user)
+    prof = Profile.objects.get(user=user)
     change_profile_form = ProfileUpdateForm()
     change_user_form = UserUpdateForm({
-        'first_name': usr.first_name,
-        'last_name': usr.last_name,
-        'email': usr.email
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email
     })
     change_password_form = PasswordUpdateForm()
     if request.method == "POST":
@@ -255,10 +244,10 @@ def redact_profile(request: WSGIRequest):
         change_user_form = UserUpdateForm(request.POST)
         if change_user_form.is_valid():
             data = change_user_form.cleaned_data
-            usr.first_name = data['first_name']
-            usr.last_name = data['last_name']
-            usr.email = data['email']
-            usr.save()
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.email = data['email']
+            user.save()
 
         change_password_form = PasswordUpdateForm(request.POST)
         if change_password_form.is_valid():
@@ -271,18 +260,18 @@ def redact_profile(request: WSGIRequest):
                 messages.add_message(request, messages.ERROR,
                                      "Поля \"Новый пароль\" и \"Подтвердите новый пароль\" не совпадают")
             else:
-                usr.set_password(data['new_password'])
-                usr.save()
-                login(request, usr)
+                user.set_password(data['new_password'])
+                user.save()
+                login(request, user)
                 messages.add_message(request, messages.SUCCESS,
                                      "Ваш пароль изменён")
 
     context = get_base_context(
         'Редактирование профиля',
         profile=prof,
-        username=usr.username,
-        email=usr.email,
-        last_name=usr.last_name,
+        username=user.username,
+        email=user.email,
+        last_name=user.last_name,
         change_profile_form=change_profile_form,
         change_user_form=change_user_form,
         change_password_form=change_password_form
@@ -296,20 +285,20 @@ def profile_page(request: WSGIRequest):
     if request.method == 'POST':
         logout(request)
         return redirect('login')
-    
-    usr = User.objects.get_by_natural_key(request.user)
-    prof = Profile.objects.get(user=usr)
-    user=request.user
+
+    user = User.objects.get_by_natural_key(request.user)
+    profile = Profile.objects.get(user=user)
     history = ViewHistory.objects.filter(user=request.user).select_related('apartment')
     apartments = Apartment.objects.all()
-    my_flats = Apartment.objects.filter(user=request.user)
-    context={
-        'profile':prof,
-        'form': user,
-        'history':history,
-        'apartments':apartments,
-        'myflats':my_flats
-    }
+    user_flats = Apartment.objects.filter(user=user)
+    context = get_base_context(
+        'Профиль',
+        user=user,
+        profile=profile,
+        history=history,
+        apartments=apartments,
+        myflats=user_flats
+    )
     return render(request, 'pages/profile.html', context)
 
 
@@ -376,7 +365,7 @@ def send_support_message(request):
                 ['pavel1234111@gmail.com'],
             )
             for idx, f in enumerate(files[:3]):
-                setattr(support_request, f'photo{idx+1}', f)
+                setattr(support_request, f'photo{idx + 1}', f)
                 email.attach(f.name, f.read(), f.content_type)
             support_request.save()
             # (опционально: отправка email)
@@ -384,12 +373,10 @@ def send_support_message(request):
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
+
+
 @login_required
 def my_support_requests(request):
     requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'pages/my_support_requests.html', {'requests': requests})
-
-
-
-
-
+    context = get_base_context('Мои запросы', requests=requests)
+    return render(request, 'pages/my_support_requests.html', context)
