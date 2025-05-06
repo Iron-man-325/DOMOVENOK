@@ -14,6 +14,7 @@ urlpatterns = [
     path('add/', views.add_apartment, name='add'),
     path('support/', views.support, name='data'),
     path('questions/', views.faq_questions, name='faq'),
+    path('my-support-requests/', views.my_support_requests, name='my_support_requests'),
 
     path('flat-list/', views.flat_list, name='apartment_list'),
     path('flat/<int:flat_id>/', views.show_flat, name='flat_detail'),

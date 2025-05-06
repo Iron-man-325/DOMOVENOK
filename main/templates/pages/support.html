@@ -18,13 +18,13 @@
                     <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" >Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
@@ -53,8 +53,8 @@
         <button class="underlined-tab">
             <p class="tab">Ваш запрос</p>
         </button>
-        <button class="reg-tab">
-            <p class="tab">Мои запросы</p>
+        <button class="reg-tab" onclick="location.href='{% url 'my_support_requests' %}'">
+    <p class="tab">Мои запросы</p>
         </button>
     </div>
     <div>

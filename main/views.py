@@ -1,5 +1,5 @@
 import json
-
+from .models import SupportRequest
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -209,21 +209,23 @@ def send_support_message(request):
         files = request.FILES.getlist('photos')
 
         if user_message:
-            email = EmailMessage(
-                'Сообщение поддержки',
-                user_message,
-                'no-reply@yourdomain.com',
-                ['pavel1234111@gmail.com'],
+            support_request = SupportRequest.objects.create(
+                user=request.user,
+                message=user_message,
             )
-            for f in files[:3]:
-                email.attach(f.name, f.read(), f.content_type)
-            email.send(fail_silently=False)
+            for idx, f in enumerate(files[:3]):
+                setattr(support_request, f'photo{idx+1}', f)
+            support_request.save()
+            # (опционально: отправка email)
             return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
 
 
-
+@login_required
+def my_support_requests(request):
+    requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'pages/my_support_requests.html', {'requests': requests})
 
 
 def login_view(request):
@@ -280,3 +282,5 @@ def faq_questions(request: WSGIRequest):
                             ]
 
     return render(request, 'pages/faq_questions.html', context)
+
+
