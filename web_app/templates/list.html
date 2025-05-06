@@ -3,31 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список квартир в Москве (Avito)</title>
+    <title>Квартиры в Москве</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        .apartment-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
-        .apartment-item h3 { margin-top: 0; margin-bottom: 5px; }
-        .apartment-item p { margin-bottom: 5px; color: #555; }
-        .apartment-item a { text-decoration: none; color: #007bff; }
-        .apartment-item a:hover { text-decoration: underline; }
+         .apartment-item .photo-preview.placeholder {
+             background-color: #eee;
+         }
     </style>
 </head>
 <body>
-    <h1>Список квартир в Москве</h1>
-    {% if apartments %}
-        {% for apartment in apartments %}
-            <div class="apartment-item">
-                {# Создаем ссылку на детальную страницу, используя ID квартиры #}
-                <h3><a href="{{ url_for('view_apartment_detail', apartment_id=apartment.id) }}">{{ apartment.наименование | default('Без названия') }}</a></h3>
-                <p>Цена: {{ apartment.цена | default('N/A') }}</p>
-                <p>Адрес: {{ apartment.адрес | default('N/A') }}</p>
-                <p>Метро: {{ apartment.метро | default('N/A') }}</p>
-                {# Можно добавить и другие поля из базовой информации #}
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Нет данных для отображения. Убедитесь, что файл данных существует и содержит корректный JSON.</p>
-    {% endif %}
+    <main>
+        <div class="container">
+            <h1>Список квартир в Москве</h1>
+            {% if apartments %}
+                <div class="apartments-list">
+                    {% for apartment in apartments %}
+                        <a href="{{ url_for('view_apartment_detail', apartment_id=apartment.id) }}" class="apartment-item">
+                            {% set first_detailed_photo = apartment.фотографии_детально[0] if apartment.фотографии_детально and apartment.фотографии_детально|length > 0 and apartment.фотографии_детально[0] != 'N/A' else None %}
+                            {% set first_list_photo = apartment.фотографии_список[0] if apartment.фотографии_список and apartment.фотографии_список|length > 0 and apartment.фотографии_список[0] != 'N/A' else None %}
+
+                            {% if first_detailed_photo %}
+                                <img src="{{ first_detailed_photo }}" alt="Фото квартиры" class="photo-preview">
+                            {% elif first_list_photo %}
+                                <img src="{{ first_list_photo }}" alt="Фото квартиры (превью)" class="photo-preview">
+                            {% else %}
+                                <div class="photo-preview placeholder"></div>
+                            {% endif %}
+
+                            <div class="info-block">
+                                <h3>{{ apartment.наименование | default('Без названия') }}</h3>
+                                <p class="stat-text">Цена: {{ apartment.цена | default('N/A') }}</p>
+                                <p class="stat-text">Адрес: {{ apartment.адрес | default('N/A') }}</p>
+                                <p class="stat-text">Метро: {{ apartment.метро | default('N/A') }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Нет данных для отображения. Убедитесь, что файл данных существует и содержит корректный JSON.</p>
+            {% endif %}
+        </div>
+    </main>
 </body>
 </html>
