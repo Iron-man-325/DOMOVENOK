@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
+from django.utils import timezone
+
 from .forms import ApartmentForm, User, UserForm
 from .models import Apartment, Profile
 from django.core.mail import send_mail
@@ -126,7 +128,7 @@ def flat_list(request: WSGIRequest):
 
 @login_required
 def sup(request: WSGIRequest):
-    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active')
+    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
     if not rent:
         return HttpResponse("У вас нет активной аренды", status=400)
     
@@ -147,11 +149,16 @@ def sup(request: WSGIRequest):
                 GKX_payment=form.cleaned_data['GKX_payment'],
                 GKX_receipt=form.cleaned_data['GKX_receipt'],
                 rent_payment=form.cleaned_data['rent_payment'],
-                rent_receipt=form.cleaned_data['rent_receipt'], 
+                rent_receipt=form.cleaned_data['rent_receipt'],
+                submitted_at=timezone.now()
                 )
             stat.save()
+        else:
+            print('ERrror Valid')
     else:
         form = StaticInputForm()
+        print(form.errors)
+        print(form.is_valid())
     context={
         'form':form
     }
@@ -268,7 +275,7 @@ def login_view(request):
             return redirect('profile')
         context["error"] = "Неверное имя пользователя или пароль."
 
-    return render(request, "pages/login.html", context)
+    return render(request, "pages/Login.html", context)
 
 @login_required
 def show_flat(request, flat_id):

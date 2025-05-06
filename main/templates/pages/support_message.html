@@ -49,7 +49,7 @@
     <div>
         <h2 class="head-text">Напишите ваш запрос</h2>
     </div>
-    <form method='POST'>
+    <form method='POST' enctype="multipart/form-data">
         {% csrf_token %}
     <div class="flex">
         <div>
@@ -132,49 +132,13 @@
             </div>
         </div>
     
-    <button class="button" id="sendRequest">
+    <button class="button" id="sendRequest" type="submit">
         <p class="but-text">Отправить запрос</p>
     </button>
 </form>
 </div>
 
 <script>
-document.getElementById('sendRequest').addEventListener('click', function(e) {
-    e.preventDefault();
 
-    const userMessage = document.getElementById('userMessage').value;
-    const photoInput = document.getElementById('photoInput');
-    const files = photoInput.files;
-
-    if (files.length > 3) {
-        alert('Можно добавить не более 3 фото!');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('message', userMessage);
-    for (let i = 0; i < files.length; i++) {
-        formData.append('photos', files[i]);
-    }
-
-    fetch('/send-support-message/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Сообщение отправлено успешно!');
-            document.getElementById('userMessage').value = '';
-            photoInput.value = '';
-        } else {
-            alert('Ошибка при отправке сообщения.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
 </script>
 {% endblock %}
