@@ -19,13 +19,13 @@
                     <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text">Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
@@ -68,27 +68,7 @@
         <h3>О квартире</h3>
         <div class="line"></div>
         <div class="content">
-            {% if user.is_authenticated and user == apartment.user %}
-            <div class="status-block">
-                <h3>Управление статусом</h3>
-                <form method="post" action="{% url 'update_apartment_status' apartment.id %}">
-                    {% csrf_token %}
-                    <select name="status" class="status-select">
-                        <option value="available" {% if apartment.status == 'available' %}selected{% endif %}>
-                            Свободно
-                        </option>
-                        <option value="rented" {% if apartment.status == 'rented' %}selected{% endif %}>
-                            Сдается
-                        </option>
-                    </select>
-                    <button type="submit" class="status-update-btn">Обновить статус</button>
-                </form>
-            </div>
-            {% endif %}
-
-            <div class="status-indicator {% if apartment.status == 'available' %}status-available{% else %}status-rented{% endif %}">
-                Статус: {{ apartment.get_status_display }}
-            </div>
+            
         </div>
         <!-- Колонки с данными -->
         <div class="columns">
@@ -184,11 +164,14 @@
 
         <script>
             function redirectToRent() {
-                const days = document.getElementById('days-input').value;
-                if (days && days > 0) {
-                    window.location.href = `/rent/${ {{ apartment.id }} }/${days}/`;
+                const days = parseInt(document.getElementById('days-input').value);
+                const minNights = {{ apartment.min_nights }};
+                const apartmentId = {{ apartment.id }};
+                
+                if (days && days < minNights) {
+                    window.location.href = `/rent/${apartmentId}/${days}/`;
                 } else {
-                    alert('Пожалуйста, введите корректное количество дней');
+                    alert('Минимальное количество дней для сдачи: ' + minNights);
                 }
             }
         </script>

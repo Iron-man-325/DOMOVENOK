@@ -1,5 +1,5 @@
 import json
-
+import uuid
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -71,7 +71,8 @@ def add_apartment(request):
                 min_nights=form.cleaned_data['min_nights'],
                 free_at=form.cleaned_data['free_at'],
                 image=form.cleaned_data['image'],
-                user = request.user
+                user = request.user,
+                key = uuid.uuid4().hex[:10]
             )
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
             apartment.amenities = request.POST.get('amenities', '')
@@ -137,9 +138,18 @@ def support(request: WSGIRequest):
     return render(request, 'pages/support.html', context)
 
 @login_required
-def stat(request: WSGIRequest):
+def stat(request: WSGIRequest, flat_id):
+    apartment = get_object_or_404(Apartment, id=flat_id)
+    history = Rent_Apartment.objects.filter(apartment=apartment)
+    cash = 0
+    if history.exists():
+        for elem in history:
+            cash += elem.price * elem.dates
+    
     context = {
-        'pagename': "Главная"
+        'apartment' : apartment,
+        'cash': cash,
+        'rents': history
     }
     return render(request, 'pages/static.html', context)
 
@@ -286,7 +296,7 @@ def update_apartment_status(request, apartment_id):
             new_status = request.POST.get('status')
             apartment.status = new_status
             apartment.save()
-    return redirect('flat_detail', flat_id=apartment_id)
+    return redirect('stat', flat_id=apartment_id)
 
 def rent_apartment(request, flat_id, dates):
     try:

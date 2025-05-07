@@ -18,13 +18,13 @@
                     <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Главная</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Статистика</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Статистика</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text">Чаты</p>
                 </div>
                 <div class="navigation-text">
-                    <p class="head-navigation-text" onclick="location.href='{% url 'stat' %}'">Квитанции</p>
+                    <p class="head-navigation-text" onclick="location.href='{% url 'profile' %}'">Квитанции</p>
                 </div>
                 <div class="navigation-text">
                     <p class="head-navigation-text" onclick="location.href='{% url 'sup' %}'">Поддержка</p>
@@ -54,14 +54,34 @@
 
                 </div>
                 <div class="stat-cont">
-                    <p class="stat-text">Адрес:</p>
-                    <p class="stat-text">Контактные данные:</p>
-                    <p class="stat-text">Статус:</p>
-                    <p class="stat-text">Стоимость:</p>
-                    <a class="stat-text">Договор</a>
+                    <p class="stat-text">Адрес: {{ apartment.city }}, {{apartment.street}}, {{apartment.housenum}}, {{apartment.stage}}, {{apartment.number}}</p>
+                    <p class="stat-text">Контактные данные: {{apartment.user.email}}</p>
+                    {% if user.is_authenticated and user == apartment.user %}
+                    <div class="status-block">
+                        <h3>Управление статусом</h3>
+                        <form method="post" action="{% url 'update_apartment_status' apartment.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="status-select">
+                                <option value="available" {% if apartment.status == 'available' %}selected{% endif %}>
+                                    Свободно
+                                </option>
+                                <option value="rented" {% if apartment.status == 'rented' %}selected{% endif %}>
+                                    Сдается
+                                </option>
+                            </select>
+                            <button type="submit" class="status-update-btn">Обновить статус</button>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    <div class="status-indicator {% if apartment.status == 'available' %}status-available{% else %}status-rented{% endif %}">
+                        Статус: {{ apartment.get_status_display }}
+                    </div>
+                    <p class="stat-text">Стоимость: {{apartment.cost_per_night}}</p>
+                    <p class="stat-text">Ключ для сдачи квартиры: {{apartment.key}}</p>
                 </div>
                 <div class="earn-cont">
-                    <h3 class="earn-money">32 000₽</h3>
+                    <h3 class="earn-money">{{cash}}</h3>
                     <p class="small-text">Всего заработано</p>
                 </div>
             </div>
@@ -91,38 +111,30 @@
                         <p class="choose-text">Квитанции об оплате</p>
                     </div>
                     <div class="option">
-                        <p class="choose-text">История оплаты</p>
+                        <p class="choose-text">История сдачи</p>
                     </div>
                 </div>
                 <div>
-                    <div class="add-cont">
-                        <div>
-                            <p class="add-text">Дата</p>
-                            <p class="add-text">23.05.2000</p>
+                    {% for rent in rents %}
+                        <div class="add-cont">
+                            <div>
+                                <p class="add-text">Кол-во дней</p>
+                                <p class="add-text">{{ rent.dates }}</p>
+                            </div>
+                            <div>
+                                <p class="add-text">Цена</p>
+                                <p class="add-text">{{ rent.price }}</p>
+                            </div>
+                            <div>
+                                <p class="last-add-text">Номер квитанции</p>
+                                <p class="last-add-text">{{ rent.id }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="add-text">Сумма</p>
-                            <p class="add-text">7500₽</p>
+                    {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
                         </div>
-                        <div>
-                            <p class="last-add-text">Номер квитанции</p>
-                            <p class="last-add-text">778742319047397429052</p>
-                        </div>
-                    </div>
-                    <div class="add-cont">
-                        <div>
-                            <p class="add-text">Дата</p>
-                            <p class="add-text">23.05.2000</p>
-                        </div>
-                        <div>
-                            <p class="add-text">Сумма</p>
-                            <p class="add-text">7500₽</p>
-                        </div>
-                        <div>
-                            <p class="last-add-text">Номер квитанции</p>
-                            <p class="last-add-text">778742319047397429052</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

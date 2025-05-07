@@ -69,7 +69,7 @@ class Apartment(models.Model):
         choices=STATUS_CHOICES,
         default='available'
     )
-
+    key = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         return f"{self.city}, {self.street}, {self.housenum}, кв. {self.number}"
