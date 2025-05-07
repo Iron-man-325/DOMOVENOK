@@ -10,8 +10,8 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import ApartmentForm, PasswordUpdateForm, ProfileUpdateForm, StaticInputForm, User, UserForm, UserUpdateForm
-from .models import Apartment, Profile, Rent_Apartment, StaticInput, SupportRequest, ViewHistory
+from .forms import ApartmentForm, PasswordUpdateForm, ProfileUpdateForm, StaticInputForm, UserForm, UserUpdateForm
+from .models import Apartment, Profile, Rent_Apartment, StaticInput, SupportRequest, User, ViewHistory
 
 
 def get_base_context(pagename: str = "", **kwargs):
