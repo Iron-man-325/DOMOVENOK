@@ -144,7 +144,37 @@
             {{ apartment.living_rules }}
         </ul>
     </div>
+    <div>
+        <button 
+            onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
+            class="button-submit height-margin"
+        >
+        Связаться с владельцем
+    </div>
+</button>
+    </div>
     {% if apartment.status != 'rented' %}
+        <script>
+            function redirectToRent() {
+                const days = parseInt(document.getElementById('days-input').value);
+                const key1 = document.getElementById('key-input').value;
+                const minNights = parseFloat("{{ apartment.min_nights|stringformat:'.2f' }}".replace(',', '.'));
+                const apartmentId = {{ apartment.id }};
+                const key = "{{ apartment.key }}";
+                
+                if (isNaN(days)) {
+                    alert('Введите корректное количество дней');
+                    return;
+                }
+
+                if (days >= minNights && key1 === key) {
+                    window.location.href = `/rent/${apartmentId}/${days}/`;
+                } else {
+                    alert('Минимальное количество дней: ' + minNights + 
+                        (key1 !== key ? ' или неверный ключ' : ''));
+                }
+            }
+        </script>
         <div class="rent-form">
             <input 
                 type="number" 
@@ -154,27 +184,19 @@
                 min="1"
                 value="1"
             >
+            <input 
+                type="text"
+                id="key-input"
+                class="days-input" 
+                placeholder="Секретный ключ"
+            >
             <button 
                 onclick="redirectToRent()" 
                 class="button-submit height-margin"
             >
-                <p class="text-submit">Связаться с арендодателем</p>
+                <p class="text-submit">Снять квартиру</p>
             </button>
         </div>
-
-        <script>
-            function redirectToRent() {
-                const days = parseInt(document.getElementById('days-input').value);
-                const minNights = {{ apartment.min_nights }};
-                const apartmentId = {{ apartment.id }};
-                
-                if (days && days < minNights) {
-                    window.location.href = `/rent/${apartmentId}/${days}/`;
-                } else {
-                    alert('Минимальное количество дней для сдачи: ' + minNights);
-                }
-            }
-        </script>
     {% endif %}
 </div>
 {% endblock %}

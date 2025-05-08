@@ -35,6 +35,7 @@ urlpatterns = [
     path('error/', views.error, name='logout'),
     path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
     path('rent/<int:flat_id>/<int:dates>/', views.rent_apartment, name='rent'),
+    path('connect/<int:flat_id>', views.contact_owner, name='connect'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

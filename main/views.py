@@ -13,6 +13,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
+from django.contrib import messages
 
 from .forms import ApartmentForm, User, UserForm
 from .models import Apartment, Profile,ViewHistory
@@ -118,7 +120,7 @@ def error(request: WSGIRequest):
 
 @login_required
 def flat_list(request: WSGIRequest):
-    apartments = Apartment.objects.all()
+    apartments = Apartment.objects.filter(status="available")
     return render(request, 'pages/flat_list_buy.html', {'apartments': apartments})
 
 
@@ -155,10 +157,17 @@ def stat(request: WSGIRequest, flat_id):
 
 @login_required
 def my_flats(request: WSGIRequest):
+    cash = 0
     apartments = Apartment.objects.filter(user=request.user)
+    for apartment in apartments:
+        history = Rent_Apartment.objects.filter(apartment=apartment)
+        if history.exists():
+            for elem in history:
+                cash += elem.price * elem.dates
     context = {
         'pagename': "Главная",
-        'apartments': apartments
+        'apartments': apartments,
+        'cash': cash
     }
     return render(request, 'pages/my_flats.html', context)
 
@@ -312,4 +321,27 @@ def rent_apartment(request, flat_id, dates):
         apartment.save()
     except Exception as e:
         print(f"Error: {e}")
+    return redirect('flat_detail', flat_id = flat_id)
+@login_required
+def contact_owner(request, flat_id):
+    user = request.user
+    username = user.username
+    email = user.email
+    apartment = get_object_or_404(Apartment,id=flat_id)
+    email_subject = f'Запрос по квартире #{flat_id} от {username}'
+    email_body = f'''
+    Пользователь хочет связаться:
+    Имя: {username}
+    Email: {email}
+    
+    ID квартиры: {flat_id}
+    '''
+    send_mail(
+        email_subject,
+        email_body,
+        settings.DEFAULT_FROM_EMAIL,
+        [apartment.user.email],  
+        fail_silently=False,
+    )    
+    
     return redirect('flat_detail', flat_id = flat_id)
