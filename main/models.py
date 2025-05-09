@@ -215,7 +215,7 @@ class Rent_Apartment(models.Model):
     price = models.IntegerField(default=0)
     apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     dates = models.IntegerField(default=0)
-    status = models.CharField(max_length=20)
+    status=models.CharField()
 
 
 class SupportRequest(models.Model):
