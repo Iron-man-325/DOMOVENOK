@@ -112,3 +112,19 @@ main{
         width: auto;
     }
 }
+
+.button-change{
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 400px;
+    height: 30px;
+    border: none;
+    border-radius: 12px;
+    background-color: rgba(232, 131, 48, 1);
+}
+.text-submit{
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    color: black;
+}

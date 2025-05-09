@@ -6,9 +6,6 @@
 
 {% block content %}
 <div>
-            <a href="{% url 'profile' %}" class="no-underline">
-                <p class="gold-colored">< Назад</p>
-            </a>
             <div>
                 <h2 class="head-settings-text">Настройки</h2>
             </div>
@@ -46,7 +43,7 @@
                     <p class="personal-info-text">Почта</p>
                     {{ change_user_form.email }}
                 </div>
-                <button type="submit">Сохранить изменения</button>
+                <button class="button-change text-submit" type="submit">Сохранить изменения</button>
             </form>
             <div>
                 <h4 class="personal-info-head-text">Пароль</h4>
@@ -65,7 +62,7 @@
                     <p class="personal-info-text">Подтвердите новый пароль</p>
                     {{ change_password_form.confirm }}
                 </div>
-                <button type="submit">Сменить пароль</button>
+                <button class="button-change text-submit" type="submit">Сменить пароль</button>
             </form>
         </div>
 {% endblock %}

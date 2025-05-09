@@ -109,3 +109,21 @@ body{
     width: 600px;
     height: 300px;
 }
+.rent-form{
+    width: 200px;
+    margin-top: 20px;
+}
+.flex{
+    display: flex;
+}
+.input-code{
+    width: 200px;
+    height: 30px;
+    border-radius: 12px;
+    border-color: rgba(207, 222, 232, 1);
+    border-style: solid;
+    background-color: rgba(243, 242, 240, 1);
+    margin-right: 20px;
+    margin-left: 25px;
+    border-width: 1px;
+}

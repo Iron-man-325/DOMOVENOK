@@ -1,6 +1,5 @@
 {% extends 'base/base.html' %}
 {% load static %}
-
 {% block css %}
 <link href="{% static 'css/faq_questions.css' %}" rel="stylesheet">
 {% endblock %}
@@ -11,17 +10,88 @@
         <h2 class="faq-head">Часто задаваемые</h2>
         <h2 class="faq-head">вопросы</h2>
     </div>
-    {% for question in questions %}
     <div class="questions">
-        <button id="{{ loop.index }}" class="faq-item">
-            <div class="faq-item">
-                <div class="faq-question">
-                    {{ question.q }}
-                    <div class="faq-answer">{{ question.a }}</div>
-                </div>
+
+        <button id="1" class="faq-item">
+          <div class="faq-question">Как купить квартиру?
+            <div id="a1" class="faq-answer">Никак</div>
             </div>
         </button>
+
     </div>
-    {% endfor %}
+    <div class="questions">
+
+        <button id="2" class="faq-item">
+          <div class="faq-question">Как оплатить квартиру?
+            <div id="a2" class="faq-answer">Вы можете оплатить квартиру прямо на сайте с помощью T Pay.</div>
+            </div>
+        </button>
+
+    </div>
+    <div class="questions">
+
+        <button id="3" class="faq-item">
+          <div class="faq-question">Как увидеть статистику по заработку?
+            <div id="a3" class="faq-answer">Никак, мы - не приложение вашего банка.</div>
+            </div>
+        </button>
+
+    </div>
+    <div class="questions">
+
+        <button id="4" class="faq-item">
+          <div class="faq-question">Как добавить квитанции об оплате?",
+            <div id="a4" class="faq-answer">Никак</div>
+            </div>
+        </button>
+
+    </div>
+    <div class="questions">
+
+        <button id="5" class="faq-item">
+          <div class="faq-question">Можно ли связаться с администрацией сайта?
+            <div id="a5" class="faq-answer">Нет, идите к чёрту, проект сдан, мы сваливаем в закат.</div>
+            </div>
+        </button>
+
+    </div>
+    <div class="questions">
+
+        <button id="6" class="faq-item">
+          <div class="faq-question">Присутствует ли на сайте поверка квартир перед выкладкой?
+            <div id="a6" class="faq-answer">Нет, модератор просто галочки тыкает с перерывом на сон."</div>
+            </div>
+        </button>
+
+    </div>
 </div>
+    <script>
+        'use script'
+
+        document.getElementById('1').addEventListener('click', function(event) {
+        document.getElementById('a1').classList.toggle('show');
+        document.getElementById('1').classList.toggle('expand');
+        });
+        document.getElementById('2').addEventListener ('click', function(event) {
+            document.getElementById('a2').classList.toggle('show');
+            document.getElementById('2').classList.toggle('expand');
+        });
+        document.getElementById('3').addEventListener('click', function(event) {
+            document.getElementById('a3').classList.toggle('show');
+            document.getElementById('3').classList.toggle('expand');
+        });
+        document.getElementById('4').addEventListener('click', function(event) {
+            document.getElementById('a4').classList.toggle('show');
+            document.getElementById('4').classList.toggle('expand');
+        });
+        document.getElementById('5').addEventListener('click', function(event) {
+            document.getElementById('a5').classList.toggle('show');
+            document.getElementById('5').classList.toggle('expand');
+        });
+        document.getElementById('6').addEventListener('click', function(event) {
+            document.getElementById('a6').classList.toggle('show');
+            document.getElementById('6').classList.toggle('expand');
+        });
+    </script>
+
 {% endblock %}

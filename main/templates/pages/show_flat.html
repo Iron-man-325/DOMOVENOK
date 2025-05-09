@@ -81,7 +81,7 @@
 
         <button 
             onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
-            class="button-submit height-margin"
+            class="button-submit height-margin text-submit"
         >
         Связаться с владельцем
     </button>
@@ -109,7 +109,9 @@
             }
         </script>
         <div class="rent-form">
+            <div class="flex">
             <input 
+            class="input-code"
                 type="number" 
                 id="days-input" 
                 class="days-input" 
@@ -118,11 +120,13 @@
                 value="1"
             >
             <input 
+            class="input-code"
                 type="text"
                 id="key-input"
                 class="days-input" 
                 placeholder="Секретный ключ"
             >
+            </div>
             <button 
                 onclick="redirectToRent()" 
                 class="button-submit height-margin"

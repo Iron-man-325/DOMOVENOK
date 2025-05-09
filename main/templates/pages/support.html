@@ -9,14 +9,6 @@
     <div>
         <h2 class="head-text">Опишите вашу проблему</h2>
     </div>
-    <div class="tab-container">
-        <button class="underlined-tab">
-            <p class="tab">Ваш запрос</p>
-        </button>
-        <button class="reg-tab" onclick="location.href='{% url 'my_support_requests' %}'">
-    <p class="tab">Мои запросы</p>
-        </button>
-    </div>
     <div>
         <form id="supportForm" enctype="multipart/form-data">
     <input class="desc-inp" placeholder="Опишите вашу проблему" id="userMessage" name="message">
@@ -29,10 +21,39 @@
         <input type="file" id="photoInput" name="photos" accept="image/*" multiple style="margin-top:10px;">
     </div>
     <button class="button" type="submit" id="sendRequest">
-        <p class="but-text">Отправить запрос</p>
+        <p class="but-text">Отправить запрос</p>    
     </button>
 </form>
+<div class="container">
+    <h2 class="head-text">Мои запросы в поддержку</h2>
 
+    {% if requests %}
+        {% for req in requests %}
+            <div class="add-block" >
+                <div  class="flex">
+                                    <div>
+                    <p class="date">{{ req.created_at|date:"d.m.Y H:i" }}</p>
+                    
+
+                    <b class="mes">Сообщение:</b>
+                    <p class="desc">{{ req.message }}</p>
+                </div>
+            
+                {% if req.photos %}
+                    <div class="photo-cont">
+                        <b class="mes">Фото:</b><br>
+                        {% for photo in req.photos %}
+                            <img src="{{ photo.url }}" class="sup-img" onclick="downloadImage(this)" style="cursor: pointer;"   alt="Фото обращения" >
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+                </div>
+                </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:#888;">У вас пока нет запросов в поддержку.</p>
+    {% endif %}
 <script>
 document.getElementById('supportForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -64,5 +85,16 @@ document.getElementById('supportForm').addEventListener('submit', function(e) {
     })
     .catch(error => console.error('Error:', error));
 });
+function downloadImage(imgElement) {
+    const link = document.createElement('a');
+    link.href = imgElement.src;
+    
+    const fileName = imgElement.src.split('/').pop() || 'receipt.jpg';
+    link.download = fileName;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 {% endblock %}

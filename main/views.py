@@ -187,7 +187,8 @@ def sup(request: WSGIRequest):
 
 @login_required
 def support(request: WSGIRequest):
-    context = get_base_context('Поддержка')
+    requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
+    context = get_base_context('Поддержка', requests=requests)
     return render(request, 'pages/support.html', context)
 
 
@@ -384,14 +385,7 @@ def my_support_requests(request):
     requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
     context = get_base_context('Мои запросы', requests=requests)
     return render(request, 'pages/my_support_requests.html', context)
-# def show_flat(request, flat_id):
-#     try:
-#         apartment = Apartment.objects.get(id=flat_id)
-#         ViewHistory.objects.update_or_create(user=request.user, apartment=apartment, price=1)   
-#         context = get_base_context(str(apartment), apartment=apartment) 
-#         return render(request, "pages/show_flat.html", context)
-#     except Apartment.DoesNotExist:
-#         return render(request, "pages/404.html", status=404)
+
     
 @login_required   
 def faq_questions(request: WSGIRequest):
