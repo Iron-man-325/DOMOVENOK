@@ -7,83 +7,434 @@
 {% block content %}
         <div class="container">
             <div>
-                <h2 class="flat-name">Квартира №1</h2>
+                <h2 class="flat-name">{{ apartment.name }}</h2>
             </div>
             <div class="flex">
                 <div class="flat-photo">
-
+                    <img src="{{ apartment.image.url }}" class="flat-photo" id="mainImage" alt="Фото квартиры">
                 </div>
                 <div class="stat-cont">
-                    <p class="stat-text">Адрес:</p>
-                    <p class="stat-text">Контактные данные:</p>
-                    <p class="stat-text">Статус:</p>
-                    <p class="stat-text">Стоимость:</p>
-                    <a class="stat-text">Договор</a>
+                    <p class="stat-text">Адрес: {{ apartment.city }}, {{apartment.street}}, {{apartment.housenum}}, {{apartment.stage}}, {{apartment.number}}</p>
+                    <p class="stat-text">Контактные данные: {{apartment.user.email}}</p>
+                    {% if user.is_authenticated and user == apartment.user %}
+                    <div class="status-block">
+                        <h3>Управление статусом</h3>
+                        <form method="post" action="{% url 'update_apartment_status' apartment.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="status-select">
+                                <option value="available" {% if apartment.status == 'available' %}selected{% endif %}>
+                                    Свободно
+                                </option>
+                                <option value="rented" {% if apartment.status == 'rented' %}selected{% endif %}>
+                                    Сдается
+                                </option>
+                            </select>
+                            <button type="submit" class="status-update-btn">Обновить статус</button>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    <div class="status-indicator {% if apartment.status == 'available' %}status-available{% else %}status-rented{% endif %}">
+                        Статус: {{ apartment.get_status_display }}
+                    </div>
+                    <p class="stat-text">Стоимость: {{apartment.cost_per_night}}</p>
+                    <p class="stat-text">Ключ для сдачи квартиры: {{apartment.key}}</p>
                 </div>
                 <div class="earn-cont">
-                    <h3 class="earn-money">32 000₽</h3>
+                    <h3 class="earn-money">{{cash}}</h3>
                     <p class="small-text">Всего заработано</p>
                 </div>
             </div>
             <div class="choose-cont">
-                <div class="option-chosed">
+                <div class="top-option top-option-chosed" data-top-tab="water">
                     <p class="choose-text">Вода</p>
                 </div>
-                <div class="option">
+                <div class="top-option" data-top-tab="electricity">
                     <p class="choose-text">Свет</p>
                 </div>
-                <div class="option">
+                <div class="top-option" data-top-tab="gas">
                     <p class="choose-text">Газ</p>
                 </div>
-                <div class="option">
-                    <p class="choose-text">Жкх</p>
-                </div>
-                <div class="option">
+                <div class="top-option" data-top-tab="rent">
                     <p class="choose-text">Аренда</p>
+                </div>
+                <div class="top-option" data-top-tab="GKX">
+                    <p class="choose-text">ЖКХ</p>
                 </div>
             </div>
             <div class="flex">
                 <div class="second-choose">
-                    <div class="option-chosed">
-                        <p class="choose-text">История оплаты</p>
-                    </div>
-                    <div class="option">
-                        <p class="choose-text">Квитанции об оплате</p>
-                    </div>
-                    <div class="option">
-                        <p class="choose-text">История оплаты</p>
-                    </div>
+            <div class="left-option left-option-chosed" data-left-tab="payment">
+                <p class="choose-text">История оплаты</p>
+            </div>
+            <div class="left-option" data-left-tab="receipts">
+                <p class="choose-text">Квитанции об оплате</p>
+            </div>
+            <div class="left-option" data-left-tab="history">
+                <p class="choose-text">История сдачи</p>
+            </div>
                 </div>
-                <div>
-                    <div class="add-cont">
+
+            <!-- Контент для воды -->
+            <div id="payment-water" class="tab-content">
+                {% for stats in stat %}
+                <div class="add-cont">
                         <div>
                             <p class="add-text">Дата</p>
-                            <p class="add-text">23.05.2000</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
                         </div>
                         <div>
                             <p class="add-text">Сумма</p>
-                            <p class="add-text">7500₽</p>
+                            <p class="add-text">{{ stats.water_payment }}₽</p>
                         </div>
                         <div>
-                            <p class="last-add-text">Номер квитанции</p>
-                            <p class="last-add-text">778742319047397429052</p>
+                            <p class="last-add-text">Расход</p>
+                            <p class="last-add-text">{{ stats.water_input }}м³</p>
                         </div>
                     </div>
-                    <div class="add-cont">
+
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Контент для света -->
+            <div id="payment-electricity" class="tab-content">
+                {% for stats in stat %}
+                <div class="add-cont">
+                    <div>
+                        <p class="add-text">Дата</p>
+                        <p class="add-text">{{ stats.submitted_at }}</p>
+                    </div>
+                    <div>
+                        <p class="add-text">Сумма</p>                            
+                        <p class="add-text">{{ stats.electro_payment }}₽</p>
+                    </div>
+                    <div>
+                        <p class="last-add-text">Расход</p>
+                        <p class="last-add-text">{{ stats.water_input }}кВт·ч</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="payment-gas" class="tab-content ">
+                {% for stats in stat %}
+                <div class="add-cont">
                         <div>
                             <p class="add-text">Дата</p>
-                            <p class="add-text">23.05.2000</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
                         </div>
                         <div>
                             <p class="add-text">Сумма</p>
-                            <p class="add-text">7500₽</p>
+                            <p class="add-text">{{ stats.gas_payment }}₽</p>
                         </div>
                         <div>
-                            <p class="last-add-text">Номер квитанции</p>
-                            <p class="last-add-text">778742319047397429052</p>
+                            <p class="last-add-text">Расход</p>
+                            <p class="last-add-text">{{ stats.gas_input }}м³</p>
                         </div>
                     </div>
+
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
                 </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Контент для аренды (как было) -->
+            <!-- <div id="payment-rent" class="tab-content">
+            {% for rent in rents %}
+                        <div class="add-cont">
+                            <div>
+                                <p class="last-add-text">Дата</p>
+                                <p class="last-add-text">{{ rent.id }}</p>
+                            </div>
+                            <div>
+                                <p class="add-text">Кол-во дней</p>
+                                <p class="add-text">{{ rent.dates }}</p>
+                            </div>
+                            <div>
+                                <p class="add-text">Цена</p>
+                                <p class="add-text">{{ rent.price }}</p>
+                            </div>
+
+                        </div>
+                    {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
+                        </div>
+                    {% endfor %}
+
+            </div> -->
+                        <div id="payment-rent" class="tab-content">
+            {% for stats in stat %}
+                        <div class="add-cont">
+                            <div class="margin">
+                                <p class="last-add-text">Дата</p>
+                                <p class="last-add-text">{{ stats.submitted_at }}</p>
+                            </div>
+                            <div >
+                                <p class="add-text">Цена</p>
+                                <p class="add-text">{{ stats.rent_payment }}</p>
+                            </div>
+
+                        </div>
+                    {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
+                        </div>
+                    {% endfor %}
+
+            </div>
+                        <div id="payment-GKX" class="tab-content ">
+            {% for stats in stat %}
+                        <div class="add-cont">
+                            <div class="margin">
+                                <p class="last-add-text">Дата</p>
+                                <p class="last-add-text">{{ stats.submitted_at }}</p>
+                            </div>
+                            <div>
+                                <p class="add-text">Цена</p>
+                                <p class="add-text">{{ stats.GKX_payment }}</p>
+                            </div>
+
+                        </div>
+                    {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
+                        </div>
+                    {% endfor %}
+
+            </div>
+                        <div id="receipts-water" class="tab-content">
+                {% for stats in stat %}
+                <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
+                        </div>
+                        <div>
+                            <img data-src="{{ stats.water_receipt.url }}"onclick="downloadImage(this)" style="cursor: pointer;" src="" class="main-image" alt="Квитанция">
+                        </div>
+                    </div>
+
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Контент для света -->
+            <div id="receipts-electricity" class="tab-content ">
+                {% for stats in stat %}
+                                <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
+                        </div>
+                        <div>
+                            <img data-src="{{ stats.electro_receipt.url }}"onclick="downloadImage(this)" style="cursor: pointer;" src="" class="main-image" alt="Квитанция">
+                        </div>
+                    </div>
+
+
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="receipts-gas" class="tab-content ">
+                {% for stats in stat %}
+                               <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
+                        </div>
+                        <div>
+                            <img data-src="{{ stats.gas_receipt.url }}"onclick="downloadImage(this)" style="cursor: pointer;" src="" class="main-image" alt="Квитанция">
+                        </div>
+                    </div>
+
+
+                {% empty %}
+                <div class="add-cont">
+                    <p class="add-text">Нет данных по воде</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Контент для аренды (как было) -->
+            <div id="receipts-rent" class="tab-content ">
+            {% for stats in stat %}
+                                        <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
+                        </div>
+                        <div>
+                            <img data-src="{{ stats.rent_receipt.url }}"onclick="downloadImage(this)" style="cursor: pointer;" src="" class="main-image" alt="Квитанция">
+                        </div>
+                    </div>
+                {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
+                        </div>
+                    {% endfor %}
+
+            </div>
+                        <div id="receipts-GKX" class="tab-content ">
+            {% for stats in stat %}
+                    <div class="add-cont">
+                        <div>
+                            <p class="add-text">Дата</p>
+                            <p class="add-text">{{ stats.submitted_at }}</p>
+                        </div>
+                        <div>
+                            <img data-src="{{ stats.GKX_receipt.url }}"onclick="downloadImage(this)" style="cursor: pointer;" src="" class="main-image" alt="Квитанция">
+                        </div>
+                    </div>
+                {% empty %}
+                        <div class="add-cont">
+                            <p class="add-text">Нет данных об аренде</p>
+                        </div>
+                    {% endfor %}
+
+            </div>
+            <div id="history-content" class="tab-content" style="display: none;">
+    {% for rent in rents %}
+    <div class="add-cont">
+        <div>
+            <p class="add-text">ID сдачи</p>
+            <p class="add-text">{{ rent.id }}</p>
+        </div>
+        <div>
+            <p class="add-text">Арендатор</p>
+            <p class="add-text">{{ rent.tenant.username }}</p>
+        </div>
+        <div>
+            <p class="add-text">Срок аренды</p>
+            <p class="add-text">{{ rent.dates }} дней</p>
+        </div>
+        <div>
+            <p class="add-text">Цена</p>
+            <p class="add-text">{{ rent.price }}</p>
+        </div>
+    </div>
+    {% empty %}
+    <div class="add-cont">
+        <p class="add-text">Нет данных по истории сдачи</p>
+    </div>
+    {% endfor %}
             </div>
         </div>
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const leftButtons = document.querySelectorAll('.left-option');
+    const topButtons = document.querySelectorAll('.top-option');
+    const topTabsContainer = document.querySelector('.choose-cont'); // Контейнер верхних кнопок
+    const historyContentId = 'history-content'; // ID специального блока
+    
+    function updateContent() {
+        const activeLeft = document.querySelector('.left-option-chosed').dataset.leftTab;
+        const activeTop = document.querySelector('.top-option-chosed')?.dataset.topTab;
+        
+        // Если выбрана "История сдачи"
+        if (activeLeft === 'history') {
+            // Скрываем все обычные блоки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Скрываем верхние кнопки
+            topTabsContainer.style.display = 'none';
+            
+            // Показываем специальный блок (добавьте этот блок в ваш HTML)
+            const historyContent = document.getElementById(historyContentId);
+            if (historyContent) {
+                historyContent.style.display = 'block';
+            }
+        } 
+        else {
+            // Показываем верхние кнопки
+            topTabsContainer.style.display = 'flex';
+            
+            // Скрываем специальный блок
+            const historyContent = document.getElementById(historyContentId);
+            if (historyContent) {
+                historyContent.style.display = 'none';
+            }
+            
+            // Стандартная логика (ваш существующий код)
+            const activeTabId = `${activeLeft}-${activeTop}`;
+            
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            const activeTab = document.getElementById(activeTabId);
+            if (activeTab) {
+                activeTab.style.display = 'block';
+            }
+        }
+    }
+
+    // Ваши существующие обработчики без изменений
+    leftButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            leftButtons.forEach(b => b.classList.remove('left-option-chosed'));
+            this.classList.add('left-option-chosed');
+            updateContent();
+        });
+    });
+
+    topButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Не переключаем верхние кнопки если активна "История сдачи"
+            if (document.querySelector('.left-option-chosed').dataset.leftTab !== 'history') {
+                topButtons.forEach(b => b.classList.remove('top-option-chosed'));
+                this.classList.add('top-option-chosed');
+                updateContent();
+            }
+        });
+    });
+
+    // Инициализация
+    updateContent();
+});
+
+function preloadImages() {
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        img.src = img.dataset.src;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    preloadImages();
+    
+    // Ваш существующий код инициализации...
+    updateContent();
+});
+function downloadImage(imgElement) {
+    // Создаем временную ссылку
+    const link = document.createElement('a');
+    link.href = imgElement.src;
+    
+    // Устанавливаем атрибут download с именем файла
+    const fileName = imgElement.src.split('/').pop() || 'receipt.jpg';
+    link.download = fileName;
+    
+    // Эмулируем клик по ссылке
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+        </script>
 {% endblock %}

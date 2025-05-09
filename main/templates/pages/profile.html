@@ -56,7 +56,7 @@
                         <p class="price">{{ apartment.cost_per_night }}</p>
                         <h4 class="flat-name">{{ apartment.name }}</h4>
                         <p class="price">{{ apartment.street }}</p>
-                        <div class="view-but" onclick="location.href='{% url 'stat' %}'">
+                        <div class="view-but" onclick="location.href='{% url 'stat' flat_id=apartment.id %}'">
                             <p class="view-text">Посмотреть</p>
                         </div>
                     </div>

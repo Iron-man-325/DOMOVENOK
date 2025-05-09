@@ -11,34 +11,82 @@
             </div>
             <div class="flex">
                 <div class="earn-cont">
-                    <p class="earn-money">3</p>
+                    <p class="earn-money">{{ apartments.count }}</p>
                     <p class="small-text">Квартир на продаже</p>
                 </div>
                 <div class="earn-cont">
-                    <p class="earn-money">420 00₽</p>
+                    <p class="earn-money">{{cash}}</p>
                     <p class="small-text">Всего заработано</p>
                 </div>
             </div>
             <div class="choose-cont">
-                <div class="option-chosed">
+                <div class="option-chosed all-flats" onclick="showAllFlats()">
                     <p class="choose-text">Все квартиры</p>
                 </div>
-                <div class="option">
-                    <p class="choose-text">Убранные</p>
+                <div class="option rented-flats" onclick="showRentedFlats()">
+                    <p class="choose-text">Сдаются</p>
                 </div>
-                <div class="option">
+                <div class="option available-flats" onclick="showAvailableFlats()">
                     <p class="choose-text">Активные</p>
                 </div>
             </div>
-            {% for apartment in apartments %}
-                <div class="add-cont">
-                    <div>
-                        <img class="flat-img-1" src="{{ apartment.image.url }}">
+            <div id="flats-container">
+                {% for apartment in apartments %}
+                    <div class="add-cont flat-item" data-status="{{ apartment.status }}">
+                        <div>
+                            <img class="flat-img-1" src="{{ apartment.image.url }}">
+                        </div>
+                        <div class="flat-name-cont">
+                            <a href='{% url 'stat' flat_id=apartment.id %}' class="flat-name">{{ apartment.name}}</a>
+                        </div>
                     </div>
-                    <div class="flat-name-cont">
-                        <a href="{% url 'stat' flat_id=apartment.id %}" class="flat-name">{{ apartment.name }}</a>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
+
+<script>
+    function showAllFlats() {
+        document.querySelectorAll('.flat-item').forEach(item => {
+            item.style.display = 'flex';
+        });
+        document.querySelector('.all-flats').classList.add('option-chosed');
+        document.querySelector('.all-flats').classList.remove('option');
+        document.querySelector('.rented-flats').classList.add('option');
+        document.querySelector('.rented-flats').classList.remove('option-chosed');
+        document.querySelector('.available-flats').classList.add('option');
+        document.querySelector('.available-flats').classList.remove('option-chosed');
+    }
+
+    function showRentedFlats() {
+        document.querySelectorAll('.flat-item').forEach(item => {
+            if (item.dataset.status === 'rented') {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        document.querySelector('.all-flats').classList.add('option');
+        document.querySelector('.all-flats').classList.remove('option-chosed');
+        document.querySelector('.rented-flats').classList.add('option-chosed');
+        document.querySelector('.rented-flats').classList.remove('option');
+        document.querySelector('.available-flats').classList.add('option');
+        document.querySelector('.available-flats').classList.remove('option-chosed');
+    }
+
+    function showAvailableFlats() {
+        document.querySelectorAll('.flat-item').forEach(item => {
+            if (item.dataset.status === 'available') {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        document.querySelector('.all-flats').classList.add('option');
+        document.querySelector('.all-flats').classList.remove('option-chosed');
+        document.querySelector('.rented-flats').classList.add('option');
+        document.querySelector('.rented-flats').classList.remove('option-chosed');
+        document.querySelector('.available-flats').classList.add('option-chosed');
+        document.querySelector('.available-flats').classList.remove('option');
+    }
+</script>
 {% endblock %}

@@ -1,3 +1,4 @@
+from datetime import date
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -20,7 +21,7 @@ urlpatterns = [
 
     path('sup/', views.sup, name='sup'),
     path('profile/', views.profile_page, name='profile'),
-    path('stat/', views.stat, name='stat'),
+    path('stat/<int:flat_id>', views.stat, name='stat'),
     path('redact/', views.redact_profile, name='redact'),
     path('send-support-message/', views.send_support_message, name='send_support_message'),
 
@@ -30,6 +31,9 @@ urlpatterns = [
     path('login/', views.login_page, name='login'),
     path('registration/', views.registration_page, name='registration'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
+    path('rent/<int:flat_id>/<int:dates>/', views.rent_apartment, name='rent'),
+    path('connect/<int:flat_id>', views.contact_owner, name='connect'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

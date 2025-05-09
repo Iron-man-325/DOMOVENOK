@@ -1,0 +1,28 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title_inner %}{{ pagename }}{% endblock %}</title>
+        <!-- Подключение стилей -->
+        <link href="{% static 'css/footer.css' %}" rel="stylesheet">
+        <link href="{% static 'css/header.css' %}" rel="stylesheet">
+        {% block css %}{% endblock %}
+        {% block extra_css %}{% endblock %}
+    </head>
+
+
+    <body>
+
+        <main>
+            {% block content %}
+
+            {% endblock %}
+        </main>
+
+        {% include 'base/footer.html' %}
+
+        {% block extra_js %} {% endblock %}
+    </body>
+
+
+</html>

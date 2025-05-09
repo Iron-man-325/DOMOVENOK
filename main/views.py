@@ -1,17 +1,23 @@
 import json
-
+import uuid
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
+from .forms import ApartmentForm, User, UserForm
+from .models import Apartment, Profile, Rent_Apartment
+from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import ApartmentForm, PasswordUpdateForm, ProfileUpdateForm, StaticInputForm, UserForm, UserUpdateForm
 from .models import Apartment, Profile, Rent_Apartment, StaticInput, SupportRequest, User, ViewHistory
+from django.conf import settings
+from django.contrib import messages
 
 
 def get_base_context(pagename: str = "", **kwargs):
@@ -40,8 +46,8 @@ def get_base_context(pagename: str = "", **kwargs):
 
     context = {'pagename': pagename,
                'menu': [MenuUrlContext('index', 'Главная'),
-                        MenuUrlContext('stat', 'Статистика'),
-                        MenuUrlContext('index', 'Чаты'),
+                        MenuUrlContext('my_flats', 'Мои Квартиры'),
+                        MenuUrlContext('profile', 'Профиль'),
                         MenuUrlContext('faq', 'Q&A'),
                         MenuUrlContext('support', 'Поддержка'),
                         MenuUrlContext('redact', 'Настройки'),
@@ -91,7 +97,8 @@ def add_apartment(request):
                 image=form.cleaned_data['image'],
                 square=form.cleaned_data['square'],
                 name=form.cleaned_data['name'],
-                user=request.user
+                user=request.user,
+                key = uuid.uuid4().hex[:10]
             )
             apartment.nearby_objects = request.POST.get('nearby_objects', '')
             apartment.amenities = request.POST.get('amenities', '')
@@ -121,7 +128,7 @@ def show_flat(request, flat_id):
     try:
         apartment = Apartment.objects.get(id=flat_id)
         context = get_base_context(str(apartment), apartment=apartment)
-        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment)
+        ViewHistory.objects.update_or_create(user=request.user, apartment=apartment,price=1)
         return render(request, "pages/show_flat.html", context)
     except Apartment.DoesNotExist:
         return render(request, "pages/404.html", status=404)
@@ -139,35 +146,10 @@ def error(request: WSGIRequest):
 
 
 def flat_list(request: WSGIRequest):
-    context = get_base_context('Квартиры', apartments=Apartment.objects.all())
-    return render(request, 'pages/flat_list_buy.html', context)
+    apartments = Apartment.objects.filter(status="available")
+    context=get_base_context('Главная',apartments=apartments)
+    return render(request, 'pages/flat_list_buy.html',context )
 
-
-def faq_questions(request: WSGIRequest):
-    class Question:
-        def __init__(self, q: str, a: str = ""):
-            self.q = q
-            self.a = a
-
-    questions = [Question("Как выставить объявление об аренде квартиры?",
-                          "Кнопка справа сверху, в меню, \"Разместить объявление\". Авторизация обязательна."),
-                 Question("Как оплатить квартиру?",
-                          "Вы можете оплатить квартиру прямо на сайте с помощью своего виртуального кошелька."),
-                 Question("Как увидеть статистику по заработку?",
-                          "Никак, мы - не приложение вашего банка."),
-                 Question("Как добавить квитанции об оплате?",
-                          "Никак."),
-                 Question("Можно ли связаться с администрацией сайта?",
-                          "Нет. Зачем связываться с администраторами, когда есть поддержка?"),
-                 Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
-                          "Нет, модератор просто галочки тыкает с перерывом на сон."),
-                 Question("?",
-                          "Ещё вопросы? На нашем сайте есть поддержка..."),
-                 ]
-
-    context = get_base_context('Часто задаваемые вопросы', questions=questions)
-
-    return render(request, 'pages/faq_questions.html', context)
 
 
 @login_required
@@ -210,16 +192,38 @@ def support(request: WSGIRequest):
 
 
 @login_required
-def stat(request: WSGIRequest):
-    context = get_base_context('Статистика')
-    return render(request, 'pages/static.html', context)
+def stat(request: WSGIRequest, flat_id):
+    apartment = get_object_or_404(Apartment, id=flat_id)
+    
+    # Загружаем все данные сразу
+    rents = Rent_Apartment.objects.filter(apartment=apartment)
+    stats=StaticInput.objects.all()
+    
+    cash = sum(rent.price * rent.dates for rent in rents) if rents.exists() else 0
 
+    context = get_base_context(
+        'Мои квартиры',
+        apartment= apartment,
+        cash= cash,
+        rents= rents,
+        stat=stats
+    )
+    return render(request, 'pages/static.html', context)
 
 @login_required
 def my_flats(request: WSGIRequest):
+    cash = 0
     apartments = Apartment.objects.filter(user=request.user)
-    context = get_base_context('Ваши квартиры', apartments=apartments)
+    for apartment in apartments:
+        history = Rent_Apartment.objects.filter(apartment=apartment)
+        if history.exists():
+            for elem in history:
+                cash += elem.price * elem.dates
+    context = get_base_context('Мои квартиры',
 
+        apartments= apartments,
+        cash= cash
+    )
     return render(request, 'pages/my_flats.html', context)
 
 
@@ -380,3 +384,88 @@ def my_support_requests(request):
     requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
     context = get_base_context('Мои запросы', requests=requests)
     return render(request, 'pages/my_support_requests.html', context)
+# def show_flat(request, flat_id):
+#     try:
+#         apartment = Apartment.objects.get(id=flat_id)
+#         ViewHistory.objects.update_or_create(user=request.user, apartment=apartment, price=1)   
+#         context = get_base_context(str(apartment), apartment=apartment) 
+#         return render(request, "pages/show_flat.html", context)
+#     except Apartment.DoesNotExist:
+#         return render(request, "pages/404.html", status=404)
+    
+@login_required   
+def faq_questions(request: WSGIRequest):
+    class Question:
+        def __init__(self, q: str, a: str = ""):
+            self.q = q
+            self.a = a
+
+    context = get_base_context('Часто задаваемые вопросы')
+    context['questions'] = [Question("Как выставить квартиру на продажу?",
+                                     "Никак."),
+                            Question("Как оплатить квартиру?",
+                                     "Вы можете оплатить квартиру прямо на сайте с помощью T Pay."),
+                            Question("Как увидеть статистику по заработку?",
+                                     "Никак, мы - не приложение вашего банка."),
+                            Question("Как добавить квитанции об оплате?",
+                                     "Никак."),
+                            Question("Можно ли связаться с администрацией сайта?",
+                                     "Нет, идите к чёрту, проект сдан, мы сваливаем в закат."),
+                            Question("Присутствует ли на сайте поверка квартир перед выкладкой?",
+                                     "Нет, модератор просто галочки тыкает с перерывом на сон."
+                                     + " Ваша заявка не модерируется?"
+                                     + " Ничего не можем поделать, модератору здоровье важнее этой заявки."),
+                            Question("?",
+                                     "?"),
+                            ]
+
+    return render(request, 'pages/faq_questions.html', context)
+
+def update_apartment_status(request, apartment_id):
+    if request.method == 'POST':
+        apartment = get_object_or_404(Apartment, id=apartment_id)
+        if request.user == apartment.user:
+            new_status = request.POST.get('status')
+            apartment.status = new_status
+            apartment.save()
+    return redirect('stat', flat_id=apartment_id)
+
+def rent_apartment(request, flat_id, dates):
+    try:
+        apartment = get_object_or_404(Apartment, id=flat_id)
+        rent = Rent_Apartment.objects.create(
+            tenant=request.user,
+            landlord=apartment.user,
+            price=apartment.cost_per_night,
+            dates=dates,
+            apartment=apartment,
+            status='active'
+        )
+        apartment.status = 'rented'
+        apartment.save()
+    except Exception as e:
+        print(f"Error: {e}")
+    return redirect('flat_detail', flat_id = flat_id)
+@login_required
+def contact_owner(request, flat_id):
+    user = request.user
+    username = user.username
+    email = user.email
+    apartment = get_object_or_404(Apartment,id=flat_id)
+    email_subject = f'Запрос по квартире #{flat_id} от {username}'
+    email_body = f'''
+    Пользователь хочет связаться:
+    Имя: {username}
+    Email: {email}
+    
+    ID квартиры: {flat_id}
+    '''
+    send_mail(
+        email_subject,
+        email_body,
+        settings.DEFAULT_FROM_EMAIL,
+        [apartment.user.email],  
+        fail_silently=False,
+    )    
+    
+    return redirect('flat_detail', flat_id = flat_id)

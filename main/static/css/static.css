@@ -65,7 +65,6 @@ main{
 .flat-photo{
     width: 300px;
     height: 300px;
-    background-image: url(../img/flat.png);
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 12px;
@@ -95,30 +94,8 @@ main{
     border-left: none;
     border-bottom: 2px solid rgba(240, 234, 228, 1);
 }
-.option-chosed{
-    display: flex;
-    justify-content: center;
-    vertical-align: middle;
-    line-height: 20px;
-    width: 220px;
-    height: 53px;
-    border-radius: 12px;
-    background-color: rgba(240, 234, 228, 1);
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-.option{
-    width: 220px;
-    height: 53px;
-    background-color: rgba(252, 250, 248, 1);
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    vertical-align: middle;
-    line-height: 20px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
+
+
 .second-choose{
     width: 230px;
     padding-top: 20px;
@@ -139,4 +116,132 @@ main{
     vertical-align: middle;
     line-height: 10px;
     justify-content: center;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 80%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.delete-btn {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.cancel-btn {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: #bdbdbd;
+}
+.hidden {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+}
+.tab-content {
+    visibility: visible;
+    height: auto;
+}
+
+.option {
+    cursor: pointer;
+    /* ваши стили кнопок */
+}
+.left-option{
+    width: 220px;
+    height: 53px;
+    background-color: rgba(252, 250, 248, 1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.left-option-chosed{
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    width: 220px;
+    height: 53px;
+    border-radius: 12px;
+    background-color: rgba(240, 234, 228, 1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.top-option{
+    width: 220px;
+    height: 53px;
+    background-color: rgba(252, 250, 248, 1);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.top-option-chosed{
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 20px;
+    width: 220px;
+    height: 53px;
+    border-radius: 12px;
+    background-color: rgba(240, 234, 228, 1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.main-image{
+    margin-top: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+}
+.margin{
+    margin-right: 20px;
 }
