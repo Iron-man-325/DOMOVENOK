@@ -1,51 +1,306 @@
 {% extends 'base/base.html' %}
 {% load static %}
+
 {% block css %}
 <link href="{% static 'css/flat_list_buy.css' %}" rel="stylesheet">
+<style>
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 12px;
+    }
+    
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        font-family: "Noto Sans", sans-serif;
+        cursor: pointer;
+    }
+    
+    .close:hover {
+        color: black;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-family: "Noto Sans", sans-serif;
+        color: #333;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        font-family: "Noto Sans", sans-serif;
+        transition: border 0.3s;
+    }
+    
+    .form-group input:focus {
+        border-color: rgba(232, 131, 48, 1);
+        outline: none;
+    }
+    
+    .search-submit {
+        background-color: rgba(232, 131, 48, 1);
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        cursor: pointer;
+        font-family: "Noto Sans", sans-serif;
+        font-size: 16px;
+        width: 100%;
+        transition: background-color 0.3s;
+        border-radius: 12px;
+    }
+    
+    .search-submit:hover {
+        background-color: rgba(232, 131, 60, 1);
+    }
+    
+    .results-container {
+        margin-top: 25px;
+        padding: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .result-item {
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+    
+    .result-item h5 {
+        margin-top: 0;
+        color: #2c3e50;
+    }
+    
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #555;
+    }
+    
+    .error-message {
+        color: #d9534f;
+        padding: 15px;
+        background-color: #fdf7f7;
+        border: 1px solid #ebccd1;
+        border-radius: 4px;
+    }
+    
+    .no-results {
+        color: #777;
+        padding: 15px;
+        text-align: center;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-            <div class="back-img">
-                <div class="search-cont">
-                    <div>
-                        <h2 class="text-noto">Найдите свой идеальный дом</h2>
-                    </div>
-                    <div>
-                        <div class="wrapper">
-                            <input class="search-input" placeholder="Ищем город, район или адрес">
-                            <button class="but-search">
-                                <p class="search-text">Поиск</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div class="back-img">
+        <div class="search-cont">
+            <div>
+                <h2 class="text-noto">Найдите свой идеальный дом</h2>
             </div>
             <div>
-                <div>
-                    <h3 class="text">Последние предложения</h3>
+                <div class="wrapper">
+                    <button class="search-submit" id="openSearchModal">
+                        <p class="search-text">Расширенный поиск</p>
+                    </button>
                 </div>
-                {% for apartment in apartments %}
-                <div class="var-cont">
-                <img class="flat-img" src="{{ apartment.image.url }}">
-                    <div class="desc-cont">
-                        <div class="desc">
-
-                            <h4 class="name-flat">{{ apartment.name }}</h4>
-                            <p class="desc-text">{{ apartment.city }}</p>
-                            <p class="desc-text">{{ apartment.cost_per_night }}</p>
-
-
-
-                        </div>
-                        <div class="but-div">
-                            <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
-                                <p class="reserve-text">Забронировать</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
         </div>
+    </div>
+
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 class="desc-text"style="margin-top: 0;">Расширенный поиск</h3>
+            <form id="searchForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="desc-text for="city">Город:</label>
+                    <input type="text" id="city" name="city" placeholder="Например: Москва" required>
+                </div>
+                <div class="form-group">
+                    <label class="desc-text for="street">Улица (необязательно):</label>
+                    <input type="text" id="street" name="street" placeholder="Например: Ленина">
+                </div>
+                <button  type="submit" class="search-submit">Найти</button>
+            </form>
+            <div id="searchResults" class="results-container"></div>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <h3 class="text">Последние предложения</h3>
+        </div>
+        <div id="apartmentsContainer">
+            {% for apartment in apartments %}
+            <div class="var-cont">
+                <img class="flat-img" src="{{ apartment.image.url }}" alt="{{ apartment.name }}">
+                <div class="desc-cont">
+                    <div class="desc">
+                        <h4 class="name-flat">{{ apartment.name }}</h4>
+                        <p class="desc-text">{{ apartment.city }}{% if apartment.street %}, {{ apartment.street }}{% endif %}</p>
+                        <p class="desc-text">{{ apartment.cost_per_night }} ₽/ночь</p>
+                    </div>
+                    <div class="but-div">
+                        <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
+                            <p class="reserve-text">Забронировать</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+
+    var modal = $("#searchModal");
+    
+    $("#openSearchModal").click(function() {
+        modal.show();
+        $("#city").focus();
+    });
+    
+    $(".close, .modal").click(function(e) {
+        if ($(e.target).hasClass('modal') || $(e.target).hasClass('close')) {
+            modal.hide();
+            $("#searchResults").empty();
+        }
+    });
+
+    $("#searchForm").submit(function(e) {
+        e.preventDefault();
+        
+        var city = $("#city").val().trim();
+        var street = $("#street").val().trim();
+        
+        if (!city) {
+            showError("Пожалуйста, укажите город");
+            return;
+        }
+        
+        $("#searchResults").html('<div class="loading"><i class="fas fa-spinner fa-spin"></i> Идет поиск...</div>');
+        
+        $.ajax({
+            url: "{% url 'search_apartments' %}",
+            type: "POST",
+            data: {
+                city: city,
+                street: street,
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    if (response.apartments && response.apartments.length > 0) {
+                        displayResults(response.apartments);
+                    } else {
+                        $("#searchResults").html('<div class="no-results">По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.</div>');
+                    }
+                } else {
+                    showError(response.message || "Произошла ошибка при поиске");
+                }
+            },
+            error: function(xhr, status, error) {
+                var errorMsg = "Ошибка при выполнении запроса. Пожалуйста, попробуйте позже.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                showError(errorMsg);
+                console.error("AJAX Error:", status, error, xhr.responseText);
+            }
+        });
+    });
+    
+    function showError(message) {
+        $("#searchResults").html('<div class="error-message">' + message + '</div>');
+    }
+    
+    function displayResults(apartments) {
+        var resultsContainer = $("#searchResults");
+        var html = '<h4>Найдено вариантов: ' + apartments.length + '</h4>';
+        
+        apartments.forEach(function(apartment) {
+            html += `
+            <div class="result-item">
+                <h5>${apartment.name || 'Без названия'}</h5>
+                <p><strong>Адрес:</strong> ${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
+                <p><strong>Цена:</strong> ${apartment.cost_pernight || '0'} ₽/ночь</p>
+                <a  href='/flat/${apartment.id}' class="reserve-text">Забронировать</a>
+            </div>
+            `;
+        });
+        
+        resultsContainer.html(html);
+        updateMainList(apartments);
+    }
+    
+    function updateMainList(apartments) {
+        var container = $("#apartmentsContainer");
+        container.empty();
+        
+        if (apartments.length === 0) {
+            container.html('<div class="no-results">Ничего не найдено</div>');
+            return;
+        }
+        
+        apartments.forEach(function(apartment) {
+            container.append(`
+            <div class="var-cont">
+                <img class="flat-img" src="${apartment.image || '{% static "img/default_flat.jpg" %}'}" alt="${apartment.name || ''}">
+                <div class="desc-cont">
+                    <div class="desc">
+                        <h4 class="name-flat">${apartment.name || 'Без названия'}</h4>
+                        <p class="desc-text">${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
+                        <p class="desc-text">${apartment.cost_per_night || '0'} ₽/ночь</p>
+                    </div>
+                        <p class="reserve-text">Забронировать</p>
+                </div>
+            </div>
+            `);
+        });
+    }
+});
+</script>
 {% endblock %}

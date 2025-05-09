@@ -380,3 +380,58 @@ def my_support_requests(request):
     requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
     context = get_base_context('Мои запросы', requests=requests)
     return render(request, 'pages/my_support_requests.html', context)
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
+import json
+from .models import Apartment
+
+@csrf_exempt
+def search_apartments(request):
+    if request.method == 'POST':
+        try:
+            # Для Django < 3.1 используйте request.POST
+            data = request.POST
+            
+            city = data.get('city', '').strip()
+            street = data.get('street', '').strip()
+            
+            if not city:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Город обязателен для поиска'
+                }, status=400)
+            
+            apartments = Apartment.objects.filter(city__icontains=city)
+            
+            if street:
+                apartments = apartments.filter(street__icontains=street)
+            
+            apartments_list = []
+            for apt in apartments:
+                apartments_list.append({
+                    'id': apt.id,
+                    'name': apt.name,
+                    'city': apt.city,
+                    'street': apt.street,
+                    'cost_per_night': str(apt.cost_per_night),
+                    'image': apt.image.url if apt.image else ''
+                })
+            
+            return JsonResponse({
+                'success': True,
+                'apartments': apartments_list
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Ошибка сервера: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Неверный метод запроса'
+    }, status=405)
