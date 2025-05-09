@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 URL = "https://www.avito.ru/moskva/kvartiry/sdam"
-OUTPUT_JSON_FILE = 'web_app/avito_apartments_high_res_photos.json'
+OUTPUT_JSON_FILE = 'avito_apartments.json'
 WAIT_TIMEOUT_LIST = 15
 WAIT_TIMEOUT_DETAIL = 20
 
@@ -65,11 +65,70 @@ def parse_area_info(title_text):
         return match.group(1).replace(',', '.')
     return "N/A"
 
+def parse_address_parts(full_address):
+    city = None
+    street = None
+    housenum = None
+
+    parts = [p.strip() for p in full_address.replace(',', ' ').split()]
+
+    if not parts:
+        return None, None, None
+
+    if len(parts) > 0:
+        city = parts[0]
+
+    if len(parts) > 1:
+        house_match = re.search(r'\d+[а-я]?$', parts[-1])
+        if house_match:
+            housenum = parts[-1]
+            street_parts = parts[1:-1]
+            street = ' '.join(street_parts) if street_parts else None
+        elif len(parts) > 1:
+             street_parts = parts[1:]
+             street = ' '.join(street_parts)
+             housenum = None
+
+    return city if city and city != 'N/A' else None, \
+           street if street and street != 'N/A' else None, \
+           housenum if housenum and housenum != 'N/A' else None
+
+def parse_number(text_value):
+    if isinstance(text_value, (int, float)):
+        return text_value
+    if not isinstance(text_value, str):
+        return None
+
+    cleaned_text = re.sub(r'[^\d.,]', '', text_value)
+    cleaned_text = cleaned_text.replace(',', '.')
+
+    try:
+        if '.' in cleaned_text:
+            return float(cleaned_text)
+        else:
+             return int(cleaned_text)
+    except ValueError:
+        return None
+
+
+def extract_from_characteristics(characteristics_dict, keys):
+    if not characteristics_dict:
+        return None
+    for key in keys:
+        if key in characteristics_dict and characteristics_dict[key] and characteristics_dict[key].strip() not in ('N/A', ''):
+            return characteristics_dict[key].strip()
+    return None
+
+def parse_numeric_characteristic(characteristics_dict, keys):
+    value = extract_from_characteristics(characteristics_dict, keys)
+    if value:
+        return parse_number(value)
+    return None
+
+
 def scrape_listing_page(driver):
     all_page_data = []
     processed_item_ids = set()
-
-    print("Начинаю прокрутку и парсинг страницы списка объявлений...")
 
     time.sleep(3)
 
@@ -78,7 +137,6 @@ def scrape_listing_page(driver):
         WebDriverWait(driver, WAIT_TIMEOUT_LIST).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, items_container_selector))
         )
-        print("Основной контейнер объявлений списка загружен.")
 
         last_scroll_position = -1
         scroll_attempts = 0
@@ -91,7 +149,6 @@ def scrape_listing_page(driver):
                 )
                 listing_elements = driver.find_elements(By.CSS_SELECTOR, 'div[data-marker="item"]')
             except (TimeoutException, StaleElementReferenceException):
-                 print(f"Шаг {scroll_attempts}: Не удалось найти элементы 'item' на странице списка или ссылки устарели.")
                  listing_elements = []
 
             current_items_on_page_count = len(listing_elements)
@@ -112,7 +169,7 @@ def scrape_listing_page(driver):
 
             new_items_found_in_scroll = len(current_scroll_items_to_process)
             if new_items_found_in_scroll > 0:
-                 print(f"Шаг прокрутки списка {scroll_attempts}: Обнаружено {new_items_found_in_scroll} новых объявлений.")
+                 pass
 
 
             for item_id, item in current_scroll_items_to_process:
@@ -191,12 +248,10 @@ def scrape_listing_page(driver):
 
 
             if new_items_found_in_scroll == 0 or (scroll_position_not_changing and item_count_not_increasing):
-                 print("\nЗавершение прокрутки страницы списка: Новые объявления не появляются или достигнут конец.")
                  break
 
             at_very_bottom = (current_scroll_position + viewport_height) >= document_height - SCROLL_TOLERANCE - 50
             if new_items_found_in_scroll > 0 and scroll_position_not_changing and not at_very_bottom:
-                 print("\nВнимание: Найдены новые объявления, но позиция прокрутки списка не меняется. Завершение прокрутки.")
                  break
 
 
@@ -242,16 +297,30 @@ def parse_srcset(srcset_string):
     return candidates[0]['url'] if candidates else None
 
 def scrape_apartment_detail(driver, listing_url):
-    detail_data = {
-        'цена': 'N/A',
-        'залог': 'N/A',
-        'комиссия': 'N/A',
-        'адрес': 'N/A',
-        'метро': 'N/A',
-        'описание_полное': 'N/A',
-        'дата_публикации_детально': 'N/A',
-        'характеристики': {},
-        'фотографии_детально': []
+    apartment_data = {
+        'avito_id': 'N/A',
+        'avito_link': listing_url,
+        'name': 'N/A',
+        'city': None,
+        'street': None,
+        'stage': None,
+        'number': None,
+        'housenum': None,
+        'description': 'N/A',
+        'max_people': None,
+        'sleeping_places': None,
+        'sleeping_rooms': None,
+        'bathrooms': None,
+        'square': None,
+        'cost_per_night': None,
+        'prepayment': None,
+        'min_nights': None,
+        'free_at': None,
+        'nearby_objects': '[]',
+        'amenities': '[]',
+        'living_rules': '[]',
+        'image_url': None,
+        'original_avito_data': {}
     }
 
     try:
@@ -259,8 +328,22 @@ def scrape_apartment_detail(driver, listing_url):
         WebDriverWait(driver, WAIT_TIMEOUT_DETAIL).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '[data-marker="item-view/item-price"]'))
         )
-        # Добавляем небольшую паузу после ожидания основных элементов
-        time.sleep(1) # Добавлена пауза 1 секунда здесь
+        time.sleep(1)
+
+        if apartment_data['avito_link'] and 'avito.ru' in apartment_data['avito_link']:
+             id_match = re.search(r'_(\d+)$', apartment_data['avito_link'])
+             if id_match:
+                  apartment_data['avito_id'] = id_match.group(1)
+
+        try:
+            title_element = driver.find_element(By.CSS_SELECTOR, '[data-marker="item-view/title"]')
+            apartment_data['name'] = title_element.text.strip()
+        except NoSuchElementException: pass
+
+        try:
+            description_element = driver.find_element(By.CSS_SELECTOR, '[itemprop="description"]')
+            apartment_data['description'] = description_element.text.strip()
+        except NoSuchElementException: pass
 
         price_value = 'N/A'
         try:
@@ -269,8 +352,7 @@ def scrape_apartment_detail(driver, listing_url):
                 content_attr = price_element_for_attr.get_attribute('content')
                 if content_attr:
                      price_value = content_attr.strip()
-            except (NoSuchElementException, StaleElementReferenceException):
-                 pass
+            except NoSuchElementException: pass
 
             if price_value == 'N/A':
                  try:
@@ -278,17 +360,13 @@ def scrape_apartment_detail(driver, listing_url):
                       text_content = price_element_for_text.text.strip()
                       if text_content:
                            price_value = text_content
-                 except (NoSuchElementException, StaleElementReferenceException):
-                      pass
+                 except NoSuchElementException: pass
 
-            detail_data['цена'] = price_value
-
-            if detail_data['цена'] == 'N/A':
-                 print(f"--- Отладка детали --- Элемент(ы) цены найдены, но значение (content или text) не удалось получить ({listing_url}).")
+            apartment_data['cost_per_night'] = parse_number(price_value) if price_value != 'N/A' else None
 
         except Exception as e:
-            print(f"--- Отладка детали --- Непредвиденная ошибка при парсинге ЦЕНЫ ({listing_url}): {e}")
             pass
+
 
         try:
              deposit_fee_element = driver.find_element(By.CSS_SELECTOR, '.styles-item-price-sub-price-A1IZy span')
@@ -296,71 +374,40 @@ def scrape_apartment_detail(driver, listing_url):
 
              deposit_match = re.search(r'залог\s*([\d\s]+)\s*₽', deposit_fee_text)
              if deposit_match:
-                  detail_data['залог'] = deposit_match.group(1).replace('\xa0', '').replace(' ', '').strip()
+                  deposit_value_str = deposit_match.group(1).replace('\xa0', '').replace(' ', '').strip()
+                  apartment_data['prepayment'] = parse_number(deposit_value_str)
 
-             fee_match = re.search(r'комиссия\s*([\d\s]+)\s*₽', deposit_fee_text)
-             if fee_match:
-                  detail_data['комиссия'] = fee_match.group(1).replace('\xa0', '').replace(' ', '').strip()
-
-             if detail_data['залог'] == 'N/A' and detail_data['комиссия'] == 'N/A' and deposit_fee_text:
-                  print(f"--- Отладка детали --- Элемент залога/комиссии найден, но не удалось распарсить значения из текста: '{deposit_fee_text}' ({listing_url})")
-
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-            pass
+        except NoSuchElementException: pass
         except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге залога/комиссии ({listing_url}): {e}")
             pass
 
+
+        full_address = 'N/A'
         try:
             address_element = driver.find_element(By.CSS_SELECTOR, '[itemprop="address"] .style-item-address__string-wt61A')
-            detail_data['адрес'] = address_element.text.strip()
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-            print(f"--- Отладка детали --- Не удалось получить АДРЕС ({listing_url}): {e}")
-            pass
-        except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге АДРЕСА ({listing_url}): {e}")
-            pass
+            full_address = address_element.text.strip()
+            apartment_data['original_avito_data']['адрес'] = full_address
+
+            city, street, housenum = parse_address_parts(full_address)
+            apartment_data['city'] = city
+            apartment_data['street'] = street
+            apartment_data['housenum'] = housenum
+
+        except NoSuchElementException: pass
 
         try:
             metro_elements = driver.find_elements(By.CSS_SELECTOR, '[itemprop="address"] .style-item-address-georeferences-item-TZsrp')
             metro_info = [el.text.strip() for el in metro_elements if el.text.strip()]
-            detail_data['метро'] = ", ".join(metro_info) if metro_info else "N/A"
-            if not metro_info and metro_elements:
-                 print(f"--- Отладка детали --- Элемент(ы) МЕТРО найдены, но текст пустой или состоит из пробелов ({listing_url}).")
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-            pass
-        except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге МЕТРО ({listing_url}): {e}")
-            pass
+            apartment_data['original_avito_data']['метро'] = ", ".join(metro_info) if metro_info else "N/A"
+        except NoSuchElementException: pass
 
-        try:
-            description_element = driver.find_element(By.CSS_SELECTOR, '[itemprop="description"]')
-            detail_data['описание_полное'] = description_element.text.strip()
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-            print(f"--- Отладка детали --- Не удалось получить ПОЛНОЕ ОПИСАНИЕ ({listing_url}): {e}")
-            pass
-        except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге ПОЛНОГО ОПИСАНИЯ ({listing_url}): {e}")
-            pass
 
-        try:
-             date_element = driver.find_element(By.CSS_SELECTOR, '[data-marker="item-view/item-date"]')
-             detail_data['дата_публикации_детально'] = date_element.text.strip()
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-             print(f"--- Отладка детали --- Не удалось найти элемент ДАТЫ ПУБЛИКАЦИИ ({listing_url}): {e}")
-             pass
-        except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге ДАТЫ ПУБЛИКАЦИИ ({listing_url}): {e}")
-            pass
-
+        characteristics_dict = {}
         try:
             characteristics_container = driver.find_element(By.CSS_SELECTOR, '[data-marker="item-view/item-params"]')
             char_elements = characteristics_container.find_elements(By.CSS_SELECTOR, 'li[class*="params-paramsList__item-"]')
 
-            if not char_elements and characteristics_container:
-                 print(f"--- Отладка детали --- Контейнер характеристик найден, но нет строк характеристик по селектору 'li[class*=\"params-paramsList__item-\"]' ({listing_url}).")
-
-            for i, char_el in enumerate(char_elements):
+            for char_el in char_elements:
                 try:
                     name_el = char_el.find_element(By.CSS_SELECTOR, 'span[class*="module-noAccent-"]')
                     name = name_el.text.strip().replace(':', '')
@@ -374,24 +421,77 @@ def scrape_apartment_detail(driver, listing_url):
                          value = full_text
 
                     if name and value:
-                         detail_data['характеристики'][name] = value
+                         characteristics_dict[name] = value
 
-                except NoSuchElementException:
-                     print(f"--- Отладка детали --- Не удалось найти элементы названия/значения характеристики в строке {i+1} ({listing_url}).")
-                     pass
-                except Exception as e_char:
-                     print(f"--- Отладка детали --- Ошибка при парсинге строки характеристики {i+1} ({listing_url}): {e_char}")
-                     pass
+                except NoSuchElementException: pass
+                except Exception as e_char: pass
 
-            if not detail_data['характеристики'] and characteristics_container:
-                 print(f"--- Отладка детали --- Словарь характеристик остался пустым, хотя контейнер найден ({listing_url}).")
+            apartment_data['original_avito_data']['характеристики'] = characteristics_dict
 
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-            print(f"--- Отладка детали --- Не найден контейнер характеристик по селектору '[data-marker=\"item-view/item-params\"]' ({listing_url}): {e}")
-            pass
+            apartment_data['max_people'] = parse_numeric_characteristic(characteristics_dict, ['Количество гостей'])
+            apartment_data['sleeping_places'] = parse_numeric_characteristic(characteristics_dict, ['Спальные места', 'Количество спальных мест'])
+
+            num_rooms_char = extract_from_characteristics(characteristics_dict, ['Комнат в квартире', 'Количество комнат'])
+            if num_rooms_char:
+                 if 'студия' in num_rooms_char.lower():
+                      apartment_data['sleeping_rooms'] = 0
+                 else:
+                     apartment_data['sleeping_rooms'] = parse_number(num_rooms_char)
+            elif 'количество_комнат' in apartment_data.get('original_avito_data', {}) and apartment_data['original_avito_data']['количество_комнат'] != 'N/A':
+                 title_rooms = apartment_data['original_avito_data']['количество_комнат']
+                 if 'студия' in title_rooms.lower():
+                     apartment_data['sleeping_rooms'] = 0
+                 else:
+                     apartment_data['sleeping_rooms'] = parse_number(title_rooms)
+            else:
+                 apartment_data['sleeping_rooms'] = None
+
+
+            bathroom_char = extract_from_characteristics(characteristics_dict, ['Санузел'])
+            if bathroom_char:
+                 num_match = re.search(r'\d+', bathroom_char)
+                 if num_match:
+                      apartment_data['bathrooms'] = parse_number(num_match.group(0))
+                 elif 'совмещенный' in bathroom_char.lower() or 'раздельный' in bathroom_char.lower() or 'один' in bathroom_char.lower():
+                      apartment_data['bathrooms'] = 1
+
+            apartment_data['square'] = parse_numeric_characteristic(characteristics_dict, ['Общая площадь', 'Площадь'])
+            if apartment_data['square'] is None and 'общая_площадь_м2' in apartment_data.get('original_avito_data', {}) and apartment_data['original_avito_data']['общая_площадь_м2'] != 'N/A':
+                apartment_data['square'] = parse_number(apartment_data['original_avito_data']['общая_площадь_м2'])
+
+
+            min_nights_char = extract_from_characteristics(characteristics_dict, ['Минимальный срок аренды', 'Срок аренды'])
+            if min_nights_char:
+                 num_match = re.search(r'\d+', min_nights_char)
+                 if num_match:
+                      value = parse_number(num_match.group(0))
+                      if 'сутки' in min_nights_char.lower() or 'день' in min_nights_char.lower():
+                           apartment_data['min_nights'] = value
+                      elif 'месяц' in min_nights_char.lower() and value is not None:
+                           apartment_data['min_nights'] = value * 30
+
+
+            amenity_keys = [
+                'Парковка', 'Лифт', 'Балкон', 'Лоджия', 'Окна', 'Вид из окон',
+                'В доме', 'Ремонт', 'Техника', 'Мебель', 'Комфорт',
+                'Дополнительно'
+            ]
+            amenities_list = []
+            for key in amenity_keys:
+                 if key in characteristics_dict and characteristics_dict[key]:
+                      amenities_list.append(f"{key}: {characteristics_dict[key]}")
+
+            apartment_data['amenities'] = json.dumps(amenities_list)
+
+
+        except NoSuchElementException: pass
         except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге блока характеристик ({listing_url}): {e}")
             pass
+
+        if 'этаж_инфо' in apartment_data.get('original_avito_data', {}) and apartment_data['original_avito_data']['этаж_инфо'] != 'N/A':
+            floor_match = re.match(r'(\d+)', apartment_data['original_avito_data']['этаж_инфо'])
+            if floor_match:
+                apartment_data['stage'] = floor_match.group(1)
 
 
         try:
@@ -402,16 +502,12 @@ def scrape_apartment_detail(driver, listing_url):
                 main_image_url_data = main_image_wrapper.get_attribute('data-url')
                 if main_image_url_data:
                      collected_photo_urls.add(main_image_url_data)
-            except (NoSuchElementException, StaleElementReferenceException):
-                 pass
+            except NoSuchElementException: pass
 
             try:
                 thumbnail_images = driver.find_elements(By.CSS_SELECTOR, 'ul[data-marker="image-preview/preview-wrapper"] li[data-marker="image-preview/item"] img')
 
-                if not thumbnail_images and not collected_photo_urls:
-                     print(f"--- Отладка детали --- Не найдено ни одного элемента img в галерее (главное фото data-url и миниатюры) по основным селекторам ({listing_url}).")
-
-                for i, img_el in enumerate(thumbnail_images):
+                for img_el in thumbnail_images:
                      try:
                           srcset_attr = img_el.get_attribute('srcset')
                           data_src_attr = img_el.get_attribute('data-src')
@@ -439,37 +535,34 @@ def scrape_apartment_detail(driver, listing_url):
                           elif not best_url:
                                pass
 
-                     except StaleElementReferenceException:
-                          print(f"--- Отладка детали --- StaleElementReferenceException при парсинге фото {i+1} ({listing_url}).")
-                          pass
-                     except Exception as e_img:
-                          print(f"--- Отладка детали --- Ошибка при извлечении URL для фото {i+1} ({listing_url}): {e_img}")
-                          pass
+                     except StaleElementReferenceException: pass
+                     except Exception as e_img: pass
 
-            except (NoSuchElementException, StaleElementReferenceException) as e:
-                 pass
+            except NoSuchElementException: pass
 
-            detail_data['фотографии_детально'] = list(collected_photo_urls)
+            photo_list = list(collected_photo_urls)
+            if photo_list:
+                 apartment_data['image_url'] = photo_list[0]
 
-            if not detail_data['фотографии_детально'] and (main_image_wrapper or thumbnail_images):
-                 print(f"--- Отладка детали --- Список фотографий детально остался пустым, хотя элементы галереи найдены ({listing_url}).")
+            apartment_data['original_avito_data']['фотографии_детально'] = photo_list
 
 
-        except (NoSuchElementException, StaleElementReferenceException) as e:
-             print(f"--- Отладка детали --- Не удалось найти корневой контейнер или элементы галереи фото ({listing_url}): {e}")
-             pass
+        except NoSuchElementException: pass
         except Exception as e:
-            print(f"--- Отладка детали --- Ошибка при парсинге блока фото ({listing_url}): {e}")
             pass
 
 
     except TimeoutException:
-        print(f"--- Отладка детали --- Время ожидания загрузки страницы объявления истекло ({listing_url}).")
+        pass
     except Exception as e:
-        print(f"--- Отладка детали --- Произошла непредвиденная ошибка при обработке страницы {listing_url}: {e}")
+        pass
 
 
-    return detail_data
+    if 'original_avito_data' in apartment_data and not apartment_data['original_avito_data']:
+        del apartment_data['original_avito_data']
+
+
+    return apartment_data
 
 def save_to_json(data, filename):
     if not data:
@@ -479,13 +572,14 @@ def save_to_json(data, filename):
     try:
         with open(filename, 'w', encoding='utf-8') as output_file:
             json.dump(data, output_file, ensure_ascii=False, indent=4)
-        print(f"Данные успешно сохранены в файл: {filename}")
+        print("Данные успешно сохранены в файл:", filename)
     except IOError as e:
-        print(f"Ошибка при записи в файл {filename}: {e}")
+        print("Ошибка при записи в файл", filename, ":", e)
     except Exception as e:
-        print(f"Непредвиденная ошибка при сохранении в JSON: {e}")
+        print("Непредвиденная ошибка при сохранении в JSON:", e)
 
 if __name__ == "__main__":
+    print("--- СКРИПТ ЗАПУЩЕН ---")
     driver = None
     all_collected_data = []
     page_count = 0
@@ -494,60 +588,120 @@ if __name__ == "__main__":
     print("### ВНИМАНИЕ: Скрипт настроен на парсинг ВСЕХ объявлений со всех страниц списка.")
     print("### Это может занять много времени и увеличить риск блокировки.")
     print(f"### Если вы хотите ограничить количество, установите MAX_PAGES_TO_PARSE или MAX_APARTMENTS_TO_SCRAPE.")
+    print("--- НАЧАЛО БЛОКА TRY ---")
 
     try:
         driver = setup_driver()
+        print("--- Драйвер успешно инициализирован (или попытка инициализации) ---")
+
         if driver is None:
+            print("--- Драйвер НЕ БЫЛ ИНИЦИАЛИЗИРОВАН, ВЫЗЫВАЕМ ИСКЛЮЧЕНИЕ ---")
             raise Exception("Не удалось инициализировать веб-драйвер.")
 
-        print(f"Загрузка страницы списка: {URL}")
+        print("Загрузка страницы списка:", URL)
         driver.get(URL)
+        print("--- Страница загружена ---")
+
         time.sleep(5)
 
         while True:
             if MAX_PAGES_TO_PARSE is not None and page_count >= MAX_PAGES_TO_PARSE:
-                print(f"\nДостигнут лимит в {MAX_PAGES_TO_PARSE} страниц списка. Завершение.")
+                print("\nДостигнут лимит в", MAX_PAGES_TO_PARSE, "страниц списка. Завершение.")
                 break
 
             page_count += 1
-            print(f"\n=== Обработка страницы списка {page_count} ===")
-
+            print("\n=== Обработка страницы списка", page_count, "===")
+            print("--- Вызываем scrape_listing_page ---") 
             basic_listings_data = scrape_listing_page(driver)
+            print(f"--- scrape_listing_page завершен, найдено {len(basic_listings_data)} базовых записей ---") # <-- И эту
 
             if basic_listings_data:
-                print(f"Найдено {len(basic_listings_data)} объявлений на странице списка {page_count}.")
-                print(f"Текущее общее количество собранных квартир: {len(all_collected_data)}")
-
+                print("Найдено", len(basic_listings_data), "объявлений на странице списка", page_count, ". Обработка деталей...")
                 processed_on_this_page_count = 0
                 for i, listing in enumerate(basic_listings_data):
                     listing_url = listing.get('ссылка')
                     listing_id = listing.get('id', 'N/A')
 
                     if listing_url and listing_url != 'N/A':
-                        already_detailed = any(
-                            d.get('id') == listing_id and
-                            any(key not in ['id', 'ссылка', 'фотографии_список', 'наименование', 'количество_комнат', 'общая_площадь_м2', 'этаж_инфо'] and value not in ('N/A', {}, []) for key, value in d.items())
-                            for d in all_collected_data
-                        )
+                         already_detailed = any(d.get('avito_id') == listing_id for d in all_collected_data)
 
-                        if not already_detailed:
+                         if not already_detailed:
                             processed_on_this_page_count += 1
                             print(f"Парсинг детальной страницы {processed_on_this_page_count} с страницы списка {page_count} (Общее обработанных: {len(all_collected_data)+1}) ID: {listing_id} URL: {listing_url}...")
+                            print("--- Вызываем scrape_apartment_detail ---") 
                             try:
                                 time.sleep(PAUSE_BETWEEN_DETAIL_PAGES)
 
                                 detail_data = scrape_apartment_detail(driver, listing_url)
-                                merged_data = {**listing, **detail_data}
-                                all_collected_data.append(merged_data)
+                                print("--- scrape_apartment_detail успешно завершен ---") # <-- И эту
+
+                                if detail_data['name'] == 'N/A' and 'наименование' in listing and listing['наименование'] != 'N/A':
+                                     detail_data['name'] = listing['наименование']
+                                if detail_data['square'] is None and 'общая_площадь_м2' in listing and listing['общая_площадь_м2'] != 'N/A':
+                                     detail_data['square'] = parse_number(listing['общая_площадь_м2'])
+                                if detail_data['sleeping_rooms'] is None and 'количество_комнат' in listing and listing['количество_комнат'] != 'N/A':
+                                     title_rooms = listing['количество_комнат']
+                                     if 'студия' in title_rooms.lower():
+                                          detail_data['sleeping_rooms'] = 0
+                                     else:
+                                          detail_data['sleeping_rooms'] = parse_number(title_rooms)
+                                if detail_data['stage'] is None and 'этаж_инфо' in listing and listing['этаж_инфо'] != 'N/A':
+                                     floor_match = re.match(r'(\d+)', listing['этаж_инфо'])
+                                     if floor_match:
+                                          detail_data['stage'] = floor_match.group(1)
+
+                                if detail_data['image_url'] is None and 'фотографии_список' in listing and listing['фотографии_список']:
+                                    if listing['фотографии_список'][0] and listing['фотографии_список'][0] != 'N/A':
+                                         detail_data['image_url'] = listing['фотографии_список'][0]
+
+                                for key in ['наименование', 'количество_комнат', 'общая_площадь_м2', 'этаж_инфо', 'фотографии_список']:
+                                     if key in listing and key not in detail_data.get('original_avito_data', {}):
+                                          if 'original_avito_data' not in detail_data:
+                                               detail_data['original_avito_data'] = {}
+                                          detail_data['original_avito_data'][key] = listing[key]
+
+
+                                all_collected_data.append(detail_data)
 
                             except Exception as e_detail_scrape:
                                  print(f"--- ГЛОБАЛЬНАЯ ОШИБКА ДЕТАЛИ --- Произошла ошибка при обработке детальной страницы для {listing_url} (ID: {listing_id}): {e_detail_scrape}")
-                                 all_collected_data.append(listing)
                                  error_occurred = True
+                                 basic_apartment = {
+                                     'avito_id': listing.get('id', 'N/A'),
+                                     'avito_link': listing.get('ссылка', 'N/A'),
+                                     'name': listing.get('наименование', 'N/A'),
+                                     'city': None, 'street': None, 'housenum': None,
+                                     'stage': parse_floor_info(listing.get('этаж_инфо', '') if listing.get('этаж_инфо') != 'N/A' else None),
+                                     'number': None,
+                                     'description': 'N/A',
+                                     'max_people': None, 'sleeping_places': None, 'sleeping_rooms': parse_rooms_info(listing.get('количество_комнат', '') if listing.get('количество_комнат') != 'N/A' else None), 'bathrooms': None,
+                                     'square': parse_number(listing.get('общая_площадь_м2', '') if listing.get('общая_площадь_м2') != 'N/A' else None),
+                                     'cost_per_night': None, 'prepayment': None, 'min_nights': None,
+                                     'free_at': None, 'nearby_objects': '[]', 'amenities': '[]', 'living_rules': '[]',
+                                     'image_url': listing['фотографии_список'][0] if listing.get('фотографии_список') else None,
+                                     'original_avito_data': listing
+                                 }
+                                 all_collected_data.append(basic_apartment)
+
 
                     else:
                         print(f"Пропускаю объявление без ссылки (ID: {listing_id}) с страницы списка {page_count}. Сохраняю базовые данные.")
-                        all_collected_data.append(listing)
+                        basic_apartment = {
+                            'avito_id': listing.get('id', 'N/A'),
+                            'avito_link': listing.get('ссылка', 'N/A'),
+                            'name': listing.get('наименование', 'N/A'),
+                            'city': None, 'street': None, 'housenum': None,
+                            'stage': parse_floor_info(listing.get('этаж_инфо', '') if listing.get('этаж_инфо') != 'N/A' else None),
+                            'number': None,
+                            'description': 'N/A',
+                            'max_people': None, 'sleeping_places': None, 'sleeping_rooms': parse_rooms_info(listing.get('количество_комнат', '') if listing.get('количество_комнат') != 'N/A' else None), 'bathrooms': None,
+                            'square': parse_number(listing.get('общая_площадь_м2', '') if listing.get('общая_площадь_м2') != 'N/A' else None),
+                            'cost_per_night': None, 'prepayment': None, 'min_nights': None,
+                            'free_at': None, 'nearby_objects': '[]', 'amenities': '[]', 'living_rules': '[]',
+                            'image_url': listing['фотографии_список'][0] if listing.get('фотографии_список') else None,
+                            'original_avito_data': listing
+                        }
+                        all_collected_data.append(basic_apartment)
 
             else:
                 print(f"На странице списка {page_count} не было собрано базовых записей для детального парсинга.")
@@ -557,13 +711,13 @@ if __name__ == "__main__":
                 driver.execute_script("window.scrollTo(0, 0);")
                 time.sleep(1)
 
-                print(f"Поиск кнопки 'Следующая страница' на странице списка {page_count}...")
                 next_button = WebDriverWait(driver, 10).until(
                      EC.element_to_be_clickable((By.CSS_SELECTOR, next_button_selector))
                  )
                 print("Найдена кнопка 'Следующая страница'. Переход...")
                 next_page_url = next_button.get_attribute('href')
                 driver.get(next_page_url)
+                print("--- Перешли на следующую страницу списка ---") 
                 time.sleep(7)
 
             except (NoSuchElementException, TimeoutException):
@@ -578,13 +732,25 @@ if __name__ == "__main__":
         print(f"Произошла глобальная ошибка во время выполнения: {e_global}")
         error_occurred = True
     finally:
+        print("--- Блок finally начал выполнение ---") 
         if driver:
             print("Закрытие браузера...")
             driver.quit()
+            print("--- Браузер закрыт ---") # <-- И эту
 
+    print("--- Блок после try/except/finally начал выполнение ---") 
     if all_collected_data:
-         print(f"\nВсего собрано {len(all_collected_data)} уникальных объявлений (базовые + детальные данные).")
-         save_to_json(all_collected_data, OUTPUT_JSON_FILE)
+         print("\nВсего собрано", len(all_collected_data), "уникальных объявлений (базовые + детальные данные).")
+         cleaned_data = []
+         for item in all_collected_data:
+              if 'original_avito_data' in item and not item['original_avito_data']:
+                   temp_item = item.copy()
+                   del temp_item['original_avito_data']
+                   cleaned_data.append(temp_item)
+              else:
+                   cleaned_data.append(item)
+
+         save_to_json(cleaned_data, OUTPUT_JSON_FILE)
 
          if error_occurred:
              print("Примечание: Сохранение произведено, но во время работы скрипта возникли ошибки при парсинге.")
@@ -593,3 +759,4 @@ if __name__ == "__main__":
              print("\nНе было собрано данных из-за возникшей глобальной ошибки.")
          else:
              print("\nНе было собрано ни одного объявления. Проверьте URL или селекторы.")
+    print("--- СКРИПТ ЗАВЕРШЕН (нормальное завершение) ---") 
