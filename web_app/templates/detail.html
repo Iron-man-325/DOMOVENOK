@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ apartment.наименование | default('Детали квартиры') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+     <style>
+         .back-link {
+             position: absolute;
+             top: 20px;
+             left: 20px;
+             z-index: 100;
+             font-family: sans-serif;
+         }
+         .back-link a {
+             color: #007bff;
+             text-decoration: none;
+             font-size: 16px;
+         }
+         .back-link a:hover {
+             text-decoration: underline;
+         }
+
+         .detail-text-item strong {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            color: rgba(27, 20, 14, 1);
+            display: inline-block;
+            width: 180px;
+            vertical-align: top;
+            margin-right: 10px;
+        }
+         .detail-text-item span {
+            color: rgba(133, 115, 96, 1);
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-weight: normal;
+            font-size: 14px;
+            display: inline-block;
+             max-width: calc(100% - 190px);
+             word-wrap: break-word;
+        }
+
+         .characteristics li strong {
+             font-family: "Plus Jakarta Sans", sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            color: rgba(27, 20, 14, 1);
+            display: inline-block; width: 180px;
+            vertical-align: top;
+             margin-right: 10px;
+        }
+         .characteristics li span {
+            color: rgba(133, 115, 96, 1);
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-weight: normal;
+            font-size: 14px;
+            display: inline-block;
+             max-width: calc(100% - 190px);
+             word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="detail-overlay"></div>
+
+    <p class="back-link"><a href="{{ url_for('list_apartments') }}">&larr; Вернуться к списку</a></p>
+
+    <main>
+         <div class="detail-modal-content">
+
+            <h1 class="flat-name">{{ apartment.наименование | default('Детали квартиры') }}</h1>
+
+            <div class="detail-block">
+                <h2>Основная информация</h2>
+                <p class="detail-text-item"><strong>ID:</strong> <span>{{ apartment.id }}</span></p>
+                <p class="detail-text-item"><strong>Цена:</strong> <span>{{ apartment.цена | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Залог:</strong> <span>{{ apartment.залог | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Комиссия:</strong> <span>{{ apartment.комиссия | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Адрес:</strong> <span>{{ apartment.адрес | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Метро:</strong> <span>{{ apartment.метро | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Площадь:</strong> <span>{{ apartment.общая_площадь_м2 | default('N/A') }} м²</span></p>
+                <p class="detail-text-item"><strong>Этаж:</strong> <span>{{ apartment.этаж_инфо | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Дата публикации (детально):</strong> <span>{{ apartment.дата_публикации_детально | default('N/A') }}</span></p>
+                <p class="detail-text-item"><strong>Ссылка на Avito:</strong> <span><a href="{{ apartment.ссылка }}" target="_blank">{{ apartment.ссылка | default('N/A') }}</a></span></p>
+            </div>
+
+            <div class="detail-block">
+                <h2>Описание</h2>
+                <p>{{ apartment.описание_полное | default('Нет описания.') }}</p>
+            </div>
+
+             {% if apartment.характеристики %}
+                <div class="detail-block characteristics">
+                    <h2>Характеристики</h2>
+                    <ul>
+                        {% for key, value in apartment.характеристики.items() %}
+                            <li><strong>{{ key }}:</strong> <span>{{ value }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+
+            {% if apartment.фотографии_детально %}
+                <div class="detail-block">
+                    <h2>Фотографии</h2>
+                    <div class="photo-gallery">
+                        {% for photo_url in apartment.фотографии_детально %}
+                             {% if photo_url and photo_url != 'N/A' %}
+                                <img src="{{ photo_url }}" alt="Фото {{ loop.index }}">
+                             {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+         </div>
+    </main>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        var photoModal = document.getElementById("myModal");
+        var photoModalImg = document.getElementById("modalImage");
+        var galleryImages = document.querySelectorAll('.photo-gallery img');
+
+        galleryImages.forEach(function(img) {
+            img.onclick = function(){
+                photoModal.style.display = "flex";
+                photoModalImg.src = this.src;
+            }
+        });
+
+        var span = photoModal.getElementsByClassName("close")[0];
+
+        span.onclick = function() {
+          photoModal.style.display = "none";
+        }
+
+        photoModal.onclick = function(event) {
+            if (event.target == photoModal) {
+                photoModal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (photoModal.style.display === "flex" && event.key === "Escape") {
+                photoModal.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+</html>
