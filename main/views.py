@@ -469,7 +469,6 @@ def sup(request: WSGIRequest):
                 GKX_receipt=form.cleaned_data['GKX_receipt'],
                 rent_payment=form.cleaned_data['rent_payment'],
                 rent_receipt=form.cleaned_data['rent_receipt'], 
-                rent_receipt=form.cleaned_data['rent_receipt'],
                 submitted_at=timezone.now()
                 )
             stat.save()
