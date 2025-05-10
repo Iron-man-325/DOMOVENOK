@@ -287,9 +287,6 @@ def redact_profile(request: WSGIRequest):
 
 @login_required
 def profile_page(request: WSGIRequest):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('login')
 
     user = User.objects.get_by_natural_key(request.user)
     profile = Profile.objects.get(user=user)
@@ -463,3 +460,7 @@ def contact_owner(request, flat_id):
     )    
     
     return redirect('flat_detail', flat_id = flat_id)
+
+def logout_page(request):
+    logout(request)
+    return redirect('login')

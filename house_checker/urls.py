@@ -30,7 +30,7 @@ urlpatterns = [
 
     path('login/', views.login_page, name='login'),
     path('registration/', views.registration_page, name='registration'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', views.logout_page, name='logout'),
     path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
     path('rent/<int:flat_id>/<int:dates>/', views.rent_apartment, name='rent'),
     path('connect/<int:flat_id>', views.contact_owner, name='connect'),
