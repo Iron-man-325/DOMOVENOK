@@ -28,6 +28,9 @@
                                 <option value="rented" {% if apartment.status == 'rented' %}selected{% endif %}>
                                     Сдается
                                 </option>
+                                <option value="closed" {% if apartment.status == 'closed' %}selected{% endif %}>
+                                    Снять с продажи
+                                </option>
                             </select>
                             <button type="submit" class="status-update-btn status-change">Обновить статус</button>
                         </form>

@@ -19,14 +19,14 @@ urlpatterns = [
     path('flat/<int:flat_id>/', views.show_flat, name='flat_detail'),
     path('my-flats/', views.my_flats, name='my_flats'),
 
-    path('sup/', views.sup, name='sup'),
+    path('sup/', views.support, name='sup'),
     path('profile/', views.profile_page, name='profile'),
     path('stat/<int:flat_id>', views.stat, name='stat'),
     path('redact/', views.redact_profile, name='redact'),
     path('send-support-message/', views.send_support_message, name='send_support_message'),
 
     path('prob/', views.my_problems, name='prob'),
-    path('error/', views.error, name='error'),
+    path('error/', views.error_page, name='error'),
 
     path('login/', views.login_page, name='login'),
     path('registration/', views.registration_page, name='registration'),
