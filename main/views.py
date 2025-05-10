@@ -33,6 +33,7 @@ def get_base_context(pagename: str = "", **kwargs):
             MenuUrlContext('faq', 'Q&A'),
             MenuUrlContext('support', 'Поддержка'),
             MenuUrlContext('redact', 'Настройки'),
+            MenuUrlContext('sup', 'Внеение данных'),
         ]
     }
     context.update(kwargs)
