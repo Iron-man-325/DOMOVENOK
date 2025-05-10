@@ -1,21 +1,24 @@
-.. sv documentation master file, created by
-   sphinx-quickstart on Sun Jan 21 00:16:59 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. Документация House Checker documentation master file
 
-Welcome to sv's documentation!
-==============================
+Главная страница
+================
+.. Длина === должна быть не меньше заголовка
+
+Добро пожаловать в документацию House Checker!
+=============================================
+
+Основная документация
+---------------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Модули проекта:
+   
+   models
+   views
 
-   views.rst
-
-
-
-Indices and tables
-==================
+Индексы и поиск
+===============
 
 * :ref:`genindex`
 * :ref:`modindex`

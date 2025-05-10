@@ -1,23 +1,27 @@
-import os
-import sys
-import django
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-sys.path.insert(0, os.path.abspath("../.."))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'house_checker.settings'
-django.setup()
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-
-project = 'sv'
-copyright = '2024, KriptYashka'
-author = 'KriptYashka'
+project = 'House Checker'
+copyright = '2025, Your Name'
+author = 's103_team'
+release = '18.05.2025'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
+]
 
 templates_path = ['_templates']
-exclude_patterns = ['source']
+exclude_patterns = []
 
 language = 'ru'
 
@@ -25,5 +29,4 @@ language = 'ru'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'alabaster'
-# html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
