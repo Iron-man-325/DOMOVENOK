@@ -31,6 +31,7 @@ urlpatterns = [
     path('login/', views.login_page, name='login'),
     path('registration/', views.registration_page, name='registration'),
     path('logout/', views.logout_page, name='logout'),
+    path('search/', views.search_apartments, name='search_apartments'),
 
     path('api/v1/apartment/', view_api.create_apartment),
     path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
