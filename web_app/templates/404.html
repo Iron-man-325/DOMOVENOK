@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+     <style>
+        body { font-family: sans-serif; margin: 50px; text-align: center; background-color: rgba(252, 250, 248, 1); }
+        h1 { color: #dc3545; }
+         .container {
+            width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(240, 234, 228, 1);
+            box-sizing: border-box;
+         }
+         .container p {
+             color: #555;
+         }
+         .container p a {
+            color: #007bff;
+            text-decoration: none;
+         }
+         .container p a:hover {
+             text-decoration: underline;
+         }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="container">
+            <h1>Ошибка 404: Страница не найдена</h1>
+            <p>К сожалению, запрошенная вами страница или информация о квартире не найдена.</p>
+            <p><a href="{{ url_for('list_apartments') }}">Вернуться на главную страницу</a></p>
+        </div>
+    </main>
+</body>
+</html>
