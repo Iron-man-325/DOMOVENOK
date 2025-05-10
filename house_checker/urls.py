@@ -19,7 +19,7 @@ urlpatterns = [
     path('flat/<int:flat_id>/', views.show_flat, name='flat_detail'),
     path('my-flats/', views.my_flats, name='my_flats'),
 
-    path('sup/', views.support, name='sup'),
+    path('sup/', views.sup, name='sup'),
     path('profile/', views.profile_page, name='profile'),
     path('stat/<int:flat_id>', views.stat, name='stat'),
     path('redact/', views.redact_profile, name='redact'),

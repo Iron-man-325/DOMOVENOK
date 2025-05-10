@@ -151,7 +151,7 @@ def support_message(request: WSGIRequest):
 
 
 @login_required
-def support(request: WSGIRequest):
+def  support(request: WSGIRequest):
     requests = SupportRequest.objects.filter(user=request.user).order_by('-created_at')
     context = get_base_context('Поддержка', requests=requests)
     return render(request, 'pages/support.html', context)
@@ -445,3 +445,41 @@ def search_apartments(request):
         'success': False,
         'message': 'Неверный метод запроса'
     }, status=405)
+def sup(request: WSGIRequest):
+    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active')
+    rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
+    if not rent:
+        return HttpResponse("У вас нет активной аренды", status=400)
+    
+    if request.method == 'POST':
+        form=StaticInputForm(request.POST, request.FILES)
+        if form.is_valid():
+            stat=StaticInput.objects.create(
+                apartment=rent.apartment,
+                water_input=form.cleaned_data['water_input'],
+                water_payment=form.cleaned_data['water_payment'],
+                water_receipt=form.cleaned_data['water_receipt'],
+                electro_input=form.cleaned_data['electro_input'],
+                electro_payment=form.cleaned_data['electro_payment'],
+                electro_receipt=form.cleaned_data['electro_receipt'],
+                gas_input=form.cleaned_data['gas_input'],
+                gas_payment=form.cleaned_data['gas_payment'],
+                gas_receipt=form.cleaned_data['gas_receipt'],
+                GKX_payment=form.cleaned_data['GKX_payment'],
+                GKX_receipt=form.cleaned_data['GKX_receipt'],
+                rent_payment=form.cleaned_data['rent_payment'],
+                rent_receipt=form.cleaned_data['rent_receipt'], 
+                rent_receipt=form.cleaned_data['rent_receipt'],
+                submitted_at=timezone.now()
+                )
+            stat.save()
+        else:
+            print('ERrror Valid')
+    else:
+        form = StaticInputForm()
+        print(form.errors)
+        print(form.is_valid())
+    context={
+        'form':form
+    }
+    return render(request, 'pages/support_message.html', context)
