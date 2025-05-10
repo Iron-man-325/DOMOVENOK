@@ -1,3 +1,4 @@
+import uuid
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -161,7 +162,7 @@ def  support(request: WSGIRequest):
 def stat(request: WSGIRequest, flat_id):
     apartment = get_object_or_404(Apartment, id=flat_id)
     rents = Rent_Apartment.objects.filter(apartment=apartment)
-    stats = StaticInput.objects.all()
+    stats = StaticInput.objects.filter(apartment=flat_id)
     cash = sum(rent.price * rent.dates for rent in rents) if rents.exists() else 0
 
     context = get_base_context(
@@ -272,14 +273,16 @@ def login_page(request):
     context = get_base_context('Авторизация', error=None)
 
     if request.method == 'POST':
-        user = authenticate(
-            request,
-            username=request.POST.get('username'),
-            password=request.POST.get('password')
-        )
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
-            return redirect(request.GET.get('next', 'profile'))
+            if 'next' in request.GET.keys():
+                return redirect(request.GET.get('next'))
+            return redirect('profile')
         context["error"] = "Неверное имя пользователя или пароль."
 
     return render(request, "registration/login.html", context)
@@ -449,7 +452,7 @@ def sup(request: WSGIRequest):
     rent=Rent_Apartment.objects.filter(tenant=request.user,status='active')
     rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
     if not rent:
-        return HttpResponse("У вас нет активной аренды", status=400)
+        return redirect('error')
     
     if request.method == 'POST':
         form=StaticInputForm(request.POST, request.FILES)
@@ -478,7 +481,7 @@ def sup(request: WSGIRequest):
         form = StaticInputForm()
         print(form.errors)
         print(form.is_valid())
-    context={
-        'form':form
-    }
+    context=get_base_context('Внесение данных',
+        form=form
+    )
     return render(request, 'pages/support_message.html', context)
