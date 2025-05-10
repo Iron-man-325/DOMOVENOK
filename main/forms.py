@@ -1,10 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect,FileInput,NumberInput
-from .models import Profile, Apartment,StaticInput
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect, FileInput, NumberInput
 from django.contrib.auth.models import User
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput, RadioSelect
-
+from .models import Profile, Apartment, StaticInput
 from .models import Apartment, Profile
 
 

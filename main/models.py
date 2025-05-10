@@ -76,14 +76,7 @@ class Apartment(models.Model):
     def __str__(self):
         return f"{self.city}, {self.street}, {self.housenum}, кв. {self.number}"
 
-class Rent_Apartment(models.Model):
-    landlord = models.ForeignKey(User, on_delete=models.CASCADE, related_name='landlord_rentals')
-    tenant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tenant_rentals')
-    price = models.IntegerField(default=0)
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
-    dates = models.IntegerField(default=0)
-    status=models.CharField()
-    
+
 class Profile(models.Model):
     """
     Доп. таблица к пользователю
