@@ -6,133 +6,138 @@
 {% endblock %}
 
 {% block content %}
-<div class="content">
-    <!-- Блок с картинками (добавьте реализацию) -->
-        <img src="{{ apartment.image.url }}" class="main-image your-img" id="mainImage" alt="Фото квартиры">
+{% if apartment.status != 'closed' %}
+    <div class="content">
+            <img src="{{ apartment.image.url }}" class="main-image your-img" id="mainImage" alt="Фото квартиры">
 
-    <!-- Блок с ценой -->
-    <div class="price-block">
-        <h3 class="price-text">{{ apartment.cost_per_night }}</h3>
-        <p class="text">{{ apartment.sleeping_rooms }} спален, {{ apartment.bathrooms }} ванны, {{ apartment.square }}м²</p>
-    </div>
-    <div>
-        <p class="text">{{ apartment.description}}</p>
-    </div>
+        <!-- Блок с ценой -->
+        <div class="price-block">
+            <h3 class="price-text">{{ apartment.cost_per_night }}</h3>
+            <p class="text">{{ apartment.sleeping_rooms }} спален, {{ apartment.bathrooms }} ванны, {{ apartment.square }}м²</p>
+        </div>
+        <div>
+            <p class="text">{{ apartment.description}}</p>
+        </div>
 
-    <!-- Основные характеристики -->
-    <div class="characteristics">
-        <h3>О квартире</h3>
-    </div>
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Колличество людей</p>
-            <p class="text">{{ apartment.max_people }}</p>
+        <!-- Основные характеристики -->
+        <div class="characteristics">
+            <h3>О квартире</h3>
         </div>
-        <div class="part">
-            <p class="head-text">Колличество кроватей</p>
-            <p class="text">{{ apartment.sleeping_places }}</p>
-        </div>
-    </div>
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Условия аренды</p>
-            <p class="text">Предоплата: {{ apartment.prepayment }}</p>
-            <p class="text">Колличество ночей(мин): {{ apartment.min_nights }}</p>
-        </div>
-        <div class="part">
-            <p class="head-text">Расположение</p>
-            <p class="text">Город: {{ apartment.city }}, Улица:{{ apartment.street }}</p>
-            <p class="text">Дом: {{ apartment.housenum }}, Квартира №:{{ apartment.number }}</p>
-        </div>
-    </div>
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Места рядом</p>
-            <p class="text">{{ apartment.nearby_objects }}</p>
-        </div>
-    </div>
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Удобства</p>
-            <p class="text">{{ apartment.amenities }}</p>
-        </div>
-    </div>
-
-    <!-- Что находится рядом-->
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Места рядом</p>
-            <p class="text">{{ apartment.nearby_objects }}</p>
-        </div>
-    </div>
-    <!-- Дополнительные удобства -->
-    <div class="line"></div>
-    <div class="columns">
-        <div class="part">
-            <p class="head-text">Правила</p>
-            <p class="text">{{ apartment.living_rules }}</p>
-        </div>
-    </div>
-
-        <button 
-            onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
-            class="button-submit height-margin text-submit"
-        >
-        Связаться с владельцем
-    </button>
-    
-    {% if apartment.status != 'rented' %}
-        <script>
-            function redirectToRent() {
-                const days = parseInt(document.getElementById('days-input').value);
-                const key1 = document.getElementById('key-input').value;
-                const minNights = parseFloat("{{ apartment.min_nights|stringformat:'.2f' }}".replace(',', '.'));
-                const apartmentId = {{ apartment.id }};
-                const key = "{{ apartment.key }}";
-                
-                if (isNaN(days)) {
-                    alert('Введите корректное количество дней');
-                    return;
-                }
-
-                if (days >= minNights && key1 === key) {
-                    window.location.href = `/rent/${apartmentId}/${days}/`;
-                } else {
-                    alert('Минимальное количество дней: ' + minNights + 
-                        (key1 !== key ? ' или неверный ключ' : ''));
-                }
-            }
-        </script>
-        <div class="rent-form">
-            <div class="flex">
-            <input 
-            class="input-code"
-                type="number" 
-                id="days-input" 
-                class="days-input" 
-                placeholder="Количество дней" 
-                min="1"
-                value="1"
-            >
-            <input 
-            class="input-code"
-                type="text"
-                id="key-input"
-                class="days-input" 
-                placeholder="Секретный ключ"
-            >
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Колличество людей</p>
+                <p class="text">{{ apartment.max_people }}</p>
             </div>
+            <div class="part">
+                <p class="head-text">Колличество кроватей</p>
+                <p class="text">{{ apartment.sleeping_places }}</p>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Условия аренды</p>
+                <p class="text">Предоплата: {{ apartment.prepayment }}</p>
+                <p class="text">Колличество ночей(мин): {{ apartment.min_nights }}</p>
+            </div>
+            <div class="part">
+                <p class="head-text">Расположение</p>
+                <p class="text">Город: {{ apartment.city }}, Улица:{{ apartment.street }}</p>
+                <p class="text">Дом: {{ apartment.housenum }}, Квартира №:{{ apartment.number }}</p>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Места рядом</p>
+                <p class="text">{{ apartment.nearby_objects }}</p>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Удобства</p>
+                <p class="text">{{ apartment.amenities }}</p>
+            </div>
+        </div>
+
+        <!-- Что находится рядом-->
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Места рядом</p>
+                <p class="text">{{ apartment.nearby_objects }}</p>
+            </div>
+        </div>
+        <!-- Дополнительные удобства -->
+        <div class="line"></div>
+        <div class="columns">
+            <div class="part">
+                <p class="head-text">Правила</p>
+                <p class="text">{{ apartment.living_rules }}</p>
+            </div>
+        </div>
+
             <button 
-                onclick="redirectToRent()" 
-                class="button-submit height-margin"
+                onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
+                class="button-submit height-margin text-submit"
             >
-                <p class="text-submit">Снять квартиру</p>
-            </button>
+            Связаться с владельцем
+        </button>
+        
+        {% if apartment.status == 'available' %}
+            <script>
+                function redirectToRent() {
+                    const days = parseInt(document.getElementById('days-input').value);
+                    const key1 = document.getElementById('key-input').value;
+                    const minNights = parseFloat("{{ apartment.min_nights|stringformat:'.2f' }}".replace(',', '.'));
+                    const apartmentId = {{ apartment.id }};
+                    const key = "{{ apartment.key }}";
+                    
+                    if (isNaN(days)) {
+                        alert('Введите корректное количество дней');
+                        return;
+                    }
+
+                    if (days >= minNights && key1 === key) {
+                        window.location.href = `/rent/${apartmentId}/${days}/`;
+                    } else {
+                        alert('Минимальное количество дней: ' + minNights + 
+                            (key1 !== key ? ' или неверный ключ' : ''));
+                    }
+                }
+            </script>
+            <div class="rent-form">
+                <div class="flex">
+                <input 
+                class="input-code"
+                    type="number" 
+                    id="days-input" 
+                    class="days-input" 
+                    placeholder="Количество дней" 
+                    min="1"
+                    value="1"
+                >
+                <input 
+                class="input-code"
+                    type="text"
+                    id="key-input"
+                    class="days-input" 
+                    placeholder="Секретный ключ"
+                >
+                </div>
+                <button 
+                    onclick="redirectToRent()" 
+                    class="button-submit height-margin"
+                >
+                    <p class="text-submit">Снять квартиру</p>
+                </button>
+            </div>
+        {% endif %}
+    {% else %}
+        <div>
+            <p class="text">К сожалению, хозяин снял квартиру с сайта</p>
         </div>
     {% endif %}
 </div>
