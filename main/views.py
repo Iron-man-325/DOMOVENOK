@@ -9,11 +9,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from .forms import (ApartmentForm, PasswordUpdateForm, ProfileUpdateForm, 
+from .forms import (ApartmentForm, PasswordUpdateForm, ProfileUpdateForm,
                    StaticInputForm, UserForm, UserUpdateForm)
 from .models import (Apartment, Profile, Rent_Apartment, StaticInput,
                     SupportRequest, User, ViewHistory)
-
 
 def get_base_context(pagename: str = "", **kwargs):
     """
@@ -105,7 +104,7 @@ def admin_view(request):
 def show_flat(request, flat_id):
     apartment = get_object_or_404(Apartment, id=flat_id)
     ViewHistory.objects.update_or_create(
-        user=request.user, 
+        user=request.user,
         apartment=apartment,
         price=1
     )
@@ -133,10 +132,10 @@ def flat_list(request: WSGIRequest):
 @login_required
 def support_message(request: WSGIRequest):
     rent = Rent_Apartment.objects.filter(
-        tenant=request.user, 
+        tenant=request.user,
         status='active'
     ).first()
-    
+
     if not rent:
         return HttpResponse("У вас нет активной аренды", status=400)
 
@@ -145,7 +144,7 @@ def support_message(request: WSGIRequest):
         if form.is_valid():
             form.save()
             return redirect('support')
-    
+
     context = get_base_context('Поддержка', form=StaticInputForm())
     return render(request, 'pages/support_message.html', context)
 
@@ -178,11 +177,11 @@ def stat(request: WSGIRequest, flat_id):
 def my_flats(request: WSGIRequest):
     apartments = Apartment.objects.filter(user=request.user)
     cash = sum(
-        elem.price * elem.dates 
-        for apartment in apartments 
+        elem.price * elem.dates
+        for apartment in apartments
         for elem in Rent_Apartment.objects.filter(apartment=apartment)
     )
-    
+
     context = get_base_context('Мои квартиры', apartments=apartments, cash=cash)
     return render(request, 'pages/my_flats.html', context)
 
@@ -222,7 +221,8 @@ def redact_profile(request: WSGIRequest):
                                      "Неверный старый пароль (или пользователь недействителен)")
             elif data['new_password'] != data['confirm']:
                 messages.add_message(request, messages.ERROR,
-                                     "Поля \"Новый пароль\" и \"Подтвердите новый пароль\" не совпадают")
+                                     "Поля \"Новый пароль\" и \"Подтвердите новый пароль\"" \
+                                     " не совпадают")
             else:
                 usr.set_password(data['new_password'])
                 usr.save()
@@ -251,7 +251,7 @@ def profile_page(request: WSGIRequest):
     profile = Profile.objects.get(user=user)
     history = ViewHistory.objects.filter(user=user).select_related('apartment')
     user_flats = Apartment.objects.filter(user=user)
-    
+
     context = get_base_context(
         'Профиль',
         user=user,
@@ -338,7 +338,7 @@ def my_support_requests(request):
     return render(request, 'pages/my_support_requests.html', context)
 
 
-@login_required   
+@login_required
 def faq_questions(request: WSGIRequest):
     class Question:
         def __init__(self, q: str, a: str = ""):
@@ -362,7 +362,7 @@ def faq_questions(request: WSGIRequest):
                 Question("?",
                             "?"),
                 ]
-    
+
     context = get_base_context('Часто задаваемые вопросы', questions=questions)
     return render(request, 'pages/faq_questions.html', context)
 
@@ -401,7 +401,7 @@ def contact_owner(request, flat_id):
         Email: {request.user.email}
         ID квартиры: {flat_id}''',
         settings.DEFAULT_FROM_EMAIL,
-        [apartment.user.email],  
+        [apartment.user.email],
         fail_silently=False,
     )
     return redirect('flat_detail', flat_id=flat_id)
@@ -411,11 +411,10 @@ def logout_page(request):
     logout(request)
     return redirect('login')
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.exceptions import ObjectDoesNotExist
-import json
-from .models import Apartment
+
+
+
+
 
 @csrf_exempt
 def search_apartments(request):
@@ -423,21 +422,21 @@ def search_apartments(request):
         try:
             # Для Django < 3.1 используйте request.POST
             data = request.POST
-            
+
             city = data.get('city', '').strip()
             street = data.get('street', '').strip()
-            
+
             if not city:
                 return JsonResponse({
                     'success': False,
                     'message': 'Город обязателен для поиска'
                 }, status=400)
-            
+
             apartments = Apartment.objects.filter(city__icontains=city)
-            
+
             if street:
                 apartments = apartments.filter(street__icontains=street)
-            
+
             apartments_list = []
             for apt in apartments:
                 apartments_list.append({
@@ -448,18 +447,18 @@ def search_apartments(request):
                     'cost_per_night': str(apt.cost_per_night),
                     'image': apt.image.url if apt.image else ''
                 })
-            
+
             return JsonResponse({
                 'success': True,
                 'apartments': apartments_list
             })
-            
+
         except Exception as e:
             return JsonResponse({
                 'success': False,
                 'message': f'Ошибка сервера: {str(e)}'
             }, status=500)
-    
+
     return JsonResponse({
         'success': False,
         'message': 'Неверный метод запроса'
@@ -469,7 +468,7 @@ def sup(request: WSGIRequest):
     rent=Rent_Apartment.objects.filter(tenant=request.user,status='active').first()
     if not rent:
         return redirect('error')
-    
+
     if request.method == 'POST':
         form=StaticInputForm(request.POST, request.FILES)
         if form.is_valid():
@@ -487,7 +486,7 @@ def sup(request: WSGIRequest):
                 GKX_payment=form.cleaned_data['GKX_payment'],
                 GKX_receipt=form.cleaned_data['GKX_receipt'],
                 rent_payment=form.cleaned_data['rent_payment'],
-                rent_receipt=form.cleaned_data['rent_receipt'], 
+                rent_receipt=form.cleaned_data['rent_receipt'],
                 submitted_at=timezone.now()
                 )
             stat.save()
