@@ -79,7 +79,6 @@
         font-family: "Noto Sans", sans-serif;
         font-size: 16px;
         width: 100%;
-        transition: background-color 0.3s;
         border-radius: 12px;
     }
     
@@ -136,7 +135,7 @@
                 <h2 class="text-noto">Найдите свой идеальный дом</h2>
             </div>
             <div>
-                <div class="wrapper">
+                <div class="wrapper-1">
                     <button class="search-submit" id="openSearchModal">
                         <p class="search-text">Расширенный поиск</p>
                     </button>
@@ -172,12 +171,12 @@
         <div id="apartmentsContainer">
             {% for apartment in apartments %}
             <div class="var-cont">
-                <img class="flat-img" src="{{ apartment.image.url }}" alt="{{ apartment.name }}">
+                <img  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'"  class="flat-img" src="{{ apartment.image.url }}" alt="{{ apartment.name }}">
                 <div class="desc-cont">
                     <div class="desc">
-                        <h4 class="name-flat">{{ apartment.name }}</h4>
-                        <p class="desc-text">{{ apartment.city }}{% if apartment.street %}, {{ apartment.street }}{% endif %}</p>
-                        <p class="desc-text">{{ apartment.cost_per_night }} ₽/ночь</p>
+                        <h4  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'"  class="name-flat">{{ apartment.name }}</h4>
+                        <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.city }}{% if apartment.street %}, {{ apartment.street }}{% endif %}</p>
+                        <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.cost_per_night }} ₽/ночь</p>
                     </div>
                     <div class="but-div">
                         <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
@@ -266,7 +265,7 @@ $(document).ready(function() {
             <div class="result-item">
                 <h5>${apartment.name || 'Без названия'}</h5>
                 <p><strong>Адрес:</strong> ${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
-                <p><strong>Цена:</strong> ${apartment.cost_pernight || '0'} ₽/ночь</p>
+                <p><strong>Цена:</strong> ${apartment.cost_per_night || '0'} ₽/ночь</p>
                 <a  href='/flat/${apartment.id}' class="reserve-text">Забронировать</a>
             </div>
             `;

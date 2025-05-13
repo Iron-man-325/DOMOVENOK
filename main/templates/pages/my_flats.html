@@ -15,7 +15,7 @@
                     <p class="small-text">Квартир на продаже</p>
                 </div>
                 <div class="earn-cont">
-                    <p class="earn-money">{{cash}}</p>
+                    <p class="earn-money">{{cash}} ₽</p>
                     <p class="small-text">Всего заработано</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 {% for apartment in apartments %}
                     <div class="add-cont flat-item" data-status="{{ apartment.status }}">
                         <div>
-                            <img class="flat-img-1" src="{{ apartment.image.url }}">
+                            <img onclick="location.href='{% url 'stat' flat_id=apartment.id %}'"  class="flat-img-1" src="{{ apartment.image.url }}">
                         </div>
                         <div class="flat-name-cont">
                             <a href='{% url 'stat' flat_id=apartment.id %}' class="flat-name">{{ apartment.name}}</a>

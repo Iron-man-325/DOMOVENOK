@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from main import views, view_api
+from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,7 +33,6 @@ urlpatterns = [
     path('logout/', views.logout_page, name='logout'),
     path('search/', views.search_apartments, name='search_apartments'),
 
-    path('api/v1/apartment/', view_api.create_apartment),
     path('flat/<int:apartment_id>/update_status/', views.update_apartment_status, name='update_apartment_status'),
     path('rent/<int:flat_id>/<int:dates>/', views.rent_apartment, name='rent'),
     path('connect/<int:flat_id>', views.contact_owner, name='connect'),

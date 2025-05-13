@@ -5,9 +5,10 @@
 {% endblock %}
 {% block content %}
         <div class="container">
-            <div class="create">
+            <div class="create-head">
                 <h2 class="style-text-head">Создание аккаунта</h2>
             </div>
+            <div class="create-head">
             <form method="post" >
                 {% csrf_token %}
                 <div class="create">
@@ -25,12 +26,10 @@
                 <div class="create">
                     {{ form.last_name }}
                 </div>
-                <div class="create">
-                    <p class="style-text-small text-color-small"> Используйтеs 8 или более символов, состоящих из букв, цифр и символов.</p>
-                </div>
                 <div class="cont-button">
                     <button class="enter-text button-create-ak">Создать аккаунт</button>
             </div>
             </form>
+                    </div>
         </div>
 {% endblock %}

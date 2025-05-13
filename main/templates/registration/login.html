@@ -10,17 +10,15 @@
     {% csrf_token %}
     <div class="container">
         <div class="enter">
-            <h2 class="style-text">Вход в Домовенок</h2>
+            <h2 class="head-dom">Вход в Домовенок</h2>
         </div>
         <div class="fields">
             <form method="post">
                 <div class="mail">
-                    <p class="text">Ник</p>
-                    <input class="enter-field" name="username" type="text" required />
+                    <input class="enter-field" name="username" type="text" required placeholder="Ник" />
                 </div>
                 <div class="password">
-                    <p class="text">Пароль</p>
-                    <input class="enter-field" name="password" type="password" placeholder="" required />
+                    <input class="enter-field" name="password" type="password" placeholder="Пароль" required />
                 </div>
                 <div class="cont">
                     <a class="password-forget">Забыли пароль?</a>

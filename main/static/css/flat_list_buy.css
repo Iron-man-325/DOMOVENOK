@@ -7,6 +7,7 @@ body{
 main{
     display:flex;
     justify-content:center;
+    margin-top: 20px;
 }
 .back-img{
     width: 928px;
@@ -57,7 +58,7 @@ main{
 .search-cont{
     padding: 25% 0 0 10%;
 }
-.wrapper{
+.wrapper-1{
     position: relative;
     display: inline-block;
 }
@@ -73,7 +74,8 @@ main{
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 12px;
-}
+    cursor:pointer;
+} 
 .var-cont{
     margin-top: 30px;
     display: flex;
@@ -84,6 +86,8 @@ main{
     font-size: 16px;
     color: rgba(136, 115, 99, 1);
     margin: 10px 0 0 0;
+    text-decoration: none;
+    cursor:pointer;
 }
 .name-flat{
     font-family: "Noto Sans", sans-serif;
@@ -91,9 +95,10 @@ main{
     font-size: 18px;
     font-weight: bold;
     margin: 10px 0 0 0 ;
+    cursor:pointer;
 }
 .desc{
-    width: 100px;
+    width: 200px;
     margin: 10px 0 0 15px;
 }
 .reserve-but{

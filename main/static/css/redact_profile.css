@@ -4,11 +4,17 @@
 
 body{
     background-color: rgba(252, 250, 248, 1);
+    min-height: 100vh;
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
 }
 
 main{
     display:flex;
     justify-content:center;
+    padding-top: 30px;
+    padding-bottom: 50px;
 }
 
 .gold-colored{

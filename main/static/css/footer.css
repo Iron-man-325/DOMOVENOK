@@ -1,12 +1,16 @@
-.footer{
-    height: 110px;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 50px;
+
+body{
+    background-color: rgba(252, 250, 248, 1);
+    margin: 0;
+}
+footer{
+    width: 100%;
     background:rgba(235, 219, 203, 1);
     padding:0 0px;
     font-family: 'Play', sans-serif;
     text-align:center;
+    margin-top: auto;
+    height: 100%;
 }
 
 .footer .row{
@@ -63,4 +67,23 @@
     .footer .row a i{
         margin:0% 3%;
     }
+}
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+main {
+    flex: 1;
+}
+.footer ul {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap; /* Позволяет элементам переноситься */
+  justify-content: center; /* Центрируем элементы */
+  gap: 15px; /* Отступ между пунктами */
 }

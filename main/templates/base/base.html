@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title_inner %}{{ pagename }}{% endblock %}</title>
         <!-- Подключение стилей -->
         <link href="{% static 'css/footer.css' %}" rel="stylesheet">
@@ -12,20 +13,22 @@
 
 
     <body>
-        <header>
-            {% block header %}
-            {% include 'base/menu.html' %}
-            {% endblock %}
-        </header>
-        <main>
-            {% block content %}
+        <div class="wrapper">
+            <header>
+                {% block header %}
+                {% include 'base/menu.html' %}
+                {% endblock %}
+            </header>
+            <main>
+                {% block content %}
 
-            {% endblock %}
-        </main>
+                {% endblock %}
+            </main>
 
-        {% include 'base/footer.html' %}
+            {% include 'base/footer.html' %}
 
-        {% block extra_js %} {% endblock %}
+            {% block extra_js %} {% endblock %}
+    </div>
     </body>
 
 

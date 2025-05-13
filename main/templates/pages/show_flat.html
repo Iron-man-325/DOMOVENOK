@@ -8,11 +8,14 @@
 {% block content %}
 {% if apartment.status != 'closed' %}
     <div class="content">
+        <div class="center-block">
+            <div>
             <img src="{{ apartment.image.url }}" class="main-image your-img" id="mainImage" alt="Фото квартиры">
 
         <!-- Блок с ценой -->
         <div class="price-block">
-            <h3 class="price-text">{{ apartment.cost_per_night }}</h3>
+            <h3 class="price-text">{{ apartment.name }}</h3>
+            <h4 class="price-text">{{ apartment.cost_per_night }}</h4>
             <p class="text">{{ apartment.sleeping_rooms }} спален, {{ apartment.bathrooms }} ванны, {{ apartment.square }}м²</p>
         </div>
         <div>
@@ -78,14 +81,6 @@
                 <p class="text">{{ apartment.living_rules }}</p>
             </div>
         </div>
-
-            <button 
-                onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
-                class="button-submit height-margin text-submit"
-            >
-            Связаться с владельцем
-        </button>
-        
         {% if apartment.status == 'available' %}
             <script>
                 function redirectToRent() {
@@ -117,7 +112,6 @@
                     class="days-input" 
                     placeholder="Количество дней" 
                     min="1"
-                    value="1"
                 >
                 <input 
                 class="input-code"
@@ -127,12 +121,6 @@
                     placeholder="Секретный ключ"
                 >
                 </div>
-                <button 
-                    onclick="redirectToRent()" 
-                    class="button-submit height-margin"
-                >
-                    <p class="text-submit">Снять квартиру</p>
-                </button>
             </div>
         {% endif %}
     {% else %}
@@ -140,5 +128,19 @@
             <p class="text">К сожалению, хозяин снял квартиру с сайта</p>
         </div>
     {% endif %}
+    </div>
 </div>
+            <button 
+                onclick="window.location.href='{% url 'connect' flat_id=apartment.id %}'"
+                class="button-submit height-margin text-submit"
+            >
+            Связаться с владельцем
+        </button>
+                        <button 
+                    onclick="redirectToRent()" 
+                    class="button-submit height-margin"
+                >
+                    <p class="text-submit">Снять квартиру</p>
+                </button>
+                </div>
 {% endblock %}

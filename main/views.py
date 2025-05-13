@@ -30,11 +30,11 @@ def get_base_context(pagename: str = "", **kwargs):
         'menu': [
             MenuUrlContext('index', 'Главная'),
             MenuUrlContext('my_flats', 'Мои Квартиры'),
+            MenuUrlContext('sup', 'Квитанции'),
             MenuUrlContext('profile', 'Профиль'),
-            MenuUrlContext('faq', 'Q&A'),
-            MenuUrlContext('support', 'Поддержка'),
             MenuUrlContext('redact', 'Настройки'),
-            MenuUrlContext('sup', 'Внеение данных'),
+            MenuUrlContext('support', 'Поддержка'),
+            MenuUrlContext('faq', 'Q&A'),
         ]
     }
     context.update(kwargs)
@@ -253,18 +253,23 @@ def profile_page(request: WSGIRequest):
 
 
 def registration_page(request):
-    form = UserForm()
-    
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = User.objects.create_user(
+                email=form.data["email"],
+                username=form.data["username"],
+                password=form.data["password"],
+                last_name=form.data["last_name"],
+                first_name=form.data["first_name"]
+            )
+
             Profile.objects.create(user=user)
             login(request, user)
             return redirect('profile')
         if User.objects.filter(username=form.data["username"]).exists():
             messages.error(request, "Пользователь с таким ником уже существует")
-
+    form = UserForm(request.POST)
     context = get_base_context('Регистрация', form=form)
     return render(request, "registration/registration.html", context)
 
