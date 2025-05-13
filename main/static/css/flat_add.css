@@ -5,23 +5,26 @@ body{
 }
 html{
     width: 100%;
-    margin: 0; /* Убираем внешние отступы */
-    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; 
+    padding: 0; 
     box-sizing: border-box;
 }
-main {
-    width: 100%;
-    display: flex; /* Используем Flexbox */
-    justify-content: center; /* Горизонтальное выравнивание по центру */
-    align-items: center; /* Вертикальное выравнивание по центру */
-    min-height: 100vh; /* Минимальная высота равна высоте экрана */
+main{
+    display:flex;
+    justify-content:center;
+}
+.container{
+    width: 700px;
+    height: auto;
 }
 .group-input{
     width: 216px;
     height: 40px;
     border-radius: 12px;
-    border-color: rgba(161, 130, 74, 1);
+    border-color: rgba(232, 222, 207, 1);
     border-style: solid;
+    border-width: 1px;
+    background-color: rgba(252, 250, 248, 1);
 }
 ::placeholder { 
     color: rgba(161, 130, 74, 1); 
@@ -45,8 +48,10 @@ main {
     width: 448px;
     height: 144px;
     border-radius: 12px;
-    border-color: rgba(161, 130, 74, 1);
+    border-color: rgba(232, 222, 207, 1);
     border-style: solid;
+    background-color: rgba(252, 250, 248, 1);
+    border-width: 1px;
 }
 .head-2-text{
     font-family: "Plus Jakarta Sans", sans-serif;
@@ -59,8 +64,10 @@ main {
     width: 448px;
     height: 56px;
     border-radius: 12px;
-    border-color: rgba(161, 130, 74, 1);
+    border-color: rgba(232, 222, 207, 1);
     border-style: solid;
+    border-width: 1px;
+    background-color: rgba(252, 250, 248, 1);
 }
 .height-margin{
     margin-top: 30px;

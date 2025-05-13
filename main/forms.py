@@ -75,7 +75,7 @@ class ApartmentForm(forms.Form):
 
     description = forms.CharField(min_length=1,
                                   max_length=69,
-                                  widget=forms.TextInput({"class": "description"})
+                                  widget=forms.Textarea({"class": "description"})
                                   )
 
     max_people = forms.DecimalField(widget=forms.NumberInput({"class": "count-input",

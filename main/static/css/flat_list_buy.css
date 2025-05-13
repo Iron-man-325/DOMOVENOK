@@ -154,3 +154,14 @@ main{
     height: 150px;
     position: relative;
 }
+.text-mod{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+}
+.mod-var{
+    width: 200px;
+    margin: 10px 0 0 15px;
+}

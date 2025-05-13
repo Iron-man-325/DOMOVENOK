@@ -11,6 +11,7 @@ body{
     align-items: center;
     flex-direction: column;
     gap: 56px;
+    margin-bottom: 60px;
 }
 
 .faq-head {
@@ -76,7 +77,7 @@ body{
 }
 
 .faq-item.expand {
-    max-height: 112px;
+    max-height: 180px;
     align-items: stretch;
     transition: max-height 0.2s ease-out;
 }

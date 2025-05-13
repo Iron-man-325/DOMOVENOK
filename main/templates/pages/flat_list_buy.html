@@ -256,15 +256,19 @@ $(document).ready(function() {
     
     function displayResults(apartments) {
         var resultsContainer = $("#searchResults");
-        var html = '<h4>Найдено вариантов: ' + apartments.length + '</h4>';
+        var html = '<h4 class="text-mod">Найдено вариантов: ' + apartments.length + '</h4>';
         
         apartments.forEach(function(apartment) {
             html += `
-            <div class="result-item">
-                <h5>${apartment.name || 'Без названия'}</h5>
-                <p><strong>Адрес:</strong> ${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
-                <p><strong>Цена:</strong> ${apartment.cost_per_night || '0'} ₽/ночь</p>
-                <a  href='/flat/${apartment.id}' class="reserve-text">Забронировать</a>
+            <div class="var-cont">
+                <img class="flat-img" src="${apartment.image || '{% static "img/default_flat.jpg" %}'}" alt="${apartment.name || ''}">
+                <div class="desc-cont">
+                    <div class="mod-var">
+                        <h3 class="desc-text-price">${apartment.cost_per_night || 'Без названия'}₽/ночь</h3>
+                        <h4 class="name-flat">${apartment.name || 'Без названия'}</h4>
+                        <p class="desc-text">${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
+                    </div>
+                </div>
             </div>
             `;
         });
@@ -292,7 +296,6 @@ $(document).ready(function() {
                         <p class="desc-text">${apartment.city}${apartment.street ? ', ' + apartment.street : ''}</p>
                         <p class="desc-text">${apartment.cost_per_night || '0'} ₽/ночь</p>
                     </div>
-                        <p class="reserve-text">Забронировать</p>
                 </div>
             </div>
             `);
@@ -300,4 +303,5 @@ $(document).ready(function() {
     }
 });
 </script>
+
 {% endblock %}

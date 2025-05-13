@@ -24,7 +24,6 @@ def get_base_context(pagename: str = "", **kwargs):
         def __init__(self, url_name: str, name: str):
             self.url_name = url_name
             self.name = name
-
     context = {
         'pagename': pagename,
         'menu': [

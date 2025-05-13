@@ -87,3 +87,12 @@ header {
     line-height: 18px;
 
 }
+.logo-prof-head{
+    margin-left: 20px;
+    height: 45px;
+    width: 45px;
+    border-radius: 64px;
+    background-image: url(../img/photo.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
