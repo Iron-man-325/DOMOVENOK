@@ -51,6 +51,7 @@ main{
     height: 48px;
     vertical-align: middle;
     line-height: 1px;
+    cursor: pointer;
 }
 .but-text{
     color: rgba(27, 20, 14, 1);

@@ -17,6 +17,9 @@ main{
     background-repeat: no-repeat;
     border-radius: 12px;
 }
+.container{
+    margin-bottom: 20px;
+}
 .text-noto{
     color: rgba(252, 250, 248, 1);
     font-family: "Noto Sans", sans-serif;
@@ -73,8 +76,11 @@ main{
     height: 256px;
     background-size: cover;
     background-repeat: no-repeat;
-    border-radius: 12px;
+    border-radius: 12px 0 0 12px;
+    border-style: solid;
+    border-color: rgba(199, 188, 165, 1);
     cursor:pointer;
+    border-width: 2px;
 } 
 .var-cont{
     margin-top: 30px;
@@ -89,6 +95,16 @@ main{
     text-decoration: none;
     cursor:pointer;
 }
+.desc-text-price{
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 16px;
+    color: rgba(27, 20, 14, 1);
+    margin: 10px 0 0 0;
+    text-decoration: none;
+    cursor:pointer;
+    font-weight: bold;
+}
 .name-flat{
     font-family: "Noto Sans", sans-serif;
     font-optical-sizing: auto;
@@ -98,7 +114,7 @@ main{
     cursor:pointer;
 }
 .desc{
-    width: 200px;
+    width: 300px;
     margin: 10px 0 0 15px;
 }
 .reserve-but{
@@ -117,8 +133,13 @@ main{
     bottom: 0;
 }
 .desc-cont{
-    height: 150px;
+    height: 256px;
     display: flex;
+    border-radius: 0 12px 12px 0;
+    border-style: solid;
+    border-color: rgba(199, 188, 165, 1);
+    border-width: 2px;
+    border-left: none;
 }
 .reserve-text{
     font-family: "Noto Sans", sans-serif;

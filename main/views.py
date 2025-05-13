@@ -190,46 +190,58 @@ def my_flats(request: WSGIRequest):
 
 @login_required
 def redact_profile(request: WSGIRequest):
-    user = request.user
-    prof = Profile.objects.get(user=user)
-    
+    usr = User.objects.get_by_natural_key(request.user)
+    prof = Profile.objects.get(user=usr)
+    change_profile_form = ProfileUpdateForm()
+    change_user_form = UserUpdateForm({
+        'first_name': usr.first_name,
+        'last_name': usr.last_name,
+        'email': usr.email
+    })
+    change_password_form = PasswordUpdateForm()
     if request.method == "POST":
-        profile_form = ProfileUpdateForm(request.POST, request.FILES)
-        user_form = UserUpdateForm(request.POST)
-        password_form = PasswordUpdateForm(request.POST)
-        
-        if profile_form.is_valid() and profile_form.cleaned_data['avatar']:
-            prof.avatar = profile_form.cleaned_data['avatar']
-            prof.save()
+        change_profile_form = ProfileUpdateForm(request.POST, request.FILES)
+        if change_profile_form.is_valid():
+            if change_profile_form.cleaned_data['avatar']:
+                prof.avatar = change_profile_form.cleaned_data['avatar']
+                prof.save()
 
-        if user_form.is_valid():
-            user_form.save()
-            
-        if password_form.is_valid():
-            data = password_form.cleaned_data
-            if not user.check_password(data['old_password']):
-                messages.error(request, "Неверный старый пароль")
+        change_user_form = UserUpdateForm(request.POST)
+        if change_user_form.is_valid():
+            data = change_user_form.cleaned_data
+            usr.first_name = data['first_name']
+            usr.last_name = data['last_name']
+            usr.email = data['email']
+            usr.save()
+
+        change_password_form = PasswordUpdateForm(request.POST)
+        if change_password_form.is_valid():
+            data = change_password_form.cleaned_data
+            check_user = authenticate(request, username=request.user, password=data['old_password'])
+            if check_user != User.objects.get_by_natural_key(request.user):
+                messages.add_message(request, messages.ERROR,
+                                     "Неверный старый пароль (или пользователь недействителен)")
             elif data['new_password'] != data['confirm']:
-                messages.error(request, "Пароли не совпадают")
+                messages.add_message(request, messages.ERROR,
+                                     "Поля \"Новый пароль\" и \"Подтвердите новый пароль\" не совпадают")
             else:
-                user.set_password(data['new_password'])
-                user.save()
-                login(request, user)
-                messages.success(request, "Пароль успешно изменён")
-    else:
-        profile_form = ProfileUpdateForm()
-        user_form = UserUpdateForm(instance=user)
-        password_form = PasswordUpdateForm()
+                usr.set_password(data['new_password'])
+                usr.save()
+                login(request, usr)
+                messages.add_message(request, messages.SUCCESS,
+                                     "Ваш пароль изменён")
+
 
     context = get_base_context(
         'Редактирование профиля',
         profile=prof,
-        username=user.username,
-        email=user.email,
-        last_name=user.last_name,
-        change_profile_form=profile_form,
-        change_user_form=user_form,
-        change_password_form=password_form
+        username=usr.username,
+        email=usr.email,
+        last_name=usr.last_name,
+        change_profile_form=change_profile_form,
+        change_user_form=change_user_form,
+        change_password_form=change_password_form
+
     )
     return render(request, 'pages/redact_profile.html', context)
 

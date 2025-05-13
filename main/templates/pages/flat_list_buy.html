@@ -174,14 +174,11 @@
                 <img  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'"  class="flat-img" src="{{ apartment.image.url }}" alt="{{ apartment.name }}">
                 <div class="desc-cont">
                     <div class="desc">
+                        <h4 onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text-price">{{ apartment.cost_per_night }} ₽/ночь</h4>
                         <h4  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'"  class="name-flat">{{ apartment.name }}</h4>
                         <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.city }}{% if apartment.street %}, {{ apartment.street }}{% endif %}</p>
-                        <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.cost_per_night }} ₽/ночь</p>
-                    </div>
-                    <div class="but-div">
-                        <button class="reserve-but" onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'">
-                            <p class="reserve-text">Забронировать</p>
-                        </button>
+                        <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.square }} м²</p>
+                    
                     </div>
                 </div>
             </div>

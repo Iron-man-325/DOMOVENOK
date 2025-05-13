@@ -127,6 +127,7 @@ main{
     border: none;
     border-radius: 12px;
     background-color: rgba(232, 131, 48, 1);
+        cursor:pointer;
 }
 .text-submit{
     font-family: "Plus Jakarta Sans", sans-serif;

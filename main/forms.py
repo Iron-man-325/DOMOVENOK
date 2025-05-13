@@ -180,7 +180,7 @@ class StaticInputForm(ModelForm):
             "rent_receipt": FileInput(attrs={
                 'id':"rent_receipt",
                 'name':"photos",
-                'style':"margin-top:10px;"
+                'style':"margin-top:10px;",
             }),
         }
 

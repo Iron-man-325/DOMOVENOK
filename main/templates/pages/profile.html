@@ -40,9 +40,9 @@
                 {% for history_entry in history %}
                     {% if apartment.id == history_entry.apartment.id and user.username == history_entry.user.username %}
                             <div class="his-block">
-                                <img src="{{ apartment.image.url }}" class="his-img" id="mainImage" alt="Фото квартиры">
-                                <p class="name-history-flat">{{ apartment.name }}</p>
-                                <p class="price">{{ apartment.cost_per_night }}</p>
+                                <img onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" src="{{ apartment.image.url }}" class="his-img" id="mainImage" alt="Фото квартиры">
+                                <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="name-history-flat">{{ apartment.name }}</p>
+                                <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="price-his">{{ apartment.cost_per_night }} ₽</p>
                             </div>
                             {% endif %}
                             {% endfor %}
@@ -55,11 +55,11 @@
                 {% for apartment in myflats %}
                 <div class="flex">
                     <div class="description-your-flat">
-                        <p class="price">{{ apartment.cost_per_night }}</p>
+                        <p class="price">{{ apartment.cost_per_night }} ₽</p>
                         <h4 class="flat-name">{{ apartment.name }}</h4>
                         <p class="price">{{ apartment.street }}</p>
                         <div class="view-but" onclick="location.href='{% url 'stat' flat_id=apartment.id %}'">
-                            <p class="view-text">Посмотреть</p>
+                            <p class="view-text">Подробнее</p>
                         </div>
                     </div>
                     <img class="your-img" src="{{ apartment.image.url }}" >
