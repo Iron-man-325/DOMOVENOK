@@ -26,6 +26,7 @@ main{
     border-width: 2px;
     border-color: rgba(240, 234, 228, 1);
     border-style: solid;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }
 .earn-money{
     font-family: "Plus Jakarta Sans", sans-serif;
@@ -75,6 +76,7 @@ main{
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }
 .option{
     width: 220px;
@@ -88,6 +90,7 @@ main{
     margin-bottom: 10px;
     margin-top: 10px;
     cursor: pointer;
+    margin-left: 10px;
 }
 .flat-img-1{
     width: 60px;

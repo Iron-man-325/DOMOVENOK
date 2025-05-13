@@ -32,6 +32,7 @@ main{
     border-width: 2px;
     border-color: rgba(240, 234, 228, 1);
     border-style: solid;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }
 .earn-money{
     font-family: "Plus Jakarta Sans", sans-serif;
@@ -210,7 +211,8 @@ main{
     background-color: rgba(240, 234, 228, 1);
     margin-top: 10px;
     margin-bottom: 10px;
-        cursor: pointer;
+    cursor: pointer;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.1);
 }
 .top-option{
     width: 220px;
@@ -224,6 +226,7 @@ main{
     margin-bottom: 10px;
     margin-top: 10px;
     cursor: pointer;
+    margin-right: 10px;
 }
 .top-option-chosed{
     display: flex;
@@ -237,6 +240,7 @@ main{
     margin-top: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    box-shadow: 0px 2px 20px  rgba(0, 0, 0, 0.1);
 }
 .main-image{
     margin-top: 5px;
@@ -261,6 +265,7 @@ main{
     border-radius: 12px;
     border: none;
     cursor: pointer;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }
 .status-select{
     width: 150px;
@@ -269,4 +274,5 @@ main{
     background-color: rgba(240, 234, 228, 1);
     border: none;
     cursor: pointer;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }

@@ -388,7 +388,7 @@ def rent_apartment(request, flat_id, dates):
     )
     apartment.status = 'rented'
     apartment.save()
-    return redirect('flat_detail', flat_id=flat_id)
+    return redirect('apartment_list')
 
 
 @login_required

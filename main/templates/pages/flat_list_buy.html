@@ -171,6 +171,7 @@
         <div id="apartmentsContainer">
             {% for apartment in apartments %}
             <div class="var-cont">
+                <div class="shadow">
                 <img  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'"  class="flat-img" src="{{ apartment.image.url }}" alt="{{ apartment.name }}">
                 <div  onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-cont">
                     <div class="desc">
@@ -182,6 +183,7 @@
                         <p onclick="location.href='{% url 'flat_detail' flat_id=apartment.id %}'" class="desc-text">{{ apartment.city }}{% if apartment.street %}, {{ apartment.street }}{% endif %}</p>
                     </div>
                 </div>
+            </div>
             </div>
             {% endfor %}
         </div>

@@ -52,6 +52,7 @@ main{
     vertical-align: middle;
     line-height: 1px;
     cursor: pointer;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
 }
 .but-text{
     color: rgba(27, 20, 14, 1);
@@ -88,13 +89,16 @@ main{
     padding: 0;
 }
 .desc-inp{
-    width: 448px;
+    width: 438px;
     height: 50px;
     margin-top: 20px;
     border-radius: 12px;
     border-style: solid;
     border-color: rgba(231, 218, 208, 1);
     margin-bottom: 20px;
+    padding-left: 10px;
+    box-shadow: 0px 4px 20px  rgba(0, 0, 0, 0.2);
+    background-color: rgba(252, 250, 248, 1);
 }
 .add-photo{
     display: flex;
