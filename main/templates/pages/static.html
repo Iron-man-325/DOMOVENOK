@@ -40,7 +40,7 @@
                     <div class="status-indicator stat-text {% if apartment.status == 'available' %}status-available{% else %}status-rented{% endif %}">
                         <p class="stat-text">Статус: {{ apartment.get_status_display }}</p>
                     </div>
-                    <p class="stat-text">Стоимость: {{apartment.cost_per_night}}</p>
+                    <p class="stat-text">Стоимость: {{apartment.cost_per_night}} ₽</p>
                     <p class="stat-text">Ключ для сдачи квартиры: {{apartment.key}}</p>
                 </div>
                 <div class="earn-cont">
