@@ -112,7 +112,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'main/static'), 
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "main", 'media')
@@ -127,10 +132,8 @@ LOGOUT_REDIRECT_URL = '/'
 if SECRET_KEY == 'Insert secret key here and uncomment this variable':
     raise RuntimeError('Сначала укажите SECRET_KEY. Подробности - в settings.py')
 
-STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR,"main", 'static')  
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
