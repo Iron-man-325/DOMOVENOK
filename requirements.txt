@@ -4,3 +4,4 @@ django-bootstrap5
 djangorestframework==3.15.2
 pillow
 pylint
+whitenoise
