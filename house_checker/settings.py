@@ -123,7 +123,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "main", 'media')
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://domovenok.onrender.com',
+]
 # AUTH_USER_MODEL = 'main.User'
 
 # Проверка тех, кто ленится указать корректный SECRET_KEY
